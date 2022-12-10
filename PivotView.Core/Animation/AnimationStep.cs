@@ -10,13 +10,13 @@ public class AnimationStep
         Easing = easing;
     }
 
-    public TimeSpan Progress { get; private set; }
-
-    public TimeSpan Duration { get; set; }
+    public TimeSpan Duration { get; }
 
     public EasingDelegate Easing { get; }
 
     public Action? OnComplete { get; set; }
+
+    public TimeSpan Progress { get; private set; }
 
     public TimeSpan Update(TimeSpan delta)
     {
@@ -25,13 +25,13 @@ public class AnimationStep
             ? remaining
             : delta;
 
-        var progress = Progress + actualDelta;
-        var seconds = progress.TotalSeconds;
+        Progress += actualDelta;
 
+        var seconds = Progress.TotalSeconds;
         var actualSeconds = Easing(seconds);
 
         foreach (var item in stepItems)
-            item.Update(actualSeconds);
+            item.SetProgress(actualSeconds);
 
         return delta - actualDelta;
     }
@@ -51,74 +51,17 @@ public class AnimationStep
 
 public abstract record AnimationStepItem()
 {
-    public abstract void Update(double progress);
+    public abstract void SetProgress(double progress);
 }
 
 public record AnimationStepItem<TValue>(AnimatableProperty<TValue?> Property, TValue? Start, TValue? End) : AnimationStepItem
 {
-    public override void Update(double progress)
+    public override void SetProgress(double progress)
     {
         var lerp = Lerping.Lerps[typeof(TValue)];
         var value = (TValue)lerp(Start, End, progress);
         Property.Current = value;
     }
-}
-
-public class AnimationSet
-{
-    private readonly LinkedList<AnimationStep> steps = new();
-
-    private AnimationStep? currentStep;
-    private TimeSpan currentDuration = TimeSpan.Zero;
-
-    public AnimationSet()
-    {
-    }
-
-    public AnimationStep? Current => currentStep;
-
-    public void Update(TimeSpan delta)
-    {
-        if (delta < TimeSpan.Zero)
-            throw new ArgumentOutOfRangeException(nameof(delta), "The animation cannot go backwards. Ensure the delta value is positive.");
-
-        // get the corrent or next step depending
-        if (currentStep is null && steps.First is not null)
-        {
-            currentStep = steps.First.Value;
-            steps.RemoveFirst();
-        }
-
-        // if there is nothing to do, bail out
-        if (currentStep is null)
-            return;
-
-        var remainingDelta = currentStep.Update(delta);
-
-        currentDuration += delta;
-    }
-
-    public void Complete()
-    {
-        // TODO: set all values to their final values
-
-        steps.Clear();
-
-        currentStep = null;
-        currentDuration = TimeSpan.Zero;
-    }
-}
-
-public class AnimatableProperty<T>
-{
-    public AnimatableProperty(T? current = default)
-    {
-        Current = current;
-    }
-
-    public T? Current { get; set; }
-
-    public T? Desired { get; set; }
 }
 
 public class Animator

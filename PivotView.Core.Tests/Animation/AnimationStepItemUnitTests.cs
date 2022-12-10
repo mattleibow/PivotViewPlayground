@@ -14,7 +14,7 @@ public class AnimationStepItemUnitTests
 
         var item = new AnimationStepItem<float>(property, start, end);
 
-        item.Update(progress);
+        item.SetProgress(progress);
 
         Assert.Equal(expected, property.Current);
     }
@@ -33,7 +33,7 @@ public class AnimationStepItemUnitTests
 
         var item = new AnimationStepItem<RectangleF>(property, start, end);
 
-        item.Update(progress);
+        item.SetProgress(progress);
 
         Assert.Equal(expected, property.Current);
     }
