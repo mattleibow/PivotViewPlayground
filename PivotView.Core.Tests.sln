@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33028.149
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PivotView.Core.Tests", "PivotView.Core.Tests\PivotView.Core.Tests.csproj", "{EF2C8727-CC59-4C23-ADE3-F631999399CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAE09155-848B-4137-9DB4-E7F10066AAC8}
+	EndGlobalSection
+EndGlobal
