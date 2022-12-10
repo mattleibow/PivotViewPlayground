@@ -4,20 +4,38 @@ namespace PivotView.Core.Tests;
 
 class AnimationStep
 {
-    private readonly List<AnimationStepItem> stepItems = new List<AnimationStepItem>();
+    private readonly List<AnimationStepItem> stepItems = new();
 
-    public AnimationStep(TimeSpan duration)
+    public AnimationStep(TimeSpan duration, EasingDelegate easing)
     {
         Duration = duration;
+        Easing = easing;
     }
 
+    public TimeSpan Progress { get; private set; }
+
     public TimeSpan Duration { get; set; }
+
+    public EasingDelegate Easing { get; }
 
     public Action? OnComplete { get; set; }
 
     public TimeSpan Update(TimeSpan delta)
     {
-        return TimeSpan.Zero;
+        var remaining = Duration - Progress;
+        var actualDelta = delta > remaining
+            ? remaining
+            : delta;
+
+        var progress = Progress + actualDelta;
+        var seconds = progress.TotalSeconds;
+
+        var actualSeconds = Easing(seconds);
+
+        foreach (var item in stepItems)
+            item.Update(actualSeconds);
+
+        return delta - actualDelta;
     }
 
     public void Add<TValue>(AnimatableProperty<TValue?> property) =>
@@ -33,9 +51,20 @@ class AnimationStep
     }
 }
 
-abstract record AnimationStepItem();
+abstract record AnimationStepItem()
+{
+    public abstract void Update(double progress);
+}
 
-record AnimationStepItem<TValue>(AnimatableProperty<TValue?> property, TValue? start, TValue? end) : AnimationStepItem;
+record AnimationStepItem<TValue>(AnimatableProperty<TValue?> Property, TValue? Start, TValue? End) : AnimationStepItem
+{
+    public override void Update(double progress)
+    {
+        var lerp = Lerping.Lerps[typeof(TValue)];
+        var value = (TValue)lerp(Start, End, progress);
+        Property.Current = value;
+    }
+}
 
 class AnimationSet
 {
@@ -102,9 +131,9 @@ static class Lerping
             [typeof(int)] = (s, e, p) => Lerp(Convert.ToInt32(s), Convert.ToInt32(e), p),
             [typeof(float)] = (s, e, p) => Lerp(Convert.ToSingle(s), Convert.ToSingle(e), p),
             [typeof(double)] = (s, e, p) => Lerp(Convert.ToDouble(s), Convert.ToDouble(e), p),
-            [typeof(PointF)] = (s, e, p) => Lerp((PointF)s, (PointF)e, p),
-            [typeof(SizeF)] = (s, e, p) => Lerp((SizeF)s, (SizeF)e, p),
-            [typeof(RectangleF)] = (s, e, p) => Lerp((RectangleF)s, (RectangleF)e, p),
+            [typeof(PointF)] = (s, e, p) => Lerp(ToPointF(s), ToPointF(e), p),
+            [typeof(SizeF)] = (s, e, p) => Lerp(ToSizeF(s), ToSizeF(e), p),
+            [typeof(RectangleF)] = (s, e, p) => Lerp(ToRectangleF(s), ToRectangleF(e), p),
         };
 
     public static int Lerp(int start, int end, double progress) =>
@@ -124,9 +153,18 @@ static class Lerping
 
     public static RectangleF Lerp(RectangleF start, RectangleF end, double progress) =>
         new(Lerp(start.Location, end.Location, progress), Lerp(start.Size, end.Size, progress));
+
+    private static PointF ToPointF(object? s) =>
+        s is null ? PointF.Empty : (PointF)s;
+
+    private static SizeF ToSizeF(object? s) =>
+        s is null ? SizeF.Empty : (SizeF)s;
+
+    private static RectangleF ToRectangleF(object? s) =>
+        s is null ? RectangleF.Empty : (RectangleF)s;
 }
 
-public delegate object LerpingDelegate(object start, object end, double progress);
+public delegate object LerpingDelegate(object? start, object? end, double progress);
 
 static class Easing
 {

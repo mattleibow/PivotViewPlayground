@@ -25,6 +25,8 @@ class NewPivotRenderer
 
     internal AnimationSet? Animation { get; set; }
 
+    public EasingDelegate AnimationEasing { get; set; } = Easing.Linear;
+
     public Func<string, bool>? Filter
     {
         get => filter;
@@ -138,7 +140,7 @@ class NewPivotRenderer
         // Animation
 
         // add step 1 - remove old items
-        var step1 = new AnimationStep(TimeSpan.FromSeconds(1));
+        var step1 = new AnimationStep(TimeSpan.FromSeconds(1), AnimationEasing);
         foreach (var item in removedItems)
         {
             step1.Add(item.Frame);
@@ -149,7 +151,7 @@ class NewPivotRenderer
         };
 
         // add step 2 - re-layout remaining items
-        var step2 = new AnimationStep(TimeSpan.FromSeconds(1));
+        var step2 = new AnimationStep(TimeSpan.FromSeconds(1), AnimationEasing);
         foreach (var item in remainingItems)
         {
             step2.Add(item.Frame);
@@ -160,7 +162,7 @@ class NewPivotRenderer
         };
 
         // add step 3 - add new items
-        var step3 = new AnimationStep(TimeSpan.FromSeconds(1));
+        var step3 = new AnimationStep(TimeSpan.FromSeconds(1), AnimationEasing);
         foreach (var item in addedItems)
         {
             step3.Add(item.Frame);
