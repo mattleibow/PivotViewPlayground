@@ -1,21 +1,19 @@
-﻿using System.Drawing;
+﻿namespace PivotView.Core.Rendering;
 
-namespace PivotView.Core;
-
-public class NewPivotRenderer
+public class PivotRenderer
 {
     private readonly PivotLayout outOfFrameLayoutRemoving = new PivotOutOfFrameLayout(false);
     private readonly PivotLayout outOfFrameLayoutAdding = new PivotOutOfFrameLayout(true);
 
-    private readonly List<PlaceholderItem> allItems = new();
-    private readonly List<PlaceholderItem> currentItems = new();
+    private readonly List<PivotRendererItem> allItems = new();
+    private readonly List<PivotRendererItem> currentItems = new();
 
-    private NewPivotDataSource? dataSource;
+    private PivotDataSource? dataSource;
     private PivotLayout? layout;
     private RectangleF frame;
     private Func<string, bool>? filter;
 
-    public NewPivotRenderer()
+    public PivotRenderer()
     {
     }
 
@@ -42,7 +40,7 @@ public class NewPivotRenderer
         }
     }
 
-    public NewPivotDataSource? DataSource
+    public PivotDataSource? DataSource
     {
         get => dataSource;
         set
@@ -52,12 +50,12 @@ public class NewPivotRenderer
             allItems.Clear();
             currentItems.Clear();
 
-            if (dataSource is not null)
+            if (dataSource?.Items is not null)
             {
                 // update all items
-                foreach (var item in dataSource)
+                foreach (var item in dataSource.Items)
                 {
-                    allItems.Add(new PlaceholderItem(item));
+                    allItems.Add(new PivotRendererItem(item));
                 }
 
                 // TODO: sorting of all items
@@ -92,9 +90,9 @@ public class NewPivotRenderer
         }
     }
 
-    public IReadOnlyList<PlaceholderItem> CurrentItems => currentItems;
+    public IReadOnlyList<PivotRendererItem> CurrentItems => currentItems;
 
-    public IReadOnlyList<PlaceholderItem> Items => allItems;
+    public IReadOnlyList<PivotRendererItem> Items => allItems;
 
     public void ResetLayout()
     {
@@ -106,7 +104,7 @@ public class NewPivotRenderer
             item.Frame.Current = item.Frame.Desired;
     }
 
-    private PlaceholderItem[] GetFilteredItems() =>
+    private PivotRendererItem[] GetFilteredItems() =>
         Filter is null
            ? allItems.ToArray()
            : allItems.Where(i => Filter(i.Name)).ToArray();

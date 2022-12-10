@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
-using System.Drawing;
+﻿namespace PivotView.Core;
 
-namespace PivotView.Core;
+// - Reset zoom, deselect, stop all other animations
+// - Hide UI, run filters
+// - Calculate locations of removed items (out of view) / explode old items out
+// - Calculate new locations of current / relayout current and leave space for new ones
+// - Calculate locations of new items / implode new ones
 
 public class OldThings
 {
@@ -197,54 +200,6 @@ public class OldThings
         }
 
         public new IList<PivotRendererItem> Items => base.Items;
-    }
-
-    public class PivotDataSource
-    {
-        private IList<PivotDataItem>? items;
-
-        public IList<PivotDataItem>? Items
-        {
-            get => items;
-            set
-            {
-                items = value;
-                OnItemsChanged();
-            }
-        }
-
-        private void OnItemsChanged()
-        {
-            if (items is null || items.Count == 0)
-                return;
-
-
-        }
-    }
-
-    [DebuggerDisplay("{Name}")]
-    public class PivotDataItem
-    {
-        public string? Name { get; set; }
-
-        public float ImageWidth { get; set; } = 0;
-
-        public float ImageHeight { get; set; } = 0;
-
-        public IList<PivotDataProperty>? Properties { get; set; } = new List<PivotDataProperty>();
-    }
-
-    public class PivotDataProperty
-    {
-        public PivotDataProperty(string name, object value)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Value = value ?? throw new ArgumentNullException(nameof(name));
-        }
-
-        public string Name { get; }
-
-        public object Value { get; }
     }
 
     public class Animatable
