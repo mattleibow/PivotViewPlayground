@@ -257,7 +257,7 @@ public class UnitTest1
     }
 }
 
-class Animator
+public class Animator
 {
     private readonly Ticker ticker;
 
@@ -270,12 +270,12 @@ class Animator
     }
 }
 
-class Ticker
+public class Ticker
 {
     public Action<TimeSpan>? Tick { get; set; }
 }
 
-class TestTicker : Ticker
+public class TestTicker : Ticker
 {
     public void PerformTick(TimeSpan delta)
     {

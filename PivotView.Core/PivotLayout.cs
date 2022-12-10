@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace PivotView.Core.Tests;
+namespace PivotView.Core;
 
-abstract class PivotLayout
+abstract public class PivotLayout
 {
     public void LayoutItems(IReadOnlyList<PlaceholderItem> items, RectangleF frame)
     {
@@ -12,7 +12,7 @@ abstract class PivotLayout
     protected abstract void OnLayoutItems(IReadOnlyList<PlaceholderItem> items, RectangleF frame);
 }
 
-class PivotGridLayout : PivotLayout
+public class PivotGridLayout : PivotLayout
 {
     protected override void OnLayoutItems(IReadOnlyList<PlaceholderItem> items, RectangleF frame)
     {
@@ -21,7 +21,7 @@ class PivotGridLayout : PivotLayout
     }
 }
 
-class PivotOutOfFrameLayout : PivotLayout
+public class PivotOutOfFrameLayout : PivotLayout
 {
     private bool isAdding;
 
@@ -50,7 +50,7 @@ class PivotOutOfFrameLayout : PivotLayout
     }
 }
 
-class PivotVerticalStackLayout : PivotLayout
+public class PivotVerticalStackLayout : PivotLayout
 {
     public float ItemSpacing { get; set; }
 

@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace PivotView.Core.Tests;
+namespace PivotView.Core;
 
-class NewPivotRenderer
+public class NewPivotRenderer
 {
     private readonly PivotLayout outOfFrameLayoutRemoving = new PivotOutOfFrameLayout(false);
     private readonly PivotLayout outOfFrameLayoutAdding = new PivotOutOfFrameLayout(true);
@@ -96,7 +96,7 @@ class NewPivotRenderer
 
     public IReadOnlyList<PlaceholderItem> Items => allItems;
 
-    internal void ResetLayout()
+    public void ResetLayout()
     {
         Animation = null;
 

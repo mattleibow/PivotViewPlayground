@@ -1,6 +1,6 @@
-﻿namespace PivotView.Core.Tests;
+﻿namespace PivotView.Core;
 
-class NewPivotDataSource : List<string>
+public class NewPivotDataSource : List<string>
 {
     public NewPivotDataSource(IEnumerable<string> collection)
         : base(collection)

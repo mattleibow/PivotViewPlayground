@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace PivotView.Core.Tests;
+namespace PivotView.Core;
 
-class AnimationStep
+public class AnimationStep
 {
     private readonly List<AnimationStepItem> stepItems = new();
 
@@ -51,12 +51,12 @@ class AnimationStep
     }
 }
 
-abstract record AnimationStepItem()
+public abstract record AnimationStepItem()
 {
     public abstract void Update(double progress);
 }
 
-record AnimationStepItem<TValue>(AnimatableProperty<TValue?> Property, TValue? Start, TValue? End) : AnimationStepItem
+public record AnimationStepItem<TValue>(AnimatableProperty<TValue?> Property, TValue? Start, TValue? End) : AnimationStepItem
 {
     public override void Update(double progress)
     {
@@ -66,7 +66,7 @@ record AnimationStepItem<TValue>(AnimatableProperty<TValue?> Property, TValue? S
     }
 }
 
-class AnimationSet
+public class AnimationSet
 {
     private readonly LinkedList<AnimationStep> steps = new();
 
@@ -111,7 +111,7 @@ class AnimationSet
     }
 }
 
-class AnimatableProperty<T>
+public class AnimatableProperty<T>
 {
     public AnimatableProperty(T? current = default)
     {
@@ -123,7 +123,7 @@ class AnimatableProperty<T>
     public T? Desired { get; set; }
 }
 
-static class Lerping
+static public class Lerping
 {
     public static readonly Dictionary<Type, LerpingDelegate> Lerps =
         new()
@@ -166,7 +166,7 @@ static class Lerping
 
 public delegate object LerpingDelegate(object? start, object? end, double progress);
 
-static class Easing
+static public class Easing
 {
     public static readonly EasingDelegate Linear = new(x => x);
 }

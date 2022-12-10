@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace PivotView.Core.Tests;
+namespace PivotView.Core;
 
-class PlaceholderItem
+public class PlaceholderItem
 {
     public PlaceholderItem(string name)
     {

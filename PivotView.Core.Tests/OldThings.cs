@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
 
-namespace PivotView.Core.Tests;
+namespace PivotView.Core;
 
-class OldThings
+public class OldThings
 {
     private static PivotDataSource CreateSingleItemDataSource(float itemWidth, float itemHeight) =>
         new()
@@ -55,7 +55,7 @@ class OldThings
         value.AddStep(100, TimeSpan.FromSeconds(1));
     }
 
-    class PivotRendererItem : Animatable
+    public class PivotRendererItem : Animatable
     {
         public PivotRendererItem(PivotDataItem dataItem)
         {
@@ -68,7 +68,7 @@ class OldThings
         public PivotDataItem DataItem { get; }
     }
 
-    class PivotRenderer
+    public class PivotRenderer
     {
         private readonly List<PivotRendererItem> items = new List<PivotRendererItem>();
         private PivotDataSource? dataSource;
@@ -189,7 +189,7 @@ class OldThings
         }
     }
 
-    class TestPivotRenderer : PivotRenderer
+    public class TestPivotRenderer : PivotRenderer
     {
         public TestPivotRenderer(Ticker ticker)
             : base(ticker)
@@ -199,7 +199,7 @@ class OldThings
         public new IList<PivotRendererItem> Items => base.Items;
     }
 
-    class PivotDataSource
+    public class PivotDataSource
     {
         private IList<PivotDataItem>? items;
 
@@ -223,7 +223,7 @@ class OldThings
     }
 
     [DebuggerDisplay("{Name}")]
-    class PivotDataItem
+    public class PivotDataItem
     {
         public string? Name { get; set; }
 
@@ -234,7 +234,7 @@ class OldThings
         public IList<PivotDataProperty>? Properties { get; set; } = new List<PivotDataProperty>();
     }
 
-    class PivotDataProperty
+    public class PivotDataProperty
     {
         public PivotDataProperty(string name, object value)
         {
@@ -247,11 +247,11 @@ class OldThings
         public object Value { get; }
     }
 
-    class Animatable
+    public class Animatable
     {
     }
 
-    class AnimatableValue<T>
+    public class AnimatableValue<T>
     {
         private readonly LinkedList<AnimatableValueStep<T>> steps = new();
 
@@ -319,7 +319,7 @@ class OldThings
         }
     }
 
-    class Animator
+    public class Animator
     {
         private readonly Ticker ticker;
 
@@ -332,12 +332,12 @@ class OldThings
         }
     }
 
-    class Ticker
+    public class Ticker
     {
         public Action<TimeSpan>? Tick { get; set; }
     }
 
-    class TestTicker : Ticker
+    public class TestTicker : Ticker
     {
         public void PerformTick(TimeSpan delta)
         {
