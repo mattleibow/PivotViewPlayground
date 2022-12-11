@@ -30,6 +30,13 @@ public class LayoutVisualizer : Visualizer
     [Switch("Show items")]
     public bool IsItemsVisible { get; set; } = true;
 
+    [Slider("Item margin", 0, 20)]
+    public double ItemMargin
+    {
+        get => Layout.ItemMargin;
+        set => Layout.ItemMargin = value;
+    }
+
     public void InvalidateLayout()
     {
         lastScreenRect = RectF.Zero;

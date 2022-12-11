@@ -10,11 +10,4 @@ public class VerticalStackLayoutVisualizer : LayoutVisualizer<PivotVerticalStack
         : base("Vertical Stack", new PivotVerticalStackLayout(), items)
     {
     }
-
-    [Slider("Item spacing", 0, 20)]
-    public float ItemSpacing
-    {
-        get => Layout.ItemSpacing;
-        set => Layout.ItemSpacing = value;
-    }
 }

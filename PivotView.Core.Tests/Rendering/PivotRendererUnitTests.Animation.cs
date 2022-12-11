@@ -14,7 +14,7 @@ public partial class PivotRendererUnitTests
             {
                 Filter = (item) => filterInitial.Contains(item),
                 DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new PivotVerticalStackLayout { ItemSpacing = 15 },
+                Layout = new PivotVerticalStackLayout { ItemMargin = 15 },
                 Frame = new RectangleF(0, 0, 120, 120)
             };
             renderer.ResetLayout();

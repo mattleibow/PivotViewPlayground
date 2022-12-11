@@ -2,24 +2,35 @@
 
 public class PivotVerticalStackLayout : PivotLayout
 {
-    public float ItemSpacing { get; set; }
-
-    protected override void OnLayoutItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
-        var totalSpacing = (items.Count - 1) * ItemSpacing;
-        var availableSpace = frame.Height - totalSpacing;
+        // 1. Get the aspect ratio of the items
+        ItemAspectRatio = GetItemAspectRatio(items);
 
-        var itemHeight = availableSpace / items.Count;
+        // 2.Calculate the smallest/best area to lay out the items
+        var count = Math.Max(items.Count, ItemCountOverride);
+        // TODO: be a bit smarter if there is a few wide items
 
+        // 3. Calculate the general item size
+        ItemHeight = frame.Height / (double)count;
+        ItemWidth = ItemHeight * ItemAspectRatio;
+
+        // 4. Calculate the total items area
+        LayoutWidth = ItemWidth;
+        LayoutHeight = ItemHeight * count;
+    }
+
+    public override void Arrange(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    {
         for (var i = 0; i < items.Count; i++)
         {
             var item = items[i];
 
             var newFrame = new RectangleF(
-                frame.X,
-                frame.Y + i * (itemHeight + ItemSpacing),
-                Math.Min(frame.Width, item.DataItem.ImageWidth),
-                Math.Min(itemHeight, item.DataItem.ImageHeight));
+                (float)(frame.X + ItemMargin),
+                (float)(frame.Y + ItemMargin + (ItemHeight * i)),
+                (float)(ItemWidth - ItemMargin - ItemMargin),
+                (float)(ItemHeight - ItemMargin - ItemMargin));
 
             item.Frame.Desired = newFrame;
         }

@@ -9,7 +9,11 @@ public class PivotOutOfFrameLayout : PivotLayout
         this.isAdding = isAdding;
     }
 
-    protected override void OnLayoutItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    {
+    }
+
+    public override void Arrange(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
         foreach (var item in items)
         {

@@ -16,7 +16,8 @@ public partial class LayoutPage : ContentPage
         Visualizers =
             new()
             {
-                new VerticalStackLayoutVisualizer(Items)
+                new VerticalStackLayoutVisualizer(Items),
+                new GridLayoutVisualizer(Items),
             };
 
         Current = Visualizers.FirstOrDefault();
