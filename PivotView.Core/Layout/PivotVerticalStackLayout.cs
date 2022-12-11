@@ -15,7 +15,11 @@ public class PivotVerticalStackLayout : PivotLayout
         {
             var item = items[i];
 
-            var newFrame = new RectangleF(0, i * (itemHeight + ItemSpacing), frame.Width, itemHeight);
+            var newFrame = new RectangleF(
+                frame.X,
+                frame.Y + i * (itemHeight + ItemSpacing),
+                Math.Min(frame.Width, item.DataItem.ImageWidth),
+                Math.Min(itemHeight, item.DataItem.ImageHeight));
 
             item.Frame.Desired = newFrame;
         }

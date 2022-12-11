@@ -79,14 +79,10 @@ public class Animator
 
 public class Ticker
 {
-    public Action<TimeSpan>? Tick { get; set; }
-}
-
-public class TestTicker : Ticker
-{
-    public void PerformTick(TimeSpan delta)
+    protected virtual void OnTick(TimeSpan delta)
     {
         Tick?.Invoke(delta);
     }
-}
 
+    public Action<TimeSpan>? Tick { get; set; }
+}
