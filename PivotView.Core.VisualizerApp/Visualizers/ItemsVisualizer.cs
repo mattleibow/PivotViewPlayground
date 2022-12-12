@@ -1,28 +1,17 @@
-﻿using PivotView.Core.Layout;
-using PivotView.Core.Rendering;
+﻿using PivotView.Core.Rendering;
 using System.Collections.ObjectModel;
 
 namespace PivotView.Core.VisualizerApp.Visualizers;
 
-public class LayoutVisualizer : Visualizer
+public class ItemsVisualizer : Visualizer
 {
-    private RectF lastScreenRect;
-
-    public LayoutVisualizer(string name, PivotLayout layout, ObservableCollection<PivotRendererItem> items)
-        : base(name + " Layout")
+    public ItemsVisualizer(string name, ObservableCollection<PivotRendererItem> items)
+        : base(name)
     {
-        Layout = layout;
         Items = items;
-
-        items.CollectionChanged += (s, e) => InvalidateLayout();
     }
 
-    public PivotLayout Layout { get; }
-
     public ObservableCollection<PivotRendererItem> Items { get; }
-
-    [Switch("Show layout lines")]
-    public bool IsLayoutLinesVisible { get; set; } = false;
 
     [Switch("Show screen boundary lines")]
     public bool IsScreenLinesVisible { get; set; } = true;
@@ -32,18 +21,6 @@ public class LayoutVisualizer : Visualizer
 
     [Switch("Show desired locations")]
     public bool IsDesiredLocations { get; set; } = true;
-
-    [Slider("Item margin", 0, 20)]
-    public double ItemMargin
-    {
-        get => Layout.ItemMargin;
-        set => Layout.ItemMargin = value;
-    }
-
-    public void InvalidateLayout()
-    {
-        lastScreenRect = RectF.Zero;
-    }
 
     public override void Draw(ICanvas canvas, RectF bounds)
     {
@@ -56,14 +33,9 @@ public class LayoutVisualizer : Visualizer
         // draw items
         if (IsItemsVisible)
         {
-            UpdateLayout(screenRect);
-
+            PrepareItems(screenRect);
             DrawItems(canvas, screenRect);
         }
-
-        // draw layout lines
-        if (IsLayoutLinesVisible)
-            DrawLayoutLines(canvas, screenRect);
 
         // draw "screen bounds"
         if (IsScreenLinesVisible)
@@ -72,6 +44,10 @@ public class LayoutVisualizer : Visualizer
             canvas.StrokeSize = 1;
             canvas.DrawRectangle(screenRect);
         }
+    }
+
+    protected virtual void PrepareItems(RectF bounds)
+    {
     }
 
     protected virtual void DrawItems(ICanvas canvas, RectF bounds)
@@ -92,35 +68,4 @@ public class LayoutVisualizer : Visualizer
             canvas.DrawString(item.Name, itemRect, HorizontalAlignment.Center, VerticalAlignment.Center);
         }
     }
-
-    protected virtual void DrawLayoutLines(ICanvas canvas, RectF bounds)
-    {
-    }
-
-    protected virtual void UpdateLayout(RectF screenRect)
-    {
-        if (lastScreenRect == screenRect)
-            return;
-        lastScreenRect = screenRect;
-
-        Layout?.LayoutItems(Items, screenRect.ToSystemRectangleF());
-    }
-
-    protected override void OnVisualizerPropertyValueChanged()
-    {
-        InvalidateLayout();
-
-        base.OnVisualizerPropertyValueChanged();
-    }
-}
-
-public class LayoutVisualizer<T> : LayoutVisualizer
-    where T : PivotLayout
-{
-    public LayoutVisualizer(string name, T layout, ObservableCollection<PivotRendererItem> items)
-        : base(name, layout, items)
-    {
-    }
-
-    public new T Layout => (T)base.Layout;
 }

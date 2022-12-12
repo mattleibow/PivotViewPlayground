@@ -25,10 +25,10 @@ static public class Lerping
         (double)((end - start) * progress) + start;
 
     public static PointF Lerp(PointF start, PointF end, double progress) =>
-        new(Lerp(start.X, end.Y, progress), Lerp(start.Y, end.Y, progress));
+        new(Lerp(start.X, end.X, progress), Lerp(start.Y, end.Y, progress));
 
     public static SizeF Lerp(SizeF start, SizeF end, double progress) =>
-        new(Lerp(start.Height, end.Width, progress), Lerp(start.Height, end.Height, progress));
+        new(Lerp(start.Width, end.Width, progress), Lerp(start.Height, end.Height, progress));
 
     public static RectangleF Lerp(RectangleF start, RectangleF end, double progress) =>
         new(Lerp(start.Location, end.Location, progress), Lerp(start.Size, end.Size, progress));

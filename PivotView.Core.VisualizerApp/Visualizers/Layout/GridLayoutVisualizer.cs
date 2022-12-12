@@ -2,7 +2,7 @@
 using PivotView.Core.Rendering;
 using System.Collections.ObjectModel;
 
-namespace PivotView.Core.VisualizerApp.Visualizers;
+namespace PivotView.Core.VisualizerApp.Visualizers.Layout;
 
 public class GridLayoutVisualizer : LayoutVisualizer<PivotGridLayout>
 {

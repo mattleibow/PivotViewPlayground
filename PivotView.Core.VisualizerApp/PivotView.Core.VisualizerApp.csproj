@@ -58,9 +58,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\AnimationPage.xaml.cs">
+	    <DependentUpon>AnimationPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\LayoutPage.xaml.cs">
 	    <DependentUpon>LayoutPage.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Pages\AnimationPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

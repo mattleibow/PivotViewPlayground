@@ -25,16 +25,16 @@ public class VisualizerPropertyAttribute : Attribute
 
 public class SliderAttribute : VisualizerPropertyAttribute
 {
-    public SliderAttribute(string label, float min, float max)
+    public SliderAttribute(string label, double min, double max)
         : base(label)
     {
         Min = min;
         Max = max;
     }
 
-    public float Min { get; }
+    public double Min { get; }
 
-    public float Max { get; }
+    public double Max { get; }
 }
 
 public class SwitchAttribute : VisualizerPropertyAttribute

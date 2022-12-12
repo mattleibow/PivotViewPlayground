@@ -1,5 +1,6 @@
 ﻿using PivotView.Core.Rendering;
 using PivotView.Core.VisualizerApp.Visualizers;
+using PivotView.Core.VisualizerApp.Visualizers.Layout;
 using System.Collections.ObjectModel;
 
 namespace PivotView.Core.VisualizerApp;
@@ -20,7 +21,7 @@ public partial class LayoutPage : ContentPage
                 new GridLayoutVisualizer(Items),
                 new OutOfFrameLayoutVisualizer(true, Items),
                 new OutOfFrameLayoutVisualizer(false, Items),
-    };
+            };
 
         Current = Visualizers.FirstOrDefault();
 

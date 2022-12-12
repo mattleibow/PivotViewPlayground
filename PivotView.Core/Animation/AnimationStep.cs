@@ -1,14 +1,24 @@
-﻿namespace PivotView.Core.Animation;
+﻿using System.Diagnostics;
 
+namespace PivotView.Core.Animation;
+
+[DebuggerDisplay("Name = {Name}, IsComplete = {IsComplete}")]
 public class AnimationStep
 {
     private readonly List<AnimationStepItem> stepItems = new();
+
+    public AnimationStep(TimeSpan duration)
+        : this(duration, Animation.Easing.Linear)
+    {
+    }
 
     public AnimationStep(TimeSpan duration, EasingDelegate easing)
     {
         Duration = duration;
         Easing = easing;
     }
+
+    public string? Name { get; set; }
 
     public TimeSpan Duration { get; }
 
@@ -18,6 +28,8 @@ public class AnimationStep
 
     public TimeSpan Progress { get; private set; }
 
+    public bool IsComplete { get; private set; }
+
     public TimeSpan Update(TimeSpan delta)
     {
         var remaining = Duration - Progress;
@@ -25,13 +37,22 @@ public class AnimationStep
             ? remaining
             : delta;
 
-        Progress += actualDelta;
+        if (!IsComplete)
+        {
+            Progress += actualDelta;
 
-        var seconds = Progress.TotalSeconds;
-        var actualSeconds = Easing(seconds);
+            var seconds = Progress.TotalSeconds;
+            var actualSeconds = Easing(seconds);
 
-        foreach (var item in stepItems)
-            item.SetProgress(actualSeconds);
+            foreach (var item in stepItems)
+                item.SetProgress(actualSeconds);
+
+            if (Progress >= Duration)
+            {
+                IsComplete = true;
+                OnComplete?.Invoke();
+            }
+        }
 
         return delta - actualDelta;
     }
@@ -46,21 +67,6 @@ public class AnimationStep
     {
         var stepItem = new AnimationStepItem<TValue>(property, start, value);
         stepItems.Add(stepItem);
-    }
-}
-
-public abstract record AnimationStepItem()
-{
-    public abstract void SetProgress(double progress);
-}
-
-public record AnimationStepItem<TValue>(AnimatableProperty<TValue?> Property, TValue? Start, TValue? End) : AnimationStepItem
-{
-    public override void SetProgress(double progress)
-    {
-        var lerp = Lerping.Lerps[typeof(TValue)];
-        var value = (TValue)lerp(Start, End, progress);
-        Property.Current = value;
     }
 }
 
