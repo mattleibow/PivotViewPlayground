@@ -31,14 +31,12 @@
             Grid.RowSpan="2"
             MaximumWidthRequest="500"
             Spacing="10"
-            BindableLayout.ItemsSource="{Binding Current.Properties}"
-            BindableLayout.ItemTemplateSelector="{StaticResource DynamicTemplateSelector}">
-            <VerticalStackLayout.Resources>
-                <ResourceDictionary>
-                    <app:DynamicTemplateSelector x:Key="DynamicTemplateSelector">
-                        <app:DynamicTemplateSelector.Templates>
-                            <app:DynamicDataTemplate>
-                                <DataTemplate x:DataType="vis:VisualizerProperty">
+            BindableLayout.ItemsSource="{Binding Current.Properties}">
+            <BindableLayout.ItemTemplateSelector>
+                <app:DynamicTemplateSelector ItemKeyBinding="{Binding Attribute.Key}">
+                    <app:DynamicTemplateSelector.Templates>
+                        <app:DynamicDataTemplate>
+                            <DataTemplate x:DataType="vis:VisualizerProperty">
                                     <Grid 
                                         ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto"
                                         ColumnSpacing="5"
@@ -70,11 +68,36 @@
                                             Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" />
                                     </Grid>
                                 </DataTemplate>
-                            </app:DynamicDataTemplate>
-                        </app:DynamicTemplateSelector.Templates>
-                    </app:DynamicTemplateSelector>
-                </ResourceDictionary>
-            </VerticalStackLayout.Resources>
+                        </app:DynamicDataTemplate>
+                        <app:DynamicDataTemplate Key="Switch">
+                            <DataTemplate x:DataType="vis:VisualizerProperty">
+                                    <Grid 
+                                        ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto"
+                                        ColumnSpacing="5"
+                                        RowSpacing="10">
+                                        <Label
+                                            Text="{Binding Attribute.Label}"
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Start"
+                                            Grid.Column="0" Grid.Row="0" />
+                                        <Label
+                                            Text="{Binding Value, StringFormat='= {0}'}"
+                                            HorizontalOptions="Start"
+                                            Grid.Column="1" Grid.Row="0" />
+                                        <Label
+                                            Text="{Binding DefaultValue, StringFormat='(default: {0})'}"
+                                            FontAttributes="Italic"
+                                            HorizontalOptions="Start"
+                                            Grid.Column="2" Grid.Row="0" />
+                                        <Switch
+                                            IsToggled="{Binding Value}"
+                                            Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" />
+                                    </Grid>
+                                </DataTemplate>
+                        </app:DynamicDataTemplate>
+                    </app:DynamicTemplateSelector.Templates>
+                </app:DynamicTemplateSelector>
+            </BindableLayout.ItemTemplateSelector>
         </VerticalStackLayout>
 
         <Editor

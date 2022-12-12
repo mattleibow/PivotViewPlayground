@@ -18,7 +18,9 @@ public partial class LayoutPage : ContentPage
             {
                 new VerticalStackLayoutVisualizer(Items),
                 new GridLayoutVisualizer(Items),
-            };
+                new OutOfFrameLayoutVisualizer(true, Items),
+                new OutOfFrameLayoutVisualizer(false, Items),
+    };
 
         Current = Visualizers.FirstOrDefault();
 

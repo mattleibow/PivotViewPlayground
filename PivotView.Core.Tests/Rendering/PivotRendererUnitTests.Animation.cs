@@ -14,7 +14,7 @@ public partial class PivotRendererUnitTests
             {
                 Filter = (item) => filterInitial.Contains(item),
                 DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new PivotVerticalStackLayout { ItemMargin = 15 },
+                Layout = new PivotVerticalStackLayout(),
                 Frame = new RectangleF(0, 0, 120, 120)
             };
             renderer.ResetLayout();
@@ -23,15 +23,15 @@ public partial class PivotRendererUnitTests
 
             var items = renderer.Items;
 
-            Assert.Equal(new(0, 0, 120, 30), items[0].Frame.Current);
-            Assert.Equal(new(0, 45, 120, 30), items[1].Frame.Current);
-            Assert.Equal(new(0, 90, 120, 30), items[2].Frame.Current);
-            Assert.Equal(new(170, 90, 120, 30), items[3].Frame.Current);
+            Assert.Equal(new(0, 0, 40, 40), items[0].Frame.Current);
+            Assert.Equal(new(0, 40, 40, 40), items[1].Frame.Current);
+            Assert.Equal(new(0, 80, 40, 40), items[2].Frame.Current);
+            Assert.Equal(new(170, 80, 40, 40), items[3].Frame.Current);
 
-            Assert.Equal(new(170, 0, 120, 30), items[0].Frame.Desired);
-            Assert.Equal(new(0, 0, 120, 30), items[1].Frame.Desired);
-            Assert.Equal(new(0, 45, 120, 30), items[2].Frame.Desired);
-            Assert.Equal(new(0, 90, 120, 30), items[3].Frame.Desired);
+            Assert.Equal(new(170, 0, 40, 40), items[0].Frame.Desired);
+            Assert.Equal(new(0, 0, 40, 40), items[1].Frame.Desired);
+            Assert.Equal(new(0, 40, 40, 40), items[2].Frame.Desired);
+            Assert.Equal(new(0, 80, 40, 40), items[3].Frame.Desired);
         }
     }
 }

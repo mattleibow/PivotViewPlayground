@@ -23,7 +23,7 @@ public class PivotOutOfFrameLayout : PivotLayout
                 ? frameProp.Desired
                 : frameProp.Current;
 
-            var newFrame = new RectangleF(frame.Width + 50, current.Y, current.Width, current.Height);
+            var newFrame = new RectangleF(frame.Right + 50, current.Y, current.Width, current.Height);
 
             if (isAdding)
                 frameProp.Current = newFrame;

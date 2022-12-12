@@ -8,17 +8,11 @@ public class PivotGridLayout : PivotLayout
         Bottom,
     }
 
-    private enum LayoutDirection
-    {
-        LeftToRight = 1,
-        RightToLeft = -1
-    }
+    public LayoutOrigin Origin { get; set; }
 
     public int Columns { get; protected set; }
 
     public int Rows { get; protected set; }
-
-    public LayoutOrigin Origin { get; set; }
 
     public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
@@ -70,18 +64,14 @@ public class PivotGridLayout : PivotLayout
         var count = items.Count;
 
         // determine the origin, direction and step values
-        double yOffset, yStep, xStep;
+        var yOffset = (double)frame.Y;
+        var yStep = ItemHeight;
+        var xStep = ItemWidth;
         if (Origin == LayoutOrigin.Bottom)
         {
-            yOffset = frame.Height - ItemHeight;
-            yStep = ItemHeight * -1.0;
-            xStep = -ItemWidth;
-        }
-        else
-        {
-            yOffset = frame.Y;
-            yStep = ItemHeight;
-            xStep = ItemWidth;
+            yOffset += frame.Height - ItemHeight;
+            yStep *= -1;
+            xStep *= -1;
         }
 
         // determine item actual size
@@ -107,17 +97,13 @@ public class PivotGridLayout : PivotLayout
         for (var rowIndex = 0; rowIndex < Rows; rowIndex++)
         {
             // determine initial X offset
-            double xOffset;
+            var xOffset = (double)frame.X;
             if (Origin == LayoutOrigin.Bottom)
             {
                 var partialCol = count % Columns;
-                xOffset = rowIndex == Rows - 1 && partialCol > 0
+                xOffset += rowIndex == Rows - 1 && partialCol > 0
                     ? ItemWidth * (partialCol - 1)
                     : ItemWidth * (Columns - 1);
-            }
-            else
-            {
-                xOffset = frame.X;
             }
 
             for (var colIndex = 0; colIndex < Columns; colIndex++)

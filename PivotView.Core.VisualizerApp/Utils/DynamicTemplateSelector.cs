@@ -7,9 +7,13 @@ public class DynamicTemplateSelector : DataTemplateSelector
 {
     private const string DefaultTemplateKey = "Default";
 
+    public ObservableCollection<DynamicDataTemplate> Templates { get; } = new();
+
+    public BindingBase? ItemKeyBinding { get; set; }
+
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
     {
-        var name = item?.ToString();
+        var name = GetItemKey(item);
 
         DynamicDataTemplate? def = null;
 
@@ -25,7 +29,28 @@ public class DynamicTemplateSelector : DataTemplateSelector
         return def ?? throw new InvalidOperationException("Missing the 'Default' data template.");
     }
 
-    public ObservableCollection<DynamicDataTemplate> Templates { get; } = new();
+    private string? GetItemKey(object? item)
+    {
+        if (ItemKeyBinding is null)
+            return item?.ToString();
+
+        var obj = new KeyObject();
+        obj.SetBinding(KeyObject.KeyProperty, ItemKeyBinding);
+        obj.BindingContext = item;
+
+        var key = (string?)obj.GetValue(KeyObject.KeyProperty);
+
+        obj.RemoveBinding(KeyObject.KeyProperty);
+        obj.BindingContext = null;
+
+        return key;
+    }
+
+    class KeyObject : BindableObject
+    {
+        public static readonly BindableProperty KeyProperty =
+            BindableProperty.Create("Key", typeof(string), typeof(DynamicTemplateSelector), default(string));
+    }
 }
 
 [ContentProperty(nameof(Template))]

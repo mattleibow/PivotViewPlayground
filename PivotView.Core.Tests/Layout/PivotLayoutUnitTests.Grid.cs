@@ -147,6 +147,24 @@ public partial class PivotLayoutUnitTests
         }
 
         [Fact]
+        public void ArrangeFromBottomIsCorrect()
+        {
+            var frame = new RectangleF(0, 0, 120, 120);
+            var layout = new PivotGridLayout
+            {
+                Origin = PivotGridLayout.LayoutOrigin.Bottom
+            };
+
+            var items = CreateItemList(new[] { "A", "B", "C" });
+
+            layout.LayoutItems(items, frame);
+
+            Assert.Equal(new(0, 0, 60, 60), items[0].Frame.Desired);
+            Assert.Equal(new(0, 60, 60, 60), items[1].Frame.Desired);
+            Assert.Equal(new(60, 60, 60, 60), items[2].Frame.Desired);
+        }
+
+        [Fact]
         public void PerfectMultiRowMultiColArrangeIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
@@ -181,6 +199,76 @@ public partial class PivotLayoutUnitTests
             Assert.Equal(new(40, 40, 40, 40), items[4].Frame.Desired);
             Assert.Equal(new(80, 40, 40, 40), items[5].Frame.Desired);
             Assert.Equal(new(0, 80, 40, 40), items[6].Frame.Desired);
+        }
+
+        [Fact]
+        public void OffsetLayoutIsCorrect()
+        {
+            var frame = new RectangleF(100, 100, 120, 120);
+            var layout = new PivotGridLayout();
+
+            var items = CreateItemList(new[] { "A", "B", "C" });
+
+            layout.LayoutItems(items, frame);
+
+            Assert.Equal(new(100, 100, 60, 60), items[0].Frame.Desired);
+            Assert.Equal(new(160, 100, 60, 60), items[1].Frame.Desired);
+            Assert.Equal(new(100, 160, 60, 60), items[2].Frame.Desired);
+        }
+
+        [Fact]
+        public void OffsetLayoutWithItemMarginIsCorrect()
+        {
+            var frame = new RectangleF(100, 100, 120, 120);
+            var layout = new PivotGridLayout
+            {
+                ItemMargin = 5
+            };
+
+            var items = CreateItemList(new[] { "A", "B", "C" });
+
+            layout.LayoutItems(items, frame);
+
+            Assert.Equal(new(105, 105, 50, 50), items[0].Frame.Desired);
+            Assert.Equal(new(165, 105, 50, 50), items[1].Frame.Desired);
+            Assert.Equal(new(105, 165, 50, 50), items[2].Frame.Desired);
+        }
+
+        [Fact]
+        public void OffsetLayoutFromBottomIsCorrect()
+        {
+            var frame = new RectangleF(100, 100, 120, 120);
+            var layout = new PivotGridLayout
+            {
+                Origin = PivotGridLayout.LayoutOrigin.Bottom
+            };
+
+            var items = CreateItemList(new[] { "A", "B", "C" });
+
+            layout.LayoutItems(items, frame);
+
+            Assert.Equal(new(100, 100, 60, 60), items[0].Frame.Desired);
+            Assert.Equal(new(100, 160, 60, 60), items[1].Frame.Desired);
+            Assert.Equal(new(160, 160, 60, 60), items[2].Frame.Desired);
+        }
+
+        [Fact]
+        public void OffsetLayoutFromBottomWithItemMarginIsCorrect()
+        {
+            var frame = new RectangleF(100, 100, 120, 120);
+            var layout = new PivotGridLayout
+            {
+                ItemMargin = 5,
+                Origin = PivotGridLayout.LayoutOrigin.Bottom
+            };
+
+            var items = CreateItemList(new[] { "A", "B", "C" });
+
+            layout.LayoutItems(items, frame);
+
+            Assert.Equal(new(105, 105, 50, 50), items[0].Frame.Desired);
+            Assert.Equal(new(105, 165, 50, 50), items[1].Frame.Desired);
+            Assert.Equal(new(165, 165, 50, 50), items[2].Frame.Desired);
         }
     }
 }

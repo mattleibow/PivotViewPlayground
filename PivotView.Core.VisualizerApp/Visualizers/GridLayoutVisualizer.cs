@@ -10,4 +10,11 @@ public class GridLayoutVisualizer : LayoutVisualizer<PivotGridLayout>
         : base("Grid", new PivotGridLayout(), items)
     {
     }
+
+    [Switch("Stack from the bottom")]
+    public bool IsBottomUp
+    {
+        get => Layout.Origin == PivotGridLayout.LayoutOrigin.Bottom;
+        set => Layout.Origin = value ? PivotGridLayout.LayoutOrigin.Bottom : PivotGridLayout.LayoutOrigin.Top;
+    }
 }

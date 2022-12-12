@@ -1,6 +1,7 @@
 ﻿using PivotView.Core.Layout;
 using PivotView.Core.Rendering;
 using System.Collections.ObjectModel;
+using System.Drawing;
 
 namespace PivotView.Core.VisualizerApp.Visualizers;
 

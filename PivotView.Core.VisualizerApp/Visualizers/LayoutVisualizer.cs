@@ -20,7 +20,7 @@ public class LayoutVisualizer : Visualizer
     public PivotLayout Layout { get; }
 
     public ObservableCollection<PivotRendererItem> Items { get; }
-    
+
     [Switch("Show layout lines")]
     public bool IsLayoutLinesVisible { get; set; } = false;
 
@@ -29,6 +29,9 @@ public class LayoutVisualizer : Visualizer
 
     [Switch("Show items")]
     public bool IsItemsVisible { get; set; } = true;
+
+    [Switch("Show desired locations")]
+    public bool IsDesiredLocations { get; set; } = true;
 
     [Slider("Item margin", 0, 20)]
     public double ItemMargin
@@ -79,10 +82,14 @@ public class LayoutVisualizer : Visualizer
 
         foreach (var item in Items)
         {
-            var itemRect = item.Frame.Desired.ToRect();
+            var r = IsDesiredLocations
+                ? item.Frame.Desired
+                : item.Frame.Current;
+            var itemRect = r.ToRect();
 
             canvas.FillRectangle(itemRect);
             canvas.DrawRectangle(itemRect);
+            canvas.DrawString(item.Name, itemRect, HorizontalAlignment.Center, VerticalAlignment.Center);
         }
     }
 
