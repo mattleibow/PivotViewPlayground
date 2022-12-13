@@ -2,11 +2,11 @@
 
 abstract public class PivotLayout
 {
-    public int ItemCountOverride { get; set; }
+    public virtual int ItemCountOverride { get; set; }
 
-    public double ItemAspectRatioOverride { get; set; }
+    public virtual double ItemAspectRatioOverride { get; set; }
 
-    public double ItemMargin { get; set; }
+    public virtual double ItemMargin { get; set; }
 
     /// <summary>
     /// Width/Height

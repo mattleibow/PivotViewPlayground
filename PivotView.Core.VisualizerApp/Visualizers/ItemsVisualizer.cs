@@ -22,13 +22,20 @@ public class ItemsVisualizer : Visualizer
     [Switch("Show desired locations")]
     public bool IsDesiredLocations { get; set; } = true;
 
+    [Slider("Screen scale", 0.1, 1)]
+    public double ScreenScale { get; set; } = 0.5;
+
     public override void Draw(ICanvas canvas, RectF bounds)
     {
         base.Draw(canvas, bounds);
 
-        var w4 = bounds.Width / 4;
-        var h4 = bounds.Height / 4;
-        var screenRect = new RectF(w4, h4, w4 * 2, h4 * 2);
+        var scaledW = bounds.Width * ScreenScale;
+        var scaledH = bounds.Height * ScreenScale;
+        var screenRect = new RectF(
+            (float)(bounds.X + (bounds.Width - scaledW) / 2),
+            (float)(bounds.Y + (bounds.Height - scaledH) / 2),
+            (float)scaledW,
+            (float)scaledH);
 
         // draw items
         if (IsItemsVisible)

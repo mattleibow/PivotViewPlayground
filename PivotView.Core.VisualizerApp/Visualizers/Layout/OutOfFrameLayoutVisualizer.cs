@@ -21,6 +21,16 @@ public class OutOfFrameLayoutVisualizer : LayoutVisualizer<OutOfFrameLayoutVisua
         {
         }
 
+        public override double ItemMargin
+        {
+            get => base.ItemMargin;
+            set
+            {
+                base.ItemMargin = value;
+                gridLayout.ItemMargin = value;
+            }
+        }
+
         public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
         {
             var otherItems = items.Where((item, idx) => idx % 2 != 0).ToArray();

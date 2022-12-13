@@ -29,8 +29,8 @@ public class PivotVerticalStackLayout : PivotLayout
             var newFrame = new RectangleF(
                 (float)(frame.X + ItemMargin),
                 (float)(frame.Y + ItemMargin + (ItemHeight * i)),
-                (float)(ItemWidth - ItemMargin - ItemMargin),
-                (float)(ItemHeight - ItemMargin - ItemMargin));
+                (float)(Math.Max(0, ItemWidth - ItemMargin - ItemMargin)),
+                (float)(Math.Max(0, ItemHeight - ItemMargin - ItemMargin)));
 
             item.Frame.Desired = newFrame;
         }
