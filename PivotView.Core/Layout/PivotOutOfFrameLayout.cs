@@ -63,7 +63,7 @@ public class PivotOutOfFrameLayout : PivotLayout
             var normY = normOnscreenCenter.Y > 0
                 ? normClipRect.Bottom + buffer.Height + normOnscreenCenter.Y
                 : normClipRect.Top - buffer.Height + normOnscreenCenter.Y;
-            
+
             // calculate the new normalized position
             var newNormY = direction * normX;
             var newNormOnscreenCenter = Math.Abs(newNormY) > Math.Abs(normY)
