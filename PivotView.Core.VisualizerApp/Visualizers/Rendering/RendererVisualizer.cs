@@ -18,6 +18,20 @@ public class RendererVisualizer : ItemsVisualizer
 
     public PivotRenderer Renderer { get; }
 
+    [Slider("Minimum animation delay (ms)", 0, 1000)]
+    public double MinimumAnimationDelay
+    {
+        get => Renderer.MinimumAnimationDelay.TotalMilliseconds;
+        set => Renderer.MinimumAnimationDelay = TimeSpan.FromMilliseconds(value);
+    }
+
+    [Slider("Maximum animation delay (ms)", 0, 1000)]
+    public double MaximumAnimationDelay
+    {
+        get => Renderer.MaximumAnimationDelay.TotalMilliseconds;
+        set => Renderer.MaximumAnimationDelay = TimeSpan.FromMilliseconds(value);
+    }
+
     protected override void PrepareItems(RectF bounds)
     {
         base.PrepareItems(bounds);
