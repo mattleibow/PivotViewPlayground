@@ -2,14 +2,14 @@
 
 namespace PivotView.Core.Animation;
 
-[DebuggerDisplay("Instantaneous: Name = {Name}, IsComplete = {IsComplete}")]
-public class InstantaneousAnimationStep : IAnimationStep
+[DebuggerDisplay("Action: Name = {Name}, IsComplete = {IsComplete}")]
+public class ActionAnimationStep : IAnimationStep
 {
-    public InstantaneousAnimationStep()
+    public ActionAnimationStep()
     {
     }
 
-    public InstantaneousAnimationStep(Action action)
+    public ActionAnimationStep(Action action)
         : this()
     {
         Action = action;

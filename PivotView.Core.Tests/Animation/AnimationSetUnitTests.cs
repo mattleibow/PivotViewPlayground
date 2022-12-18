@@ -7,7 +7,7 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        var step1 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step1);
 
         set.Update(Time.EightHundredMilli);
@@ -22,10 +22,10 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        var step1 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step1);
 
-        var step2 = new IncrementalAnimationStep(Time.OneSec);
+        var step2 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step2);
 
         Assert.Null(set.Current);
@@ -52,10 +52,10 @@ public class AnimationSetUnitTests
         var set = new AnimationSet();
         Assert.Equal(0, set.Count);
 
-        set.Add(new IncrementalAnimationStep(Time.OneSec));
+        set.Add(new PropertyAnimationStep(Time.OneSec));
         Assert.Equal(1, set.Count);
 
-        set.Add(new IncrementalAnimationStep(Time.OneSec));
+        set.Add(new PropertyAnimationStep(Time.OneSec));
         Assert.Equal(2, set.Count);
 
         set.Update(Time.FourHundredMilli);
@@ -79,10 +79,10 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        var step1 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step1);
 
-        var step2 = new IncrementalAnimationStep(Time.OneSec);
+        var step2 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step2);
 
         Assert.Null(set.Current);
@@ -108,10 +108,10 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        var step1 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step1);
 
-        var step2 = new InstantaneousAnimationStep();
+        var step2 = new ActionAnimationStep();
         set.Add(step2);
 
         Assert.Null(set.Current);
@@ -127,11 +127,11 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        set.Add(new IncrementalAnimationStep(Time.OneSec));
+        set.Add(new PropertyAnimationStep(Time.OneSec));
 
-        set.Add(new InstantaneousAnimationStep());
-        set.Add(new InstantaneousAnimationStep());
-        set.Add(new InstantaneousAnimationStep());
+        set.Add(new ActionAnimationStep());
+        set.Add(new ActionAnimationStep());
+        set.Add(new ActionAnimationStep());
 
         Assert.Null(set.Current);
 
@@ -144,10 +144,10 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        var step1 = new PropertyAnimationStep(Time.OneSec);
         set.Add(step1);
 
-        var step2 = new InstantaneousAnimationStep();
+        var step2 = new ActionAnimationStep();
         set.Add(step2);
 
         Assert.Null(set.Current);

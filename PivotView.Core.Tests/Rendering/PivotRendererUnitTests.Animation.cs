@@ -53,48 +53,48 @@ public partial class PivotRendererUnitTests
 
             // step 1.1
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[0]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[0]);
                 Assert.Equal(1, step.Count);
                 Assert.Equal("Exit", step.Name);
 
                 var stepItems = step.ToArray();
-                var item = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
+                var item = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
                 Assert.Equal(items[0].Frame, item.Property);
             }
 
             // step 1.2
             {
-                var step = Assert.IsType<InstantaneousAnimationStep>(steps[1]);
+                var step = Assert.IsType<ActionAnimationStep>(steps[1]);
                 Assert.Equal("Hide", step.Name);
             }
 
             // step 2.1
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[2]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[2]);
                 Assert.Equal(2, step.Count);
                 Assert.Equal("Layout", step.Name);
 
                 var stepItems = step.ToArray();
-                var item1 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
-                var item2 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[1]);
+                var item1 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
+                var item2 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[1]);
                 Assert.Equal(items[1].Frame, item1.Property);
                 Assert.Equal(items[2].Frame, item2.Property);
             }
 
             // step 2.2
             {
-                var step = Assert.IsType<InstantaneousAnimationStep>(steps[3]);
+                var step = Assert.IsType<ActionAnimationStep>(steps[3]);
                 Assert.Equal("Add", step.Name);
             }
 
             // step 3
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[4]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[4]);
                 Assert.Equal(1, step.Count);
                 Assert.Equal("Enter", step.Name);
 
                 var stepItems = step.ToArray();
-                var item = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
+                var item = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
                 Assert.Equal(items[3].Frame, item.Property);
             }
         }
@@ -180,14 +180,14 @@ public partial class PivotRendererUnitTests
 
             // step 2.1
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[0]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[0]);
                 Assert.Equal(3, step.Count);
                 Assert.Equal("Layout", step.Name);
 
                 var stepItems = step.ToArray();
-                var item1 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
-                var item2 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[1]);
-                var item3 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[2]);
+                var item1 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
+                var item2 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[1]);
+                var item3 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[2]);
                 Assert.Equal(items[0].Frame, item1.Property);
                 Assert.Equal(items[1].Frame, item2.Property);
                 Assert.Equal(items[2].Frame, item3.Property);
@@ -260,14 +260,14 @@ public partial class PivotRendererUnitTests
 
             // step 2.1
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[0]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[0]);
                 Assert.Equal(3, step.Count);
                 Assert.Equal("Layout", step.Name);
 
                 var stepItems = step.ToArray();
-                var item1 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
-                var item2 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[1]);
-                var item3 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[2]);
+                var item1 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
+                var item2 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[1]);
+                var item3 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[2]);
                 Assert.Equal(items[0].Frame, item1.Property);
                 Assert.Equal(items[1].Frame, item2.Property);
                 Assert.Equal(items[2].Frame, item3.Property);
@@ -275,18 +275,18 @@ public partial class PivotRendererUnitTests
 
             // step 2.2
             {
-                var step = Assert.IsType<InstantaneousAnimationStep>(steps[1]);
+                var step = Assert.IsType<ActionAnimationStep>(steps[1]);
                 Assert.Equal("Add", step.Name);
             }
 
             // step 3
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[2]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[2]);
                 Assert.Equal(1, step.Count);
                 Assert.Equal("Enter", step.Name);
 
                 var stepItems = step.ToArray();
-                var item = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
+                var item = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
                 Assert.Equal(items[3].Frame, item.Property);
             }
         }
@@ -365,30 +365,30 @@ public partial class PivotRendererUnitTests
 
             // step 1.1
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[0]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[0]);
                 Assert.Equal(1, step.Count);
                 Assert.Equal("Exit", step.Name);
 
                 var stepItems = step.ToArray();
-                var item = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
+                var item = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
                 Assert.Equal(items[2].Frame, item.Property);
             }
 
             // step 1.2
             {
-                var step = Assert.IsType<InstantaneousAnimationStep>(steps[1]);
+                var step = Assert.IsType<ActionAnimationStep>(steps[1]);
                 Assert.Equal("Hide", step.Name);
             }
 
             // step 2
             {
-                var step = Assert.IsType<IncrementalAnimationStep>(steps[2]);
+                var step = Assert.IsType<PropertyAnimationStep>(steps[2]);
                 Assert.Equal(2, step.Count);
                 Assert.Equal("Layout", step.Name);
 
                 var stepItems = step.ToArray();
-                var item1 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[0]);
-                var item2 = Assert.IsType<AnimationStepItem<RectangleF>>(stepItems[1]);
+                var item1 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[0]);
+                var item2 = Assert.IsType<PropertyAnimationStepItem<RectangleF>>(stepItems[1]);
                 Assert.Equal(items[0].Frame, item1.Property);
                 Assert.Equal(items[1].Frame, item2.Property);
             }
@@ -485,13 +485,15 @@ public partial class PivotRendererUnitTests
                 Layout = new VerticalStackLayout(),
                 LayoutTransition = new HorizontalOffsetLayoutTransition(),
                 Frame = new RectangleF(0, 0, 120, 120),
-                AnimationDelay = TimeSpan.Zero,
+                LayoutAnimationDelay = TimeSpan.Zero,
                 AddItemsAnimationDuration = Time.OneSec,
                 MoveItemsAnimationDuration = Time.OneSec,
                 RemoveItemsAnimationDuration = Time.OneSec,
                 AddItemsAnimationEasing = Easing.Linear,
                 MoveItemsAnimationEasing = Easing.Linear,
                 RemoveItemsAnimationEasing = Easing.Linear,
+                MaximumAnimationDelay = TimeSpan.Zero,
+                MinimumAnimationDelay = TimeSpan.Zero,
             };
     }
 }

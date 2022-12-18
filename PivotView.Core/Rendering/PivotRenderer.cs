@@ -106,7 +106,11 @@ public class PivotRenderer
         }
     }
 
-    public TimeSpan AnimationDelay { get; set; } = TimeSpan.FromSeconds(0.4);
+    public TimeSpan LayoutAnimationDelay { get; set; } = TimeSpan.FromSeconds(0.4);
+
+    public TimeSpan MinimumAnimationDelay { get; set; } = TimeSpan.FromSeconds(0.0);
+
+    public TimeSpan MaximumAnimationDelay { get; set; } = TimeSpan.FromSeconds(0.2);
 
     public TimeSpan RemoveItemsAnimationDuration { get; set; } = TimeSpan.FromSeconds(0.5);
 
@@ -156,7 +160,7 @@ public class PivotRenderer
 
     private void UpdateVisibleItems()
     {
-        bufferedUpdate.Post(AnimationDelay, UpdateVisibleItemsImmediate);
+        bufferedUpdate.Post(LayoutAnimationDelay, UpdateVisibleItemsImmediate);
     }
 
     private void UpdateVisibleItemsImmediate()
@@ -197,9 +201,9 @@ public class PivotRenderer
         if (removed.Length > 0)
         {
             // 1.1 animate out
-            var step1 = new IncrementalAnimationStep(RemoveItemsAnimationDuration, RemoveItemsAnimationEasing)
+            var step1 = new PropertyAnimationStep(RemoveItemsAnimationDuration, RemoveItemsAnimationEasing, MinimumAnimationDelay, MaximumAnimationDelay)
             {
-                Name = "Exit"
+                Name = "Exit",
             };
             foreach (var item in removed)
             {
@@ -208,7 +212,7 @@ public class PivotRenderer
             yield return step1;
 
             // 1.2 remove from visible items
-            var step1end = new InstantaneousAnimationStep
+            var step1end = new ActionAnimationStep
             {
                 Name = "Hide",
                 Action = () => visibleItems.RemoveAll(i => removed.Contains(i)),
@@ -220,7 +224,7 @@ public class PivotRenderer
         if (remaining.Length > 0)
         {
             // 2.1 rearrange
-            var step2 = new IncrementalAnimationStep(MoveItemsAnimationDuration, MoveItemsAnimationEasing)
+            var step2 = new PropertyAnimationStep(MoveItemsAnimationDuration, MoveItemsAnimationEasing, MinimumAnimationDelay, MaximumAnimationDelay)
             {
                 Name = "Layout"
             };
@@ -234,7 +238,7 @@ public class PivotRenderer
         // 2.2 add new items to visible items
         if (added.Length > 0)
         {
-            var step2end = new InstantaneousAnimationStep
+            var step2end = new ActionAnimationStep
             {
                 Name = "Add",
                 Action = () => visibleItems.AddRange(added),
@@ -246,7 +250,7 @@ public class PivotRenderer
         if (added.Length > 0)
         {
             // 3.1 animate new items in
-            var step3 = new IncrementalAnimationStep(AddItemsAnimationDuration, AddItemsAnimationEasing)
+            var step3 = new PropertyAnimationStep(AddItemsAnimationDuration, AddItemsAnimationEasing, MinimumAnimationDelay, MaximumAnimationDelay)
             {
                 Name = "Enter"
             };

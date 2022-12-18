@@ -13,6 +13,7 @@ internal static class Time
     public static TimeSpan TwoSec = TimeSpan.FromSeconds(1);
 
     public static TimeSpan OneHundredMilli = TimeSpan.FromMilliseconds(100);
+    public static TimeSpan TwoHundredMilli = TimeSpan.FromMilliseconds(200);
     public static TimeSpan FourHundredMilli = TimeSpan.FromMilliseconds(400);
     public static TimeSpan EightHundredMilli = TimeSpan.FromMilliseconds(800);
 }
