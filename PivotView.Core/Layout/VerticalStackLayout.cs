@@ -1,8 +1,8 @@
 ﻿namespace PivotView.Core.Layout;
 
-public class PivotVerticalStackLayout : PivotLayout
+public class VerticalStackLayout : PivotLayout
 {
-    public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    public override void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
         // 1. Get the aspect ratio of the items
         ItemAspectRatio = GetItemAspectRatio(items);
@@ -20,7 +20,7 @@ public class PivotVerticalStackLayout : PivotLayout
         LayoutHeight = ItemHeight * count;
     }
 
-    public override void Arrange(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    public override void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
         for (var i = 0; i < items.Count; i++)
         {

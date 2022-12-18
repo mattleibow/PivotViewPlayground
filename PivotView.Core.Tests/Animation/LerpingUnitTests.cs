@@ -1,4 +1,4 @@
-﻿namespace PivotView.Core.Tests.Animation;
+﻿namespace PivotView.Core.Tests;
 
 public class LerpingUnitTests
 {

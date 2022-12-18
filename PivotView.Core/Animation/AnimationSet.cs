@@ -1,29 +1,59 @@
-﻿namespace PivotView.Core.Animation;
+﻿using System.Collections;
 
-public class AnimationSet
+namespace PivotView.Core.Animation;
+
+public interface IAnimationSet
 {
-    private readonly LinkedList<AnimationStep> steps = new();
+    int Count { get; }
 
-    private AnimationStep? currentStep;
-    private TimeSpan currentDuration = TimeSpan.Zero;
+    IEnumerable<IAnimationStep> Steps { get; }
+
+    IAnimationStep? Current { get; }
+
+    bool IsComplete { get; }
+
+    void Update(TimeSpan delta);
+
+    void Complete();
+}
+
+public class AnimationSet : IAnimationSet, IEnumerable<IAnimationStep>
+{
+    private readonly LinkedList<IAnimationStep> steps = new();
+
+    private IAnimationStep? currentStep;
 
     public AnimationSet()
     {
     }
 
-    public AnimationStep? Current => currentStep;
+    public IAnimationStep? Current => currentStep;
 
     public int Count => steps.Count + (currentStep is null ? 0 : 1);
 
-    public void Add(AnimationStep step)
+    public bool IsComplete => steps.Count == 0 && currentStep is null;
+
+    public void Add(IAnimationStep step)
     {
         steps.AddLast(step);
     }
 
     public void Update(TimeSpan delta)
     {
+        // we do not support backwards at this time
         if (delta < TimeSpan.Zero)
             throw new ArgumentOutOfRangeException(nameof(delta), "The animation cannot go backwards. Ensure the delta value is positive.");
+
+        // skip if not making any progress 
+        if (delta == TimeSpan.Zero)
+            return;
+
+        // jump to the end if max value was specified
+        if (delta == TimeSpan.MaxValue)
+        {
+            Complete();
+            return;
+        }
 
         var remainingDelta = delta;
         while (remainingDelta >= TimeSpan.Zero)
@@ -36,7 +66,11 @@ public class AnimationSet
             }
 
             // if there is nothing to do, bail out
-            if (currentStep is null || remainingDelta == TimeSpan.Zero)
+            if (currentStep is null)
+                return;
+
+            // run the next step if it is instantaneous
+            if (!currentStep.IsInstantaneous && remainingDelta == TimeSpan.Zero)
                 return;
 
             // step the animation
@@ -46,18 +80,24 @@ public class AnimationSet
             if (currentStep.IsComplete)
                 currentStep = null;
         }
-
-        currentDuration += delta;
     }
 
     public void Complete()
     {
-        // TODO: set all values to their final values
+        foreach (var step in steps)
+            step.Complete();
 
         steps.Clear();
 
         currentStep = null;
-        currentDuration = TimeSpan.Zero;
     }
+
+    public IEnumerator<IAnimationStep> GetEnumerator() =>
+        steps.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() =>
+        ((IEnumerable)steps).GetEnumerator();
+
+    IEnumerable<IAnimationStep> IAnimationSet.Steps => steps;
 }
 

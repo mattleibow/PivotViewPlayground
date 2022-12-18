@@ -19,11 +19,17 @@ public partial class AnimationPage : ContentPage
             new()
             {
                 new EasingVisualizer("Linear", Easing.Linear),
+
                 new EasingVisualizer("Sin In", Easing.SinIn),
                 new EasingVisualizer("Sin Out", Easing.SinOut),
                 new EasingVisualizer("Sin InOut", Easing.SinInOut),
+
                 new EasingVisualizer("Spring In", Easing.SpringIn),
                 new EasingVisualizer("Spring Out", Easing.SpringOut),
+
+                new EasingVisualizer("Cubic In", Easing.CubicIn),
+                new EasingVisualizer("Cubic Out", Easing.CubicOut),
+                new EasingVisualizer("Cubic InOut", Easing.CubicInOut),
 
                 new LerpingVisualizer()
             };
@@ -72,5 +78,5 @@ public partial class AnimationPage : ContentPage
     }
 
     private static PivotRendererItem NewItem(string name) =>
-        new(new() { Name = name });
+        new(new() { Id = name });
 }

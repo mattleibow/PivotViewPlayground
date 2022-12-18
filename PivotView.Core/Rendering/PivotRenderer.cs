@@ -2,16 +2,23 @@
 
 public class PivotRenderer
 {
-    private readonly PivotLayout outOfFrameLayoutRemoving = new PivotOutOfFrameLayout(false);
-    private readonly PivotLayout outOfFrameLayoutAdding = new PivotOutOfFrameLayout(true);
+    private readonly TimeSpan addItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
+    private readonly TimeSpan moveItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
+    private readonly TimeSpan removeItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
+
+    private readonly EasingDelegate addItemsAnimationEasing = Easing.CubicInOut;
+    private readonly EasingDelegate moveItemsAnimationEasing = Easing.CubicInOut;
+    private readonly EasingDelegate removeItemsAnimationEasing = Easing.CubicInOut;
 
     private readonly List<PivotRendererItem> allItems = new();
     private readonly List<PivotRendererItem> currentItems = new();
+    private readonly List<PivotRendererItem> visibleItems = new();
 
-    private PivotDataSource? dataSource;
-    private PivotLayout? layout;
-    private RectangleF frame;
     private Func<string, bool>? filter;
+    private PivotDataSource? dataSource;
+    private PivotLayout? layout = new GridLayout();
+    private RectangleF frame;
+    private AnimationSet? animation;
 
     public PivotRenderer()
     {
@@ -21,22 +28,24 @@ public class PivotRenderer
     // TODO: Filter
     // TODO: SortOrder
 
-    internal AnimationSet? Animation { get; set; }
-
-    public EasingDelegate AnimationEasing { get; set; } = Easing.Linear;
+    public IAnimationSet? Animation => animation;
 
     public Func<string, bool>? Filter
     {
         get => filter;
         set
         {
+            //if (filter == value)
+            //    return;
+
             filter = value;
 
-            BuildAnimationSet();
-
-            // update current items
             currentItems.Clear();
             currentItems.AddRange(GetFilteredItems());
+
+            UpdateVisibleItems();
+
+            ItemsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -45,10 +54,14 @@ public class PivotRenderer
         get => dataSource;
         set
         {
+            if (dataSource == value)
+                return;
+
             dataSource = value;
 
             allItems.Clear();
             currentItems.Clear();
+            visibleItems.Clear();
 
             if (dataSource?.Items is not null)
             {
@@ -60,11 +73,13 @@ public class PivotRenderer
 
                 // TODO: sorting of all items
 
-                // update current items based on filter
-                currentItems.AddRange(GetFilteredItems());
-
-                // TODO: re-layout
+                var filteredItems = GetFilteredItems();
+                currentItems.AddRange(filteredItems);
             }
+
+            UpdateVisibleItems();
+
+            ItemsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -73,97 +88,161 @@ public class PivotRenderer
         get => layout;
         set
         {
+            if (layout == value)
+                return;
+
             layout = value;
 
-            // TODO: re-layout
+            UpdateVisibleItems();
         }
     }
+
+    public PivotLayoutTransition? LayoutTransition { get; set; } = new ExplosionLayoutTransition();
 
     public RectangleF Frame
     {
         get => frame;
         set
         {
+            if (frame == value)
+                return;
+
             frame = value;
 
-            // TODO: re-layout
+            UpdateVisibleItems();
         }
     }
 
+    public IReadOnlyList<PivotRendererItem> Items => allItems;
+
     public IReadOnlyList<PivotRendererItem> CurrentItems => currentItems;
 
-    public IReadOnlyList<PivotRendererItem> Items => allItems;
+    public IReadOnlyList<PivotRendererItem> VisibleItems => visibleItems;
+
+    public event EventHandler? ItemsChanged;
 
     public void ResetLayout()
     {
-        Animation = null;
+        // stop all animations
+        animation = null;
 
-        Layout?.LayoutItems(CurrentItems, Frame);
+        // update current items
+        var filteredItems = GetFilteredItems();
+        currentItems.Clear();
+        currentItems.AddRange(filteredItems);
+        visibleItems.Clear();
+        visibleItems.AddRange(filteredItems);
 
-        foreach (var item in CurrentItems)
+        // layout items
+        Layout?.LayoutItems(filteredItems, Frame);
+
+        // immediately apply layout
+        foreach (var item in filteredItems)
             item.Frame.Current = item.Frame.Desired;
     }
 
     private PivotRendererItem[] GetFilteredItems() =>
         Filter is null
            ? allItems.ToArray()
-           : allItems.Where(i => Filter(i.Name)).ToArray();
+           : allItems.Where(i => Filter(i.Id)).ToArray();
 
-    private void BuildAnimationSet()
+    private void UpdateVisibleItems()
     {
-        // TODO: reset animation
-        Animation = null;
+        animation = null;
 
-        if (allItems.Count == 0 || Layout is null)
+        // skip the layout if there are no itema or no place to put them
+        if (allItems.Count == 0 || Frame.IsEmpty)
             return;
 
         // Filter
 
-        // calculate final items
-        var finalItems = GetFilteredItems();
         // calculate old/new items
-        var removedItems = currentItems.Except(finalItems).ToArray();
-        var remainingItems = currentItems.Except(removedItems).ToArray();
-        var addedItems = finalItems.Except(currentItems).ToArray();
+        var removedItems = visibleItems.Except(currentItems).ToArray();
+        var remainingItems = visibleItems.Except(removedItems).ToArray();
+        var addedItems = currentItems.Except(visibleItems).ToArray();
 
         // Layout
 
         // calculate all the final positions
-        Layout.LayoutItems(finalItems, Frame);
+        Layout?.LayoutItems(currentItems, Frame);
         // calculate new frames
-        outOfFrameLayoutAdding.LayoutItems(addedItems, Frame);
+        LayoutTransition?.ArrangeItems(addedItems, Frame, PivotLayoutTransitionType.Enter);
         // calculate old frames
-        outOfFrameLayoutRemoving.LayoutItems(removedItems, Frame);
+        LayoutTransition?.ArrangeItems(removedItems, Frame, PivotLayoutTransitionType.Exit);
 
         // Animation
 
+        animation = new AnimationSet();
+
+        foreach (var step in GetAnimationSteps(removedItems, remainingItems, addedItems))
+            animation.Add(step);
+    }
+
+    private IEnumerable<IAnimationStep> GetAnimationSteps(PivotRendererItem[] removed, PivotRendererItem[] remaining, PivotRendererItem[] added)
+    {
         // add step 1 - remove old items
-        var step1 = new AnimationStep(TimeSpan.FromSeconds(1), AnimationEasing);
-        foreach (var item in removedItems)
+        if (removed.Length > 0)
         {
-            step1.Add(item.Frame);
+            // 1.1 animate out
+            var step1 = new IncrementalAnimationStep(removeItemsAnimationDuration, removeItemsAnimationEasing)
+            {
+                Name = "Exit"
+            };
+            foreach (var item in removed)
+            {
+                step1.Add(item.Frame);
+            }
+            yield return step1;
+
+            // 1.2 remove from visible items
+            var step1end = new InstantaneousAnimationStep
+            {
+                Name = "Hide",
+                Action = () => visibleItems.RemoveAll(i => removed.Contains(i)),
+            };
+            yield return step1end;
         }
-        step1.OnComplete = () =>
-        {
-            currentItems.RemoveAll(i => removedItems.Contains(i));
-        };
 
         // add step 2 - re-layout remaining items
-        var step2 = new AnimationStep(TimeSpan.FromSeconds(1), AnimationEasing);
-        foreach (var item in remainingItems)
+        if (remaining.Length > 0)
         {
-            step2.Add(item.Frame);
+            // 2.1 rearrange
+            var step2 = new IncrementalAnimationStep(moveItemsAnimationDuration, moveItemsAnimationEasing)
+            {
+                Name = "Layout"
+            };
+            foreach (var item in remaining)
+            {
+                step2.Add(item.Frame);
+            }
+            yield return step2;
         }
-        step2.OnComplete = () =>
+
+        // 2.2 add new items to visible items
+        if (added.Length > 0)
         {
-            currentItems.AddRange(addedItems);
-        };
+            var step2end = new InstantaneousAnimationStep
+            {
+                Name = "Add",
+                Action = () => visibleItems.AddRange(added),
+            };
+            yield return step2end;
+        }
 
         // add step 3 - add new items
-        var step3 = new AnimationStep(TimeSpan.FromSeconds(1), AnimationEasing);
-        foreach (var item in addedItems)
+        if (added.Length > 0)
         {
-            step3.Add(item.Frame);
+            // 3.1 animate new items in
+            var step3 = new IncrementalAnimationStep(addItemsAnimationDuration, addItemsAnimationEasing)
+            {
+                Name = "Enter"
+            };
+            foreach (var item in added)
+            {
+                step3.Add(item.Frame);
+            }
+
+            yield return step3;
         }
     }
 }

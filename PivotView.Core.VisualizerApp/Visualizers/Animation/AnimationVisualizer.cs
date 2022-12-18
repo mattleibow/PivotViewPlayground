@@ -1,5 +1,4 @@
 ﻿using PivotView.Core.Rendering;
-using System.Collections.ObjectModel;
 
 namespace PivotView.Core.VisualizerApp.Visualizers.Animation;
 
@@ -7,7 +6,7 @@ public class AnimationVisualizer : ItemsVisualizer
 {
     long lastTime;
 
-    public AnimationVisualizer(string name, ObservableCollection<PivotRendererItem> items)
+    public AnimationVisualizer(string name, IReadOnlyList<PivotRendererItem> items)
         : base(name + " Animation", items)
     {
     }

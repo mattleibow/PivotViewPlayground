@@ -6,13 +6,18 @@
     xmlns:local="clr-namespace:PivotView.Core.VisualizerApp">
 
     <ShellContent
+        Title="Renderer"
+        ContentTemplate="{DataTemplate local:RendererPage}"
+        Route="Renderer" />
+
+    <ShellContent
         Title="Animation"
         ContentTemplate="{DataTemplate local:AnimationPage}"
-        Route="AnimationPage" />
+        Route="Animation" />
 
     <ShellContent
         Title="Layout"
         ContentTemplate="{DataTemplate local:LayoutPage}"
-        Route="LayoutPage" />
+        Route="Layout" />
 
 </Shell>

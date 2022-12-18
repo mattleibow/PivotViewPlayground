@@ -23,13 +23,13 @@ abstract public class PivotLayout
 
     public void LayoutItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
-        Measure(items, frame);
-        Arrange(items, frame);
+        MeasureItems(items, frame);
+        ArrangeItems(items, frame);
     }
 
-    public abstract void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+    public abstract void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
 
-    public abstract void Arrange(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+    public abstract void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
 
     protected double GetItemAspectRatio(IReadOnlyList<PivotRendererItem> items)
     {

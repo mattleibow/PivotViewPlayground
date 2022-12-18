@@ -8,7 +8,7 @@ namespace PivotView.Core.VisualizerApp.Visualizers.Animation;
 public class EasingVisualizer : AnimationVisualizer
 {
     public EasingVisualizer(string name, EasingDelegate func)
-        : base($"{name} Easing", new(new[] { CreateAnimationItem() }))
+        : base($"{name} Easing", new List<PivotRendererItem>(new[] { CreateAnimationItem() }))
     {
         EasingFunction = func;
     }

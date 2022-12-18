@@ -82,5 +82,5 @@ public partial class LayoutPage : ContentPage
     }
 
     private static PivotRendererItem NewItem(string name) =>
-        new(new() { Name = name });
+        new(new() { Id = name });
 }

@@ -1,6 +1,6 @@
 ﻿namespace PivotView.Core.Layout;
 
-public class PivotGridLayout : PivotLayout
+public class GridLayout : PivotLayout
 {
     public enum LayoutOrigin
     {
@@ -14,7 +14,7 @@ public class PivotGridLayout : PivotLayout
 
     public int Rows { get; protected set; }
 
-    public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    public override void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
         // 1. Get the aspect ratio of the items
         ItemAspectRatio = GetItemAspectRatio(items);
@@ -56,7 +56,7 @@ public class PivotGridLayout : PivotLayout
         LayoutHeight = ItemHeight * Rows;
     }
 
-    public override void Arrange(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+    public override void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
     {
         if (ItemWidth == 0 || ItemHeight == 0)
             return;

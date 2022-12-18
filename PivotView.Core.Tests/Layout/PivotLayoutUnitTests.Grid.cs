@@ -8,11 +8,11 @@ public partial class PivotLayoutUnitTests
         public void SingleItemMeasureIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A" });
 
-            layout.Measure(items, frame);
+            layout.MeasureItems(items, frame);
 
             Assert.Equal(1, layout.Rows);
             Assert.Equal(1, layout.Columns);
@@ -28,11 +28,11 @@ public partial class PivotLayoutUnitTests
         public void SingleRowMeasureIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B" });
 
-            layout.Measure(items, frame);
+            layout.MeasureItems(items, frame);
 
             Assert.Equal(1, layout.Rows);
             Assert.Equal(2, layout.Columns);
@@ -48,11 +48,11 @@ public partial class PivotLayoutUnitTests
         public void MeasureIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
-            layout.Measure(items, frame);
+            layout.MeasureItems(items, frame);
 
             Assert.Equal(2, layout.Rows);
             Assert.Equal(2, layout.Columns);
@@ -68,11 +68,11 @@ public partial class PivotLayoutUnitTests
         public void PerfectMultiRowMultiColMeasureIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C", "D", "E", "F" });
 
-            layout.Measure(items, frame);
+            layout.MeasureItems(items, frame);
 
             Assert.Equal(2, layout.Rows);
             Assert.Equal(3, layout.Columns);
@@ -88,11 +88,11 @@ public partial class PivotLayoutUnitTests
         public void MultiRowMultiColMeasureIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C", "D", "E", "F", "G" });
 
-            layout.Measure(items, frame);
+            layout.MeasureItems(items, frame);
 
             Assert.Equal(3, layout.Rows);
             Assert.Equal(3, layout.Columns);
@@ -108,7 +108,7 @@ public partial class PivotLayoutUnitTests
         public void SingleItemArrangeIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A" });
 
@@ -121,7 +121,7 @@ public partial class PivotLayoutUnitTests
         public void SingleRowArrangeIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B" });
 
@@ -135,7 +135,7 @@ public partial class PivotLayoutUnitTests
         public void ArrangeIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
@@ -150,9 +150,9 @@ public partial class PivotLayoutUnitTests
         public void ArrangeFromBottomIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout
+            var layout = new GridLayout
             {
-                Origin = PivotGridLayout.LayoutOrigin.Bottom
+                Origin = GridLayout.LayoutOrigin.Bottom
             };
 
             var items = CreateItemList(new[] { "A", "B", "C" });
@@ -168,7 +168,7 @@ public partial class PivotLayoutUnitTests
         public void PerfectMultiRowMultiColArrangeIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C", "D", "E", "F" });
 
@@ -186,7 +186,7 @@ public partial class PivotLayoutUnitTests
         public void MultiRowMultiColArrangeIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C", "D", "E", "F", "G" });
 
@@ -205,7 +205,7 @@ public partial class PivotLayoutUnitTests
         public void OffsetLayoutIsCorrect()
         {
             var frame = new RectangleF(100, 100, 120, 120);
-            var layout = new PivotGridLayout();
+            var layout = new GridLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
@@ -220,7 +220,7 @@ public partial class PivotLayoutUnitTests
         public void OffsetLayoutWithItemMarginIsCorrect()
         {
             var frame = new RectangleF(100, 100, 120, 120);
-            var layout = new PivotGridLayout
+            var layout = new GridLayout
             {
                 ItemMargin = 5
             };
@@ -238,9 +238,9 @@ public partial class PivotLayoutUnitTests
         public void OffsetLayoutFromBottomIsCorrect()
         {
             var frame = new RectangleF(100, 100, 120, 120);
-            var layout = new PivotGridLayout
+            var layout = new GridLayout
             {
-                Origin = PivotGridLayout.LayoutOrigin.Bottom
+                Origin = GridLayout.LayoutOrigin.Bottom
             };
 
             var items = CreateItemList(new[] { "A", "B", "C" });
@@ -256,10 +256,10 @@ public partial class PivotLayoutUnitTests
         public void OffsetLayoutFromBottomWithItemMarginIsCorrect()
         {
             var frame = new RectangleF(100, 100, 120, 120);
-            var layout = new PivotGridLayout
+            var layout = new GridLayout
             {
                 ItemMargin = 5,
-                Origin = PivotGridLayout.LayoutOrigin.Bottom
+                Origin = GridLayout.LayoutOrigin.Bottom
             };
 
             var items = CreateItemList(new[] { "A", "B", "C" });

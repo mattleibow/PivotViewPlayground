@@ -15,7 +15,7 @@ public class OldThings
             {
                 new PivotDataItem
                 {
-                    Name = "Ginger Cat",
+                    Id = "Ginger Cat",
                     ImageWidth = itemWidth,
                     ImageHeight = itemHeight,
                 }
@@ -32,7 +32,7 @@ public class OldThings
         var data = CreateSingleItemDataSource(itemW, itemH);
 
         // user selected UI "view" (grid, bar, map)
-        var layout = new PivotGridLayout();
+        var layout = new GridLayout();
 
 
         // UI control container

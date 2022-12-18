@@ -8,7 +8,7 @@ public partial class PivotLayoutUnitTests
     private static PivotDataItem CreateDataItem(string name, float width = 100, float height = 100) =>
         new()
         {
-            Name = name,
+            Id = name,
             ImageWidth = width,
             ImageHeight = height,
         };

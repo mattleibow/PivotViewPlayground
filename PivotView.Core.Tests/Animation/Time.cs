@@ -1,4 +1,4 @@
-﻿namespace PivotView.Core.Tests.Animation;
+﻿namespace PivotView.Core.Tests;
 
 internal static class Time
 {

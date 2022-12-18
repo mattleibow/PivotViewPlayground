@@ -1,17 +1,16 @@
 ﻿using PivotView.Core.Rendering;
-using System.Collections.ObjectModel;
 
 namespace PivotView.Core.VisualizerApp.Visualizers;
 
 public class ItemsVisualizer : Visualizer
 {
-    public ItemsVisualizer(string name, ObservableCollection<PivotRendererItem> items)
+    public ItemsVisualizer(string name, IReadOnlyList<PivotRendererItem> items)
         : base(name)
     {
         Items = items;
     }
 
-    public ObservableCollection<PivotRendererItem> Items { get; }
+    public IReadOnlyList<PivotRendererItem> Items { get; }
 
     [Switch("Show screen boundary lines")]
     public bool IsScreenLinesVisible { get; set; } = true;
@@ -72,7 +71,7 @@ public class ItemsVisualizer : Visualizer
 
             canvas.FillRectangle(itemRect);
             canvas.DrawRectangle(itemRect);
-            canvas.DrawString(item.Name, itemRect, HorizontalAlignment.Center, VerticalAlignment.Center);
+            canvas.DrawString(item.Id, itemRect, HorizontalAlignment.Center, VerticalAlignment.Center);
         }
     }
 }

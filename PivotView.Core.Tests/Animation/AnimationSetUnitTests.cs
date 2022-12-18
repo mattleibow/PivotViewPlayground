@@ -1,23 +1,20 @@
-﻿namespace PivotView.Core.Tests.Animation;
+﻿namespace PivotView.Core.Tests;
 
 public class AnimationSetUnitTests
 {
     [Fact]
     public void SmallerStepDoesNotFireOnCompleteDelegate()
     {
-        var step1Complete = 0;
-
         var set = new AnimationSet();
 
-        var step1 = new AnimationStep(Time.OneSec);
-        step1.OnComplete = () => step1Complete++;
+        var step1 = new IncrementalAnimationStep(Time.OneSec);
         set.Add(step1);
 
         set.Update(Time.EightHundredMilli);
-        Assert.Equal(0, step1Complete);
+        Assert.False(step1.IsComplete);
 
         set.Update(Time.EightHundredMilli);
-        Assert.Equal(1, step1Complete);
+        Assert.True(step1.IsComplete);
     }
 
     [Fact]
@@ -25,10 +22,10 @@ public class AnimationSetUnitTests
     {
         var set = new AnimationSet();
 
-        var step1 = new AnimationStep(Time.OneSec);
+        var step1 = new IncrementalAnimationStep(Time.OneSec);
         set.Add(step1);
 
-        var step2 = new AnimationStep(Time.OneSec);
+        var step2 = new IncrementalAnimationStep(Time.OneSec);
         set.Add(step2);
 
         Assert.Null(set.Current);
@@ -55,12 +52,12 @@ public class AnimationSetUnitTests
         var set = new AnimationSet();
         Assert.Equal(0, set.Count);
 
-        set.Add(new AnimationStep(Time.OneSec));
+        set.Add(new IncrementalAnimationStep(Time.OneSec));
         Assert.Equal(1, set.Count);
 
-        set.Add(new AnimationStep(Time.OneSec));
+        set.Add(new IncrementalAnimationStep(Time.OneSec));
         Assert.Equal(2, set.Count);
-        
+
         set.Update(Time.FourHundredMilli);
         Assert.Equal(2, set.Count);
 
@@ -80,31 +77,89 @@ public class AnimationSetUnitTests
     [Fact]
     public void StepProgressesAnimationSet()
     {
-        var step1Complete = 0;
-        var step2Complete = 0;
-
         var set = new AnimationSet();
 
-        var step1 = new AnimationStep(Time.OneSec);
-        step1.OnComplete = () => step1Complete++;
+        var step1 = new IncrementalAnimationStep(Time.OneSec);
         set.Add(step1);
 
-        var step2 = new AnimationStep(Time.OneSec);
-        step2.OnComplete = () => step2Complete++;
+        var step2 = new IncrementalAnimationStep(Time.OneSec);
         set.Add(step2);
 
         Assert.Null(set.Current);
 
         set.Update(Time.EightHundredMilli);
-        Assert.Equal(0, step1Complete);
-        Assert.Equal(0, step2Complete);
+        Assert.False(step1.IsComplete);
+        Assert.False(step2.IsComplete);
+        Assert.False(set.IsComplete);
 
         set.Update(Time.EightHundredMilli);
-        Assert.Equal(1, step1Complete);
-        Assert.Equal(0, step2Complete);
+        Assert.True(step1.IsComplete);
+        Assert.False(step2.IsComplete);
+        Assert.False(set.IsComplete);
 
         set.Update(Time.EightHundredMilli);
-        Assert.Equal(1, step1Complete);
-        Assert.Equal(1, step2Complete);
+        Assert.True(step1.IsComplete);
+        Assert.True(step2.IsComplete);
+        Assert.True(set.IsComplete);
+    }
+
+    [Fact]
+    public void InstantaneousStepsAreCollapsedWithExactTime()
+    {
+        var set = new AnimationSet();
+
+        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        set.Add(step1);
+
+        var step2 = new InstantaneousAnimationStep();
+        set.Add(step2);
+
+        Assert.Null(set.Current);
+
+        set.Update(Time.OneSec);
+        Assert.True(step1.IsComplete);
+        Assert.True(step2.IsComplete);
+        Assert.True(set.IsComplete);
+    }
+
+    [Fact]
+    public void AllInstantaneousStepsAreCollapsedWithExactTime()
+    {
+        var set = new AnimationSet();
+
+        set.Add(new IncrementalAnimationStep(Time.OneSec));
+
+        set.Add(new InstantaneousAnimationStep());
+        set.Add(new InstantaneousAnimationStep());
+        set.Add(new InstantaneousAnimationStep());
+
+        Assert.Null(set.Current);
+
+        set.Update(Time.OneSec);
+        Assert.True(set.IsComplete);
+    }
+
+    [Fact]
+    public void InstantaneousStepsAreCollapsedWithSteppedTime()
+    {
+        var set = new AnimationSet();
+
+        var step1 = new IncrementalAnimationStep(Time.OneSec);
+        set.Add(step1);
+
+        var step2 = new InstantaneousAnimationStep();
+        set.Add(step2);
+
+        Assert.Null(set.Current);
+
+        set.Update(Time.EightHundredMilli);
+        Assert.False(step1.IsComplete);
+        Assert.False(step2.IsComplete);
+        Assert.False(set.IsComplete);
+
+        set.Update(Time.EightHundredMilli);
+        Assert.True(step1.IsComplete);
+        Assert.True(step2.IsComplete);
+        Assert.True(set.IsComplete);
     }
 }

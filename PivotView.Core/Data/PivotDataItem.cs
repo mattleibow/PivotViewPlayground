@@ -2,10 +2,10 @@
 
 namespace PivotView.Core.Data;
 
-[DebuggerDisplay("{Name}")]
+[DebuggerDisplay("{Id}")]
 public class PivotDataItem
 {
-    public string? Name { get; set; }
+    public string? Id { get; set; }
 
     public float ImageWidth { get; set; } = 0;
 

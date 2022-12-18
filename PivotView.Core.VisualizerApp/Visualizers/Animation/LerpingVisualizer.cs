@@ -8,7 +8,7 @@ namespace PivotView.Core.VisualizerApp.Visualizers.Animation;
 public class LerpingVisualizer : AnimationVisualizer
 {
     public LerpingVisualizer()
-        : base($"RectangleF Lerping", new(new[] { CreateAnimationItem() }))
+        : base($"RectangleF Lerping", new List<PivotRendererItem>(new[] { CreateAnimationItem() }))
     {
         LerpingFunction = Lerping.Lerps[typeof(RectangleF)];
     }

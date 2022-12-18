@@ -1,4 +1,5 @@
-﻿using PivotView.Core.Layout;
+﻿using Microsoft.Maui;
+using PivotView.Core.Layout;
 using PivotView.Core.Rendering;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -12,47 +13,26 @@ public class OutOfFrameLayoutVisualizer : LayoutVisualizer<OutOfFrameLayoutVisua
     {
     }
 
-    public class Wrapper : PivotOutOfFrameLayout
+    public class Wrapper : GridLayout
     {
-        private readonly PivotGridLayout gridLayout = new();
+        private readonly ExplosionLayoutTransition offscreen = new();
+        private readonly bool isAdding;
 
         public Wrapper(bool isAdding)
-            : base(isAdding)
         {
+            this.isAdding = isAdding;
         }
 
-        public override double ItemMargin
+        public override void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
         {
-            get => base.ItemMargin;
-            set
-            {
-                base.ItemMargin = value;
-                gridLayout.ItemMargin = value;
-            }
-        }
-
-        public override void Measure(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
-        {
-            var otherItems = items.Where((item, idx) => idx % 2 != 0).ToArray();
+            var offscreenItems = items.Where((item, idx) => idx % 2 != 0).ToArray();
 
             // layout items as if they were all on screen
-            gridLayout.Measure(items, frame);
+            base.ArrangeItems(items, frame);
             foreach (var item in items)
                 item.Frame.Current = item.Frame.Desired;
 
-            base.Measure(otherItems, frame);
-        }
-
-        public override void Arrange(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
-        {
-            var otherItems = items.Where((item, idx) => idx % 2 != 0).ToArray();
-
-            // layout items as if they were all on screen
-            gridLayout.Arrange(items, frame);
-            foreach (var item in items)
-                item.Frame.Current = item.Frame.Desired;
-
-            base.Arrange(otherItems, frame);
+            offscreen.ArrangeItems(offscreenItems, frame, isAdding ? PivotLayoutTransitionType.Enter : PivotLayoutTransitionType.Exit);
         }
     }
 }

@@ -8,11 +8,11 @@ public partial class PivotLayoutUnitTests
         public void MeasureIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotVerticalStackLayout();
+            var layout = new VerticalStackLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
-            layout.Measure(items, frame);
+            layout.MeasureItems(items, frame);
 
             Assert.Equal(1, layout.ItemAspectRatio);
             Assert.Equal(40, layout.ItemHeight);
@@ -25,7 +25,7 @@ public partial class PivotLayoutUnitTests
         public void LayoutIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotVerticalStackLayout();
+            var layout = new VerticalStackLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
@@ -40,7 +40,7 @@ public partial class PivotLayoutUnitTests
         public void LayoutWithItemMarginIsCorrect()
         {
             var frame = new RectangleF(0, 0, 120, 120);
-            var layout = new PivotVerticalStackLayout { ItemMargin = 5 };
+            var layout = new VerticalStackLayout { ItemMargin = 5 };
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
@@ -55,7 +55,7 @@ public partial class PivotLayoutUnitTests
         public void OffsetLayoutIsCorrect()
         {
             var frame = new RectangleF(100, 100, 120, 120);
-            var layout = new PivotVerticalStackLayout();
+            var layout = new VerticalStackLayout();
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 
@@ -70,7 +70,7 @@ public partial class PivotLayoutUnitTests
         public void OffsetLayoutWithItemMarginIsCorrect()
         {
             var frame = new RectangleF(100, 100, 120, 120);
-            var layout = new PivotVerticalStackLayout { ItemMargin = 5 };
+            var layout = new VerticalStackLayout { ItemMargin = 5 };
 
             var items = CreateItemList(new[] { "A", "B", "C" });
 

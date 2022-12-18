@@ -1,5 +1,8 @@
-﻿namespace PivotView.Core.Rendering;
+﻿using System.Diagnostics;
 
+namespace PivotView.Core.Rendering;
+
+[DebuggerDisplay("{Id}")]
 public class PivotRendererItem
 {
     public PivotRendererItem(PivotDataItem dataItem)
@@ -7,7 +10,7 @@ public class PivotRendererItem
         DataItem = dataItem;
     }
 
-    public string? Name => DataItem.Name;
+    public string? Id => DataItem.Id;
 
     public PivotDataItem DataItem { get; }
 
