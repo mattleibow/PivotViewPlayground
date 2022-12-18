@@ -19,7 +19,7 @@ public partial class RendererPage : ContentPage
     {
         InitializeComponent();
 
-        newIds = Enumerable.Range(1, 9).Select(i => i.ToString()).ToArray();
+        newIds = Enumerable.Range(1, 100).Select(i => i.ToString()).ToArray();
 
         renderer.DataSource = new PivotDataSource
         {
@@ -27,7 +27,7 @@ public partial class RendererPage : ContentPage
         };
 
         Visualizer = new RendererVisualizer("Default", renderer);
-        ItemsText = string.Join(Environment.NewLine, Enumerable.Range(1, 9));
+        ItemsText = string.Join(Environment.NewLine, newIds);
 
         BindingContext = this;
     }

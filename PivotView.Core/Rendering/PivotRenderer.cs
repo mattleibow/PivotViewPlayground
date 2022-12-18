@@ -2,6 +2,8 @@
 
 public class PivotRenderer
 {
+    private readonly TimeSpan animationDelay = TimeSpan.FromSeconds(0.4);
+
     private readonly TimeSpan addItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
     private readonly TimeSpan moveItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
     private readonly TimeSpan removeItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
@@ -9,6 +11,8 @@ public class PivotRenderer
     private readonly EasingDelegate addItemsAnimationEasing = Easing.CubicInOut;
     private readonly EasingDelegate moveItemsAnimationEasing = Easing.CubicInOut;
     private readonly EasingDelegate removeItemsAnimationEasing = Easing.CubicInOut;
+
+    private readonly BufferedDelegate bufferedUpdate = new();
 
     private readonly List<PivotRendererItem> allItems = new();
     private readonly List<PivotRendererItem> currentItems = new();
@@ -23,7 +27,6 @@ public class PivotRenderer
     public PivotRenderer()
     {
     }
-
 
     // TODO: Filter
     // TODO: SortOrder
@@ -148,9 +151,14 @@ public class PivotRenderer
 
     private void UpdateVisibleItems()
     {
+        bufferedUpdate.Post(animationDelay, UpdateVisibleItemsImmediate);
+    }
+
+    private void UpdateVisibleItemsImmediate()
+    {
         animation = null;
 
-        // skip the layout if there are no itema or no place to put them
+        // skip the layout if there are no items or no place to put them
         if (allItems.Count == 0 || Frame.IsEmpty)
             return;
 
