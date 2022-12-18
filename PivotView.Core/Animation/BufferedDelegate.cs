@@ -14,7 +14,7 @@ class BufferedDelegate : IDisposable
         animateTimer?.Dispose();
         animateTimer = null;
 
-        if (delay <= TimeSpan.Zero || delta < delay.TotalMilliseconds)
+        if (delta < delay.TotalMilliseconds)
         {
             animateTimer = new Timer(_ => Post(delay, action), null, delay, Timeout.InfiniteTimeSpan);
             return;
@@ -24,6 +24,11 @@ class BufferedDelegate : IDisposable
     }
 
     public void Dispose()
+    {
+        Reset();
+    }
+
+    public void Reset()
     {
         animateTimer?.Dispose();
     }

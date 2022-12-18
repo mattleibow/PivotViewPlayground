@@ -10,14 +10,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "B", "C", "D" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -41,14 +35,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "B", "C", "D" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -117,14 +105,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "B", "C", "D" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -178,14 +160,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "A", "B", "C" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -195,10 +171,10 @@ public partial class PivotRendererUnitTests
             var animation = renderer.Animation;
 
             Assert.NotNull(animation);
-            Assert.Equal(2, animation.Count);
+            Assert.Equal(1, animation.Count);
 
             var steps = animation.Steps.ToArray();
-            Assert.Equal(2, steps.Length);
+            Assert.Single(steps);
 
             // step 1 is missing
 
@@ -217,11 +193,7 @@ public partial class PivotRendererUnitTests
                 Assert.Equal(items[2].Frame, item3.Property);
             }
 
-            // step 2.2
-            {
-                var step = Assert.IsType<InstantaneousAnimationStep>(steps[1]);
-                Assert.Equal("Add", step.Name);
-            }
+            // step 2.2 is missing
 
             // step 3 is missing
         }
@@ -232,14 +204,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "A", "B", "C" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -274,14 +240,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "A", "B", "C", "D" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -337,14 +297,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "A", "B", "C", "D" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -393,14 +347,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "A", "B" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -410,10 +358,10 @@ public partial class PivotRendererUnitTests
             var animation = renderer.Animation;
 
             Assert.NotNull(animation);
-            Assert.Equal(4, animation.Count);
+            Assert.Equal(3, animation.Count);
 
             var steps = animation.Steps.ToArray();
-            Assert.Equal(4, steps.Length);
+            Assert.Equal(3, steps.Length);
 
             // step 1.1
             {
@@ -445,11 +393,7 @@ public partial class PivotRendererUnitTests
                 Assert.Equal(items[1].Frame, item2.Property);
             }
 
-            // step 2.2
-            {
-                var step = Assert.IsType<InstantaneousAnimationStep>(steps[3]);
-                Assert.Equal("Add", step.Name);
-            }
+            // step 2.2 is missing
 
             // step 3 is missing
         }
@@ -460,14 +404,8 @@ public partial class PivotRendererUnitTests
             var filterInitial = new[] { "A", "B", "C" };
             var filterUpdate = new[] { "A", "B" };
 
-            var renderer = new PivotRenderer
-            {
-                Filter = (item) => filterInitial.Contains(item),
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
+            renderer.Filter = (item) => filterInitial.Contains(item);
             renderer.ResetLayout();
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
@@ -511,13 +449,7 @@ public partial class PivotRendererUnitTests
         {
             var filterUpdate = new[] { "B", "C", "D" };
 
-            var renderer = new PivotRenderer
-            {
-                DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
-                Layout = new VerticalStackLayout(),
-                LayoutTransition = new HorizontalOffsetLayoutTransition(),
-                Frame = new RectangleF(0, 0, 120, 120)
-            };
+            var renderer = CreateTestRenderer(new[] { "A", "B", "C", "D" });
 
             renderer.Filter = (item) => filterUpdate.Contains(item);
 
@@ -537,21 +469,29 @@ public partial class PivotRendererUnitTests
             animation.Update(Time.OneSec);
 
             // after step 2
-            Assert.False(animation.IsComplete);
-            Assert.Equal(3, visibleItems.Count);
-            Assert.Equal(allItems[1], visibleItems[0]);
-            Assert.Equal(allItems[2], visibleItems[1]);
-            Assert.Equal(allItems[3], visibleItems[2]);
-
-            // step 3
-            animation.Update(Time.OneSec);
-
-            // after step 3
             Assert.True(animation.IsComplete);
             Assert.Equal(3, visibleItems.Count);
             Assert.Equal(allItems[1], visibleItems[0]);
             Assert.Equal(allItems[2], visibleItems[1]);
             Assert.Equal(allItems[3], visibleItems[2]);
+
+            // step 3 is missing
         }
+
+        private static PivotRenderer CreateTestRenderer(params string[] items) =>
+            new()
+            {
+                DataSource = CreateDataSource(items),
+                Layout = new VerticalStackLayout(),
+                LayoutTransition = new HorizontalOffsetLayoutTransition(),
+                Frame = new RectangleF(0, 0, 120, 120),
+                AnimationDelay = TimeSpan.Zero,
+                AddItemsAnimationDuration = Time.OneSec,
+                MoveItemsAnimationDuration = Time.OneSec,
+                RemoveItemsAnimationDuration = Time.OneSec,
+                AddItemsAnimationEasing = Easing.Linear,
+                MoveItemsAnimationEasing = Easing.Linear,
+                RemoveItemsAnimationEasing = Easing.Linear,
+            };
     }
 }

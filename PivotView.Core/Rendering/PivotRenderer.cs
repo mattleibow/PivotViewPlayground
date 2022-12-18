@@ -2,16 +2,6 @@
 
 public class PivotRenderer
 {
-    private readonly TimeSpan animationDelay = TimeSpan.FromSeconds(0.4);
-
-    private readonly TimeSpan addItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
-    private readonly TimeSpan moveItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
-    private readonly TimeSpan removeItemsAnimationDuration = TimeSpan.FromSeconds(0.5);
-
-    private readonly EasingDelegate addItemsAnimationEasing = Easing.CubicInOut;
-    private readonly EasingDelegate moveItemsAnimationEasing = Easing.CubicInOut;
-    private readonly EasingDelegate removeItemsAnimationEasing = Easing.CubicInOut;
-
     private readonly BufferedDelegate bufferedUpdate = new();
 
     private readonly List<PivotRendererItem> allItems = new();
@@ -116,6 +106,20 @@ public class PivotRenderer
         }
     }
 
+    public TimeSpan AnimationDelay { get; set; } = TimeSpan.FromSeconds(0.4);
+
+    public TimeSpan RemoveItemsAnimationDuration { get; set; } = TimeSpan.FromSeconds(0.5);
+
+    public TimeSpan MoveItemsAnimationDuration { get; set; } = TimeSpan.FromSeconds(0.5);
+
+    public TimeSpan AddItemsAnimationDuration { get; set; } = TimeSpan.FromSeconds(0.5);
+
+    public EasingDelegate AddItemsAnimationEasing { get; set; } = Easing.CubicInOut;
+
+    public EasingDelegate MoveItemsAnimationEasing { get; set; } = Easing.CubicInOut;
+
+    public EasingDelegate RemoveItemsAnimationEasing { get; set; } = Easing.CubicInOut;
+
     public IReadOnlyList<PivotRendererItem> Items => allItems;
 
     public IReadOnlyList<PivotRendererItem> CurrentItems => currentItems;
@@ -127,6 +131,7 @@ public class PivotRenderer
     public void ResetLayout()
     {
         // stop all animations
+        bufferedUpdate.Reset();
         animation = null;
 
         // update current items
@@ -151,7 +156,7 @@ public class PivotRenderer
 
     private void UpdateVisibleItems()
     {
-        bufferedUpdate.Post(animationDelay, UpdateVisibleItemsImmediate);
+        bufferedUpdate.Post(AnimationDelay, UpdateVisibleItemsImmediate);
     }
 
     private void UpdateVisibleItemsImmediate()
@@ -192,7 +197,7 @@ public class PivotRenderer
         if (removed.Length > 0)
         {
             // 1.1 animate out
-            var step1 = new IncrementalAnimationStep(removeItemsAnimationDuration, removeItemsAnimationEasing)
+            var step1 = new IncrementalAnimationStep(RemoveItemsAnimationDuration, RemoveItemsAnimationEasing)
             {
                 Name = "Exit"
             };
@@ -215,7 +220,7 @@ public class PivotRenderer
         if (remaining.Length > 0)
         {
             // 2.1 rearrange
-            var step2 = new IncrementalAnimationStep(moveItemsAnimationDuration, moveItemsAnimationEasing)
+            var step2 = new IncrementalAnimationStep(MoveItemsAnimationDuration, MoveItemsAnimationEasing)
             {
                 Name = "Layout"
             };
@@ -241,7 +246,7 @@ public class PivotRenderer
         if (added.Length > 0)
         {
             // 3.1 animate new items in
-            var step3 = new IncrementalAnimationStep(addItemsAnimationDuration, addItemsAnimationEasing)
+            var step3 = new IncrementalAnimationStep(AddItemsAnimationDuration, AddItemsAnimationEasing)
             {
                 Name = "Enter"
             };
