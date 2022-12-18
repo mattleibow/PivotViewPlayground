@@ -18,7 +18,7 @@ public class LayoutVisualizer : ItemsVisualizer
     public PivotLayout Layout { get; }
 
     [Slider("Item margin", 0, 20)]
-    public double ItemMargin
+    public float ItemMargin
     {
         get => Layout.ItemMargin;
         set => Layout.ItemMargin = value;

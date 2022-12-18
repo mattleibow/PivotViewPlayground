@@ -25,31 +25,31 @@ public class GridLayout : PivotLayout
         var columns = 1;
         var rows = count;
         // calculate the max size of each item to fit
-        var maxItemHeight = (double)frame.Height / rows;
+        var maxItemHeight = frame.Height / rows;
         var maxItemWidth = ItemAspectRatio * maxItemHeight;
         // loop while there is enough space to add one more column
         while (frame.Width - (columns + 1) * maxItemWidth >= 0.0 && columns < count)
         {
             // add another column
             columns++;
-            rows = (int)Math.Ceiling((double)count / columns);
+            rows = (int)Math.Ceiling((float)count / columns);
             // calculate the max size of each item to fit
-            maxItemHeight = (double)frame.Height / rows;
+            maxItemHeight = frame.Height / rows;
             maxItemWidth = ItemAspectRatio * maxItemHeight;
         }
 
         // 3. Calculate the general item size
-        ItemHeight = frame.Height / (double)rows;
+        ItemHeight = frame.Height / rows;
         ItemWidth = ItemHeight * ItemAspectRatio;
         if (ItemWidth * columns > frame.Width)
         {
-            ItemWidth = (double)frame.Width / columns;
+            ItemWidth = frame.Width / columns;
             ItemHeight = ItemWidth / ItemAspectRatio;
         }
 
         // 4. Calculate the number of rows/cols
         Columns = Math.Min(columns, items.Count);
-        Rows = (int)Math.Ceiling(items.Count / (double)Columns);
+        Rows = (int)Math.Ceiling((float)items.Count / Columns);
 
         // 5. Calculate the total items area
         LayoutWidth = ItemWidth * Columns;
@@ -64,7 +64,7 @@ public class GridLayout : PivotLayout
         var count = items.Count;
 
         // determine the origin, direction and step values
-        var yOffset = (double)frame.Y;
+        var yOffset = frame.Y;
         var yStep = ItemHeight;
         var xStep = ItemWidth;
         if (Origin == LayoutOrigin.Bottom)
@@ -75,8 +75,8 @@ public class GridLayout : PivotLayout
         }
 
         // determine item actual size
-        var maxItemWidth = Math.Max(0.0, ItemWidth - ItemMargin * 2);
-        var maxItemHeight = Math.Max(0.0, ItemHeight - ItemMargin * 2);
+        var maxItemWidth = Math.Max(0.0f, ItemWidth - ItemMargin * 2);
+        var maxItemHeight = Math.Max(0.0f, ItemHeight - ItemMargin * 2);
 
         // determine item list loop bounds
         int currentIndex, stepIndex, lastIndex;
@@ -97,7 +97,7 @@ public class GridLayout : PivotLayout
         for (var rowIndex = 0; rowIndex < Rows; rowIndex++)
         {
             // determine initial X offset
-            var xOffset = (double)frame.X;
+            var xOffset = frame.X;
             if (Origin == LayoutOrigin.Bottom)
             {
                 var partialCol = count % Columns;
@@ -115,10 +115,10 @@ public class GridLayout : PivotLayout
 
                 // determine item aspect ratio
                 var itemAspect = item.AspectRatio;
-                if (double.IsNaN(itemAspect))
-                    itemAspect = 1.0;
+                if (float.IsNaN(itemAspect))
+                    itemAspect = 1.0f;
                 // make the item fit in the space allotted
-                double width, height;
+                float width, height;
                 if (itemAspect > ItemAspectRatio)
                 {
                     width = maxItemWidth;
@@ -132,10 +132,10 @@ public class GridLayout : PivotLayout
 
                 // calculate item bounds
                 var newFrame = new RectangleF(
-                    (float)(xOffset + ItemMargin + (maxItemWidth - width) / 2.0),
-                    (float)(yOffset + ItemMargin + (maxItemHeight - height) / 2.0),
-                    (float)(width),
-                    (float)(height));
+                    xOffset + ItemMargin + (maxItemWidth - width) / 2.0f,
+                    yOffset + ItemMargin + (maxItemHeight - height) / 2.0f,
+                    width,
+                    height);
 
                 item.Frame.Desired = newFrame;
 

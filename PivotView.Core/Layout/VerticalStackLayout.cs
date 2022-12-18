@@ -12,7 +12,7 @@ public class VerticalStackLayout : PivotLayout
         // TODO: be a bit smarter if there is a few wide items
 
         // 3. Calculate the general item size
-        ItemHeight = frame.Height / (double)count;
+        ItemHeight = frame.Height / count;
         ItemWidth = ItemHeight * ItemAspectRatio;
 
         // 4. Calculate the total items area
@@ -27,10 +27,10 @@ public class VerticalStackLayout : PivotLayout
             var item = items[i];
 
             var newFrame = new RectangleF(
-                (float)(frame.X + ItemMargin),
-                (float)(frame.Y + ItemMargin + (ItemHeight * i)),
-                (float)(Math.Max(0, ItemWidth - ItemMargin - ItemMargin)),
-                (float)(Math.Max(0, ItemHeight - ItemMargin - ItemMargin)));
+                frame.X + ItemMargin,
+                frame.Y + ItemMargin + (ItemHeight * i),
+                Math.Max(0, ItemWidth - ItemMargin - ItemMargin),
+                Math.Max(0, ItemHeight - ItemMargin - ItemMargin));
 
             item.Frame.Desired = newFrame;
         }
