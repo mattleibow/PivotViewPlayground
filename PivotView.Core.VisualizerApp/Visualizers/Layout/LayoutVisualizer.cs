@@ -1,65 +1,61 @@
-﻿using PivotView.Core.Layout;
-using PivotView.Core.Rendering;
-using System.Collections.ObjectModel;
-
-namespace PivotView.Core.VisualizerApp.Visualizers.Layout;
+﻿namespace PivotView.Core.VisualizerApp.Visualizers.Layout;
 
 public class LayoutVisualizer : ItemsVisualizer
 {
-    private RectF lastScreenRect;
+	private RectF lastScreenRect;
 
-    public LayoutVisualizer(string name, PivotLayout layout, ObservableCollection<PivotRendererItem> items)
-        : base(name + " Layout", items)
-    {
-        Layout = layout;
-        items.CollectionChanged += (s, e) => InvalidateLayout();
-    }
+	public LayoutVisualizer(string name, PivotLayout layout, ObservableCollection<PivotRendererItem> items)
+		: base(name + " Layout", items)
+	{
+		Layout = layout;
+		items.CollectionChanged += (s, e) => InvalidateLayout();
+	}
 
-    public PivotLayout Layout { get; }
+	public PivotLayout Layout { get; }
 
-    [Slider("Item margin", 0, 20)]
-    public float ItemMargin
-    {
-        get => Layout.ItemMargin;
-        set => Layout.ItemMargin = value;
-    }
+	[Slider("Item margin", 0, 20)]
+	public float ItemMargin
+	{
+		get => Layout.ItemMargin;
+		set => Layout.ItemMargin = value;
+	}
 
-    public void InvalidateLayout()
-    {
-        lastScreenRect = RectF.Zero;
-    }
+	public void InvalidateLayout()
+	{
+		lastScreenRect = RectF.Zero;
+	}
 
-    protected override void PrepareItems(RectF bounds)
-    {
-        base.PrepareItems(bounds);
+	protected override void PrepareItems(RectF bounds)
+	{
+		base.PrepareItems(bounds);
 
-        UpdateLayout(bounds);
-    }
+		UpdateLayout(bounds);
+	}
 
-    protected virtual void UpdateLayout(RectF screenRect)
-    {
-        if (lastScreenRect == screenRect)
-            return;
-        lastScreenRect = screenRect;
+	protected virtual void UpdateLayout(RectF screenRect)
+	{
+		if (lastScreenRect == screenRect)
+			return;
+		lastScreenRect = screenRect;
 
-        Layout?.LayoutItems(Items, screenRect.ToSystemRectangleF());
-    }
+		Layout?.LayoutItems(Items, screenRect.ToSystemRectangleF());
+	}
 
-    protected override void OnVisualizerPropertyValueChanged()
-    {
-        InvalidateLayout();
+	protected override void OnVisualizerPropertyValueChanged()
+	{
+		InvalidateLayout();
 
-        base.OnVisualizerPropertyValueChanged();
-    }
+		base.OnVisualizerPropertyValueChanged();
+	}
 }
 
 public class LayoutVisualizer<T> : LayoutVisualizer
-    where T : PivotLayout
+	where T : PivotLayout
 {
-    public LayoutVisualizer(string name, T layout, ObservableCollection<PivotRendererItem> items)
-        : base(name, layout, items)
-    {
-    }
+	public LayoutVisualizer(string name, T layout, ObservableCollection<PivotRendererItem> items)
+		: base(name, layout, items)
+	{
+	}
 
-    public new T Layout => (T)base.Layout;
+	public new T Layout => (T)base.Layout;
 }

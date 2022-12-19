@@ -2,14 +2,14 @@
 
 public class AnimatableProperty<T>
 {
-    public AnimatableProperty(T? current = default, T? desired = default)
-    {
-        Current = current;
-        Desired = desired;
-    }
+	public AnimatableProperty(T? current = default, T? desired = default)
+	{
+		Current = current;
+		Desired = desired;
+	}
 
-    public T? Current { get; set; }
+	public T? Current { get; set; }
 
-    public T? Desired { get; set; }
+	public T? Desired { get; set; }
 }
 

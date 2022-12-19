@@ -2,13 +2,13 @@
 
 public interface IAnimationStep
 {
-    string? Name { get; }
+	string? Name { get; }
 
-    bool IsInstantaneous { get; }
+	bool IsInstantaneous { get; }
 
-    bool IsComplete { get; }
+	bool IsComplete { get; }
 
-    TimeSpan Update(TimeSpan delta);
+	TimeSpan Update(TimeSpan delta);
 
-    void Complete();
+	void Complete();
 }

@@ -5,56 +5,56 @@ namespace PivotView.Core.Animation;
 [DebuggerDisplay("Step: Name = {Name}, IsComplete = {IsComplete}")]
 public abstract class AnimationStep : IAnimationStep
 {
-    public AnimationStep(TimeSpan duration)
-    {
-        Duration = duration;
-    }
+	public AnimationStep(TimeSpan duration)
+	{
+		Duration = duration;
+	}
 
-    public string? Name { get; set; }
+	public string? Name { get; set; }
 
-    public TimeSpan Duration { get; protected set; }
+	public TimeSpan Duration { get; protected set; }
 
-    public bool IsInstantaneous => false;
+	public bool IsInstantaneous => false;
 
-    public TimeSpan Progress { get; private set; }
+	public TimeSpan Progress { get; private set; }
 
-    public bool IsComplete { get; private set; }
+	public bool IsComplete { get; private set; }
 
-    public TimeSpan Update(TimeSpan delta)
-    {
-        // we do not support backwards at this time
-        if (delta < TimeSpan.Zero)
-            throw new ArgumentOutOfRangeException(nameof(delta), "The animation cannot go backwards. Ensure the delta value is positive.");
+	public TimeSpan Update(TimeSpan delta)
+	{
+		// we do not support backwards at this time
+		if (delta < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(delta), "The animation cannot go backwards. Ensure the delta value is positive.");
 
-        // we are at the end
-        if (IsComplete)
-            return delta;
+		// we are at the end
+		if (IsComplete)
+			return delta;
 
-        // skip if not making any progress 
-        if (delta == TimeSpan.Zero)
-            return TimeSpan.Zero;
+		// skip if not making any progress 
+		if (delta == TimeSpan.Zero)
+			return TimeSpan.Zero;
 
-        // jump to the end if max value was specified
-        if (delta == TimeSpan.MaxValue)
-            delta = Duration - Progress;
+		// jump to the end if max value was specified
+		if (delta == TimeSpan.MaxValue)
+			delta = Duration - Progress;
 
-        var remaining = Duration - Progress;
-        var actualDelta = delta > remaining
-            ? remaining
-            : delta;
+		var remaining = Duration - Progress;
+		var actualDelta = delta > remaining
+			? remaining
+			: delta;
 
-        Progress += actualDelta;
+		Progress += actualDelta;
 
-        UpdateProgress();
+		UpdateProgress();
 
-        if (Progress >= Duration)
-            IsComplete = true;
+		if (Progress >= Duration)
+			IsComplete = true;
 
-        return delta - actualDelta;
-    }
+		return delta - actualDelta;
+	}
 
-    public void Complete() =>
-        Update(TimeSpan.MaxValue);
+	public void Complete() =>
+		Update(TimeSpan.MaxValue);
 
-    protected abstract void UpdateProgress();
+	protected abstract void UpdateProgress();
 }

@@ -5,37 +5,37 @@ namespace PivotView.Core.Animation;
 [DebuggerDisplay("Action: Name = {Name}, IsComplete = {IsComplete}")]
 public class ActionAnimationStep : IAnimationStep
 {
-    public ActionAnimationStep()
-    {
-    }
+	public ActionAnimationStep()
+	{
+	}
 
-    public ActionAnimationStep(Action action)
-        : this()
-    {
-        Action = action;
-    }
+	public ActionAnimationStep(Action action)
+		: this()
+	{
+		Action = action;
+	}
 
-    public string? Name { get; set; }
+	public string? Name { get; set; }
 
-    public Action? Action { get; set; }
+	public Action? Action { get; set; }
 
-    public bool IsInstantaneous => true;
+	public bool IsInstantaneous => true;
 
-    public bool IsComplete { get; private set; }
+	public bool IsComplete { get; private set; }
 
-    public void Complete()
-    {
-        if (IsComplete)
-            return;
+	public void Complete()
+	{
+		if (IsComplete)
+			return;
 
-        Action?.Invoke();
+		Action?.Invoke();
 
-        IsComplete = true;
-    }
+		IsComplete = true;
+	}
 
-    public TimeSpan Update(TimeSpan delta)
-    {
-        Complete();
-        return delta;
-    }
+	public TimeSpan Update(TimeSpan delta)
+	{
+		Complete();
+		return delta;
+	}
 }

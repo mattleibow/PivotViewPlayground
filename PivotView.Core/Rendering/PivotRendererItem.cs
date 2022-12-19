@@ -5,22 +5,22 @@ namespace PivotView.Core.Rendering;
 [DebuggerDisplay("{Id}")]
 public class PivotRendererItem
 {
-    public PivotRendererItem(PivotDataItem dataItem)
-    {
-        DataItem = dataItem;
-    }
+	public PivotRendererItem(PivotDataItem dataItem)
+	{
+		DataItem = dataItem;
+	}
 
-    public string? Id => DataItem.Id;
+	public string? Id => DataItem.Id;
 
-    public PivotDataItem DataItem { get; }
+	public PivotDataItem DataItem { get; }
 
-    /// <summary>
-    /// Width / Height
-    /// </summary>
-    public float AspectRatio =>
-        DataItem.ImageWidth == 0 || DataItem.ImageHeight == 0
-            ? 1.0f
-            : (float)DataItem.ImageWidth / DataItem.ImageHeight;
+	/// <summary>
+	/// Width / Height
+	/// </summary>
+	public float AspectRatio =>
+		DataItem.ImageWidth == 0 || DataItem.ImageHeight == 0
+			? 1.0f
+			: (float)DataItem.ImageWidth / DataItem.ImageHeight;
 
-    public AnimatableProperty<RectangleF> Frame { get; } = new(default);
+	public AnimatableProperty<RectangleF> Frame { get; } = new(default);
 }

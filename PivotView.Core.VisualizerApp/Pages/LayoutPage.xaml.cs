@@ -1,86 +1,83 @@
-﻿using PivotView.Core.Rendering;
-using PivotView.Core.VisualizerApp.Visualizers;
-using PivotView.Core.VisualizerApp.Visualizers.Layout;
-using System.Collections.ObjectModel;
+﻿using PivotView.Core.VisualizerApp.Visualizers.Layout;
 
 namespace PivotView.Core.VisualizerApp;
 
 public partial class LayoutPage : ContentPage
 {
-    private LayoutVisualizer? current;
-    private string? itemsText;
+	private LayoutVisualizer? current;
+	private string? itemsText;
 
-    public LayoutPage()
-    {
-        InitializeComponent();
+	public LayoutPage()
+	{
+		InitializeComponent();
 
-        Visualizers =
-            new()
-            {
-                new VerticalStackLayoutVisualizer(Items),
-                new GridLayoutVisualizer(Items),
-                new OutOfFrameLayoutVisualizer(true, Items),
-                new OutOfFrameLayoutVisualizer(false, Items),
-            };
+		Visualizers =
+			new()
+			{
+				new VerticalStackLayoutVisualizer(Items),
+				new GridLayoutVisualizer(Items),
+				new OutOfFrameLayoutVisualizer(true, Items),
+				new OutOfFrameLayoutVisualizer(false, Items),
+			};
 
-        Current = Visualizers.FirstOrDefault();
+		Current = Visualizers.FirstOrDefault();
 
-        BindingContext = this;
-    }
+		BindingContext = this;
+	}
 
-    public ObservableCollection<PivotRendererItem> Items { get; } =
-        new()
-        {
-            NewItem("Item 1"),
-            NewItem("Item 2"),
-            NewItem("Item 3"),
-            NewItem("Item 4"),
-        };
+	public ObservableCollection<PivotRendererItem> Items { get; } =
+		new()
+		{
+			NewItem("Item 1"),
+			NewItem("Item 2"),
+			NewItem("Item 3"),
+			NewItem("Item 4"),
+		};
 
-    public ObservableCollection<LayoutVisualizer> Visualizers { get; }
+	public ObservableCollection<LayoutVisualizer> Visualizers { get; }
 
-    public LayoutVisualizer? Current
-    {
-        get => current;
-        set
-        {
-            current = value;
-            OnPropertyChanged();
-        }
-    }
+	public LayoutVisualizer? Current
+	{
+		get => current;
+		set
+		{
+			current = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public string? ItemsText
-    {
-        get => itemsText;
-        set
-        {
-            itemsText = value ?? string.Empty;
-            var newItemsText = itemsText.Split(new[] { '\r', '\n' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+	public string? ItemsText
+	{
+		get => itemsText;
+		set
+		{
+			itemsText = value ?? string.Empty;
+			var newItemsText = itemsText.Split(new[] { '\r', '\n' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
-            var newLen = newItemsText.Length;
+			var newLen = newItemsText.Length;
 
-            while (Items.Count > newLen)
-                Items.RemoveAt(Items.Count - 1);
+			while (Items.Count > newLen)
+				Items.RemoveAt(Items.Count - 1);
 
-            while (Items.Count < newLen)
-                Items.Add(NewItem("X"));
+			while (Items.Count < newLen)
+				Items.Add(NewItem("X"));
 
-            for (var i = 0; i < Items.Count; i++)
-            {
-                var item = Items[i].DataItem;
+			for (var i = 0; i < Items.Count; i++)
+			{
+				var item = Items[i].DataItem;
 
-                if (SizeF.TryParse(newItemsText[i], out var newSize))
-                {
-                    item.ImageWidth = newSize.Width;
-                    item.ImageHeight = newSize.Height;
-                }
-            }
+				if (SizeF.TryParse(newItemsText[i], out var newSize))
+				{
+					item.ImageWidth = newSize.Width;
+					item.ImageHeight = newSize.Height;
+				}
+			}
 
-            Current?.InvalidateLayout();
-            Current?.InvalidateDrawing();
-        }
-    }
+			Current?.InvalidateLayout();
+			Current?.InvalidateDrawing();
+		}
+	}
 
-    private static PivotRendererItem NewItem(string name) =>
-        new(new() { Id = name });
+	private static PivotRendererItem NewItem(string name) =>
+		new(new() { Id = name });
 }

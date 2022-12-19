@@ -7,7 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotView.Core.Tests", "Piv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotView.Core", "PivotView.Core\PivotView.Core.csproj", "{27C567D2-B277-491E-A2D3-BA1D0D5494A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PivotView.Core.VisualizerApp", "PivotView.Core.VisualizerApp\PivotView.Core.VisualizerApp.csproj", "{11FEF861-59D3-4C44-A63F-52E478CB1DDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotView.Core.VisualizerApp", "PivotView.Core.VisualizerApp\PivotView.Core.VisualizerApp.csproj", "{11FEF861-59D3-4C44-A63F-52E478CB1DDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{62ADF24C-7BBC-4403-8CE0-C23E6C54D8DB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
