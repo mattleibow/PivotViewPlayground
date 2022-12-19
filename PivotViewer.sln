@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33028.149
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotViewer.Core.Tests", "PivotViewer.Core.Tests\PivotViewer.Core.Tests.csproj", "{EF2C8727-CC59-4C23-ADE3-F631999399CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotViewer.Core", "PivotViewer.Core\PivotViewer.Core.csproj", "{27C567D2-B277-491E-A2D3-BA1D0D5494A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotViewer.Core.VisualizerApp", "PivotViewer.Core.VisualizerApp\PivotViewer.Core.VisualizerApp.csproj", "{11FEF861-59D3-4C44-A63F-52E478CB1DDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{62ADF24C-7BBC-4403-8CE0-C23E6C54D8DB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C567D2-B277-491E-A2D3-BA1D0D5494A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C567D2-B277-491E-A2D3-BA1D0D5494A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C567D2-B277-491E-A2D3-BA1D0D5494A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C567D2-B277-491E-A2D3-BA1D0D5494A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAE09155-848B-4137-9DB4-E7F10066AAC8}
+	EndGlobalSection
+EndGlobal

@@ -1,4 +1,4 @@
-# PivotView Playground
+# PivotViewer Playground
 
 > _Click the image below to play the video._
 
