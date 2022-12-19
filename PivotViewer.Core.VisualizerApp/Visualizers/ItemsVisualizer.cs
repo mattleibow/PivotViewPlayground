@@ -60,16 +60,47 @@ public class ItemsVisualizer : Visualizer
 		canvas.StrokeColor = Colors.Gray;
 		canvas.StrokeSize = 1;
 
-		foreach (var item in Items)
+		if (IsDesiredLocations)
 		{
-			var r = IsDesiredLocations
-				? item.Frame.Desired
-				: item.Frame.Current;
-			var itemRect = r.ToRect();
-
-			canvas.FillRectangle(itemRect);
-			canvas.DrawRectangle(itemRect);
-			canvas.DrawString(item.Id, itemRect, HorizontalAlignment.Center, VerticalAlignment.Center);
+			foreach (var item in Items)
+			{
+				DrawItem(canvas, item, item.Frame.Desired.ToRect());
+			}
 		}
+		else
+		{
+			var hasMovingItems = false;
+
+			// draw static items below
+			foreach (var item in Items)
+			{
+				hasMovingItems = hasMovingItems || !item.Frame.IsCurrentDesired;
+
+				if (item.Frame.IsCurrentDesired)
+				{
+					DrawItem(canvas, item, item.Frame.Current.ToRect());
+				}
+			}
+
+			// draw moving items on top
+			if (hasMovingItems)
+			{
+				foreach (var item in Items)
+				{
+					if (!item.Frame.IsCurrentDesired)
+					{
+						DrawItem(canvas, item, item.Frame.Current.ToRect());
+					}
+				}
+			}
+		}
+	}
+
+	protected virtual void DrawItem(ICanvas canvas, PivotRendererItem item, Rect rect)
+	{
+		canvas.FillRectangle(rect);
+		canvas.DrawRectangle(rect);
+
+		canvas.DrawString(item.Id, rect, HorizontalAlignment.Center, VerticalAlignment.Center);
 	}
 }
