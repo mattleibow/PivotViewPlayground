@@ -2,7 +2,12 @@
 
 public class PivotDataSource
 {
-	private IList<PivotDataItem>? items;
+	private IList<PivotDataItem>? items = new List<PivotDataItem>();
+	private IList<PivotDataProperty>? properties = new List<PivotDataProperty>();
+
+	public string? Name { get; set; }
+
+	public string? Icon { get; set; }
 
 	public IList<PivotDataItem>? Items
 	{
@@ -10,6 +15,16 @@ public class PivotDataSource
 		set
 		{
 			items = value;
+			OnItemsChanged();
+		}
+	}
+
+	public IList<PivotDataProperty>? Properties
+	{
+		get => properties;
+		set
+		{
+			properties = value;
 			OnItemsChanged();
 		}
 	}

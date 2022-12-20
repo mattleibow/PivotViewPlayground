@@ -2,16 +2,22 @@
 
 namespace PivotViewer.Core.Data;
 
-[DebuggerDisplay("{Name} = {Value}")]
+[DebuggerDisplay("{Type}: {Name}")]
 public class PivotDataProperty
 {
-	public PivotDataProperty(string name, object value)
-	{
-		Name = name ?? throw new ArgumentNullException(nameof(name));
-		Value = value ?? throw new ArgumentNullException(nameof(name));
-	}
+	public string? Name { get; set; }
+	
+	public string? Format { get; set; }
 
-	public string Name { get; }
+	public string? Description { get; set; }
 
-	public object Value { get; }
+	public PivotDataPropertyType Type { get; set; }
+}
+
+public enum PivotDataPropertyType
+{
+	Text,
+	Number,
+	DateTime,
+	Boolean,
 }

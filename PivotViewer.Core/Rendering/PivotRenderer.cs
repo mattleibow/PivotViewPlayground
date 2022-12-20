@@ -180,6 +180,8 @@ public class PivotRenderer
 
 		// Layout
 
+		// invalidate whatever we have now
+		Layout?.Invalidate();
 		// calculate all the final positions
 		Layout?.LayoutItems(currentItems, Frame);
 		// calculate new frames

@@ -1,4 +1,6 @@
-﻿namespace PivotViewer.Core.Layout;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace PivotViewer.Core.Layout;
 
 public class GridLayout : PivotLayout
 {
@@ -8,13 +10,82 @@ public class GridLayout : PivotLayout
 		Bottom,
 	}
 
+	public enum SearchDirection
+	{
+		Left,
+		Right,
+		Up,
+		Down
+	}
+
+	private readonly Dictionary<PivotRendererItem, (int Row, int Column)> itemToPosition = new();
+	private readonly Dictionary<(int Row, int Column), PivotRendererItem> positionToItem = new();
+
 	public LayoutOrigin Origin { get; set; }
 
 	public int Columns { get; protected set; }
 
 	public int Rows { get; protected set; }
 
-	public override void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	public bool TryGetItem(int row, int column, [MaybeNullWhen(false)] out PivotRendererItem item) =>
+		positionToItem.TryGetValue((row, column), out item);
+
+	public bool TryGetGridPosition(PivotRendererItem item, out (int Row, int Column) position) =>
+		itemToPosition.TryGetValue(item, out position);
+
+	public PivotRendererItem? GetNextItem(PivotRendererItem item, SearchDirection direction)
+	{
+		if (!itemToPosition.TryGetValue(item, out var pos))
+			return null;
+
+		PivotRendererItem? next = null;
+		var nextRow = pos.Row;
+		var nextCol = pos.Column;
+
+		do
+		{
+			switch (direction)
+			{
+				case SearchDirection.Left:
+					nextCol--;
+					if (nextCol < 0)
+					{
+						nextCol = Columns - 1;
+						nextRow--;
+					}
+					break;
+				case SearchDirection.Right:
+					nextCol++;
+					if (nextCol >= Columns)
+					{
+						nextCol = 0;
+						nextRow++;
+					}
+					break;
+				case SearchDirection.Up:
+					nextRow--;
+					if (nextRow < 0)
+					{
+						nextRow = Rows - 1;
+						nextCol--;
+					}
+					break;
+				case SearchDirection.Down:
+					nextRow++;
+					if (nextRow >= Rows)
+					{
+						nextRow = 0;
+						nextCol++;
+					}
+					break;
+			}
+			positionToItem.TryGetValue((nextRow, nextCol), out next);
+		} while (nextRow < Rows && nextRow >= 0 && nextCol < Columns && nextCol >= 0 && next == null);
+
+		return next;
+	}
+
+	protected override void OnMeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
 	{
 		// 1. Get the aspect ratio of the items
 		ItemAspectRatio = GetItemAspectRatio(items);
@@ -56,8 +127,13 @@ public class GridLayout : PivotLayout
 		LayoutHeight = ItemHeight * Rows;
 	}
 
-	public override void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	protected override void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
 	{
+		// reset any local state
+		itemToPosition.Clear();
+		positionToItem.Clear();
+
+		// bail if the items are not actually visible
 		if (ItemWidth == 0 || ItemHeight == 0)
 			return;
 
@@ -157,6 +233,8 @@ public class GridLayout : PivotLayout
 				}
 
 				var gridPos = (itemRow, itemCol);
+				itemToPosition[item] = gridPos;
+				positionToItem[gridPos] = item;
 			}
 
 			// step

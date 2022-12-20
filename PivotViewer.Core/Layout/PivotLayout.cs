@@ -2,11 +2,44 @@
 
 abstract public class PivotLayout
 {
-	public virtual int ItemCountOverride { get; set; }
+	private RectangleF measureLastSize;
+	private bool measureDirty;
+	private RectangleF arrangeLastSize;
+	private bool arrangeDirty;
 
-	public virtual float ItemAspectRatioOverride { get; set; }
+	private int itemCountOverride;
+	private float itemAspectRatioOverride;
+	private float itemMargin;
 
-	public virtual float ItemMargin { get; set; }
+	public virtual int ItemCountOverride
+	{
+		get => itemCountOverride;
+		set
+		{
+			itemCountOverride = value;
+			Invalidate();
+		}
+	}
+
+	public virtual float ItemAspectRatioOverride
+	{
+		get => itemAspectRatioOverride;
+		set
+		{
+			itemAspectRatioOverride = value;
+			Invalidate();
+		}
+	}
+
+	public virtual float ItemMargin
+	{
+		get => itemMargin;
+		set
+		{
+			itemMargin = value;
+			Invalidate();
+		}
+	}
 
 	/// <summary>
 	/// Width/Height
@@ -27,9 +60,37 @@ abstract public class PivotLayout
 		ArrangeItems(items, frame);
 	}
 
-	public abstract void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+	public void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	{
+		if (measureLastSize == frame && !measureDirty)
+			return;
 
-	public abstract void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+		measureLastSize = frame;
+		measureDirty = false;
+
+		OnMeasureItems(items, frame);
+	}
+
+	public void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	{
+		if (arrangeLastSize == frame && !arrangeDirty)
+			return;
+
+		arrangeLastSize = frame;
+		arrangeDirty = false;
+
+		OnArrangeItems(items, frame);
+	}
+
+	public void Invalidate()
+	{
+		arrangeDirty = true;
+		measureDirty = true;
+	}
+
+	protected abstract void OnMeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+
+	protected abstract void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
 
 	protected float GetItemAspectRatio(IReadOnlyList<PivotRendererItem> items)
 	{

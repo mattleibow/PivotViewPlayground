@@ -11,5 +11,5 @@ public class PivotDataItem
 
 	public float ImageHeight { get; set; } = 0;
 
-	public IList<PivotDataProperty>? Properties { get; set; } = new List<PivotDataProperty>();
+	public PivotDataItemPropertyCollection? Properties { get; set; } = new();
 }

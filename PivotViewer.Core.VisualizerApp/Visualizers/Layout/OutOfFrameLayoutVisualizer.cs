@@ -19,12 +19,12 @@ public class OutOfFrameLayoutVisualizer : LayoutVisualizer<OutOfFrameLayoutVisua
 			this.isAdding = isAdding;
 		}
 
-		public override void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+		protected override void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
 		{
 			var offscreenItems = items.Where((item, idx) => idx % 2 != 0).ToArray();
 
 			// layout items as if they were all on screen
-			base.ArrangeItems(items, frame);
+			base.OnArrangeItems(items, frame);
 			foreach (var item in items)
 				item.Frame.Current = item.Frame.Desired;
 
