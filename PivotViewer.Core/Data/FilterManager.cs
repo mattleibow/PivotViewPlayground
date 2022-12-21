@@ -117,7 +117,7 @@ public class FilterManager
 			{
 				foreach (var pv in propValues)
 				{
-					if (fv.Value == pv)
+					if (fv.Value.CompareTo(pv) == 0)
 					{
 						isMatch = true;
 						break;

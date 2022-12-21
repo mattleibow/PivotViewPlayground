@@ -42,6 +42,27 @@ public class FilterManagerUnitTests
 		}
 	}
 
+	[Theory]
+	[InlineData("", 298)]
+	[InlineData("Fuel=Gas", 212)]
+	[InlineData("Fuel=Plutonium", 1)]
+	[InlineData("Fuel=Vegetable oil", 2)]
+	[InlineData("Fuel=Plutonium,Vegetable oil", 3)]
+	[InlineData("Fuel=Vegetable oil;Manufacturer=EcoJet", 1)]
+	public void ConceptCarsIsAvailableIsCorrect(string filter, int expectedCount)
+	{
+		var datasource = LoadConceptCarsDataSource();
+
+		var filterManager = new FilterManager(datasource);
+		filterManager.RebuildIndexes();
+
+		ApplyFilter(filterManager, filter);
+
+		var filteredItems = filterManager.GetFilteredItems().ToList();
+
+		Assert.Equal(expectedCount, filteredItems.Count);
+	}
+
 	private static PivotDataSource BuildTestDataSource()
 	{
 		var datasource = new PivotDataSource();
@@ -72,6 +93,16 @@ public class FilterManagerUnitTests
 
 		datasource.Items = new List<PivotDataItem> { item1, item2 };
 		datasource.Properties = new List<PivotProperty> { property1, property2, property3 };
+
+		return datasource;
+	}
+
+	private static PivotDataSource LoadConceptCarsDataSource() =>
+		LoadDataSource("TestData/conceptcars.cxml");
+
+	private static PivotDataSource LoadDataSource(string filename)
+	{
+		var datasource = CxmlPivotDataSource.FromFile(filename);
 
 		return datasource;
 	}
