@@ -5,31 +5,18 @@
     xmlns:d1p1="http://schemas.microsoft.com/livelabs/pivot/collection/2009"
     xmlns="http://schemas.microsoft.com/collection/metadata/2009">
     <FacetCategories>
-        <FacetCategory Name="Manufacturer" Type="String" d1p1:IsFilterVisible="true"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Body Style" Type="String" d1p1:IsFilterVisible="true"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Production Year" Format="###0" Type="Number"
-            d1p1:IsFilterVisible="true" d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Engine Displacement" Format="0.#L" Type="Number"
-            d1p1:IsFilterVisible="true" d1p1:IsMetaDataVisible="false"
-            d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Engine Type" Type="String" d1p1:IsFilterVisible="true"
-            d1p1:IsMetaDataVisible="false" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Transmission" Type="String" d1p1:IsFilterVisible="true"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Aspiration" Type="String" d1p1:IsFilterVisible="true"
-            d1p1:IsMetaDataVisible="false" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Fuel" Type="String" d1p1:IsFilterVisible="true"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Engine Combination" Type="String" d1p1:IsFilterVisible="false"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Length" Format="###0mm" Type="Number" d1p1:IsFilterVisible="false"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Width" Format="###0mm" Type="Number" d1p1:IsFilterVisible="false"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
-        <FacetCategory Name="Height" Format="###0mm" Type="Number" d1p1:IsFilterVisible="false"
-            d1p1:IsMetaDataVisible="true" d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Manufacturer"                          Type="String" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Body Style"                            Type="String" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Production Year"       Format="###0"   Type="Number" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Engine Displacement"   Format="0.#L"   Type="Number" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="false" d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Engine Type"                           Type="String" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="false" d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Transmission"                          Type="String" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Aspiration"                            Type="String" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="false" d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Fuel"                                  Type="String" d1p1:IsFilterVisible="true"  d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Engine Combination"                    Type="String" d1p1:IsFilterVisible="false" d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Length"                Format="###0mm" Type="Number" d1p1:IsFilterVisible="false" d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Width"                 Format="###0mm" Type="Number" d1p1:IsFilterVisible="false" d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
+        <FacetCategory Name="Height"                Format="###0mm" Type="Number" d1p1:IsFilterVisible="false" d1p1:IsMetaDataVisible="true"  d1p1:IsWordWheelVisible="true" />
     </FacetCategories>
     <Items ImgBase="conceptcars-Seadragon-21\conceptcars.dzc">
         <Item Img="#0" Id="0" Href="http://en.wikipedia.org/wiki/Al_Araba_1" Name="Al Araba 1">

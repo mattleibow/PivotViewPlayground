@@ -3,7 +3,7 @@
 public class PivotDataSource
 {
 	private IList<PivotDataItem>? items = new List<PivotDataItem>();
-	private IList<PivotDataProperty>? properties = new List<PivotDataProperty>();
+	private IList<PivotProperty>? properties = new List<PivotProperty>();
 
 	public string? Name { get; set; }
 
@@ -19,7 +19,7 @@ public class PivotDataSource
 		}
 	}
 
-	public IList<PivotDataProperty>? Properties
+	public IList<PivotProperty>? Properties
 	{
 		get => properties;
 		set

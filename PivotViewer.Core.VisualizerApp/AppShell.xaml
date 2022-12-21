@@ -6,6 +6,11 @@
     xmlns:local="clr-namespace:PivotViewer.Core.VisualizerApp">
 
     <ShellContent
+        Title="Filter"
+        ContentTemplate="{DataTemplate local:FilterPage}"
+        Route="Filter" />
+
+    <ShellContent
         Title="Renderer"
         ContentTemplate="{DataTemplate local:RendererPage}"
         Route="Renderer" />

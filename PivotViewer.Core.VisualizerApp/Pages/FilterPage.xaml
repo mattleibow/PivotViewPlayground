@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:app="clr-namespace:PivotViewer.Core.VisualizerApp"
+             xmlns:vis="clr-namespace:PivotViewer.Core.VisualizerApp.Visualizers"
+             xmlns:data="clr-namespace:PivotViewer.Core.Data;assembly=PivotViewer.Core"
+             x:Class="PivotViewer.Core.VisualizerApp.FilterPage"
+             x:DataType="app:PivotDataSourceFilter">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="10"
+            BindableLayout.ItemsSource="{Binding Properties}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="app:PivotFilterProperty">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Count, StringFormat='({0})'}" FontAttributes="Italic" />
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding Values}" MaximumHeightRequest="100">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="app:PivotFilterValue">
+                                    <HorizontalStackLayout Spacing="5" Padding="5,0,0,0">
+                                        <CheckBox IsChecked="{Binding IsApplied}" VerticalOptions="Center" />
+                                        <Label Text="{Binding Value}" VerticalOptions="Center" />
+                                        <Label Text="{Binding Count, StringFormat='({0})'}" FontAttributes="Italic" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

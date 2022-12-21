@@ -17,15 +17,27 @@ public partial class RendererPage : ContentPage
 	{
 		InitializeComponent();
 
-		newIds = Enumerable.Range(1, 100).Select(i => i.ToString()).ToArray();
-
-		renderer.DataSource = new PivotDataSource
+		try
 		{
-			Items = newIds.Select(NewItem).ToArray(),
-		};
+			var datasource = CxmlPivotDataSource.FromFile("C:\\Projects\\PivotViewPlayground\\PivotViewer.Core.Tests\\TestData\\conceptcars.cxml");
+
+			newIds = datasource.Items!.Select(i => i.Id!).ToArray();
+
+			renderer.DataSource = datasource;
+		}
+		catch
+		{
+			newIds = Enumerable.Range(1, 100).Select(i => i.ToString()).ToArray();
+
+			renderer.DataSource = new PivotDataSource
+			{
+				Items = newIds.Select(NewItem).ToArray(),
+			};
+		}
+
+		ItemsText = string.Join(Environment.NewLine, newIds);
 
 		Visualizer = new RendererVisualizer("Default", renderer);
-		ItemsText = string.Join(Environment.NewLine, newIds);
 
 		BindingContext = this;
 	}

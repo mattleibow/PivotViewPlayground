@@ -25,7 +25,7 @@ public static class CxmlPivotDataSource
 		{
 			Name = collection.Attribute("Name")?.Value,
 			Icon = collection.Attribute(xmlnsLiveLabs + "Icon")?.Value,
-			Properties = new List<PivotDataProperty>(),
+			Properties = new List<PivotProperty>(),
 			Items = new List<PivotDataItem>(),
 		};
 
@@ -71,7 +71,7 @@ public static class CxmlPivotDataSource
 		}
 	}
 
-	private static void ParseSupplement(string supplement, Dictionary<string, PivotDataProperty> properties, IList<PivotDataItem> items)
+	private static void ParseSupplement(string supplement, Dictionary<string, PivotProperty> properties, IList<PivotDataItem> items)
 	{
 		var suppCxml = XDocument.Load(supplement);
 
@@ -82,7 +82,7 @@ public static class CxmlPivotDataSource
 		ParseItems(collection, properties, items, true);
 	}
 
-	private static IEnumerable<PivotDataProperty> ParseFacetCategories(XElement collection)
+	private static IEnumerable<PivotProperty> ParseFacetCategories(XElement collection)
 	{
 		if (collection is null)
 			throw new ArgumentNullException(nameof(collection));
@@ -97,22 +97,21 @@ public static class CxmlPivotDataSource
 				if (string.IsNullOrEmpty(name))
 					throw new InvalidDataException("FacetCategory element does not have a Name attribute.");
 
-				var property = new PivotDataProperty
+				var property = new PivotProperty(name)
 				{
-					Name = name,
 					Format = facet.Attribute("Format")?.Value,
 					Type = facet.Attribute("Type")?.Value switch
 					{
-						"String" => PivotDataPropertyType.Text,
-						"LongString" => PivotDataPropertyType.Text,
-						"Number" => PivotDataPropertyType.Number,
-						"DateTime" => PivotDataPropertyType.DateTime,
-						"Link" => PivotDataPropertyType.Text,
-						_ => PivotDataPropertyType.Text,
+						"String" => PivotPropertyType.Text,
+						"LongString" => PivotPropertyType.Text,
+						"Number" => PivotPropertyType.Number,
+						"DateTime" => PivotPropertyType.DateTime,
+						"Link" => PivotPropertyType.Text,
+						_ => PivotPropertyType.Text,
 					},
-					// TODO: d1p1:IsFilterVisible
-					// TODO: d1p1:IsMetaDataVisible
-					// TODO: d1p1:IsWordWheelVisible
+					IsFilterVisible = facet.Attribute(xmlnsLiveLabs + "IsFilterVisible")?.Value == "true",
+					IsMetaDataVisible = facet.Attribute(xmlnsLiveLabs + "IsMetaDataVisible")?.Value == "true",
+					IsSearchVisible = facet.Attribute(xmlnsLiveLabs + "IsWordWheelVisible")?.Value == "true",
 				};
 
 				yield return property;
@@ -120,13 +119,13 @@ public static class CxmlPivotDataSource
 		}
 
 		// add other default facets
-		yield return new PivotDataProperty { Name = "Img" };
-		yield return new PivotDataProperty { Name = "Href" };
-		yield return new PivotDataProperty { Name = "Name" };
-		yield return new PivotDataProperty { Name = "Description" };
+		yield return new PivotProperty("Img") { IsFilterVisible = false, IsMetaDataVisible = false, IsSearchVisible = false };
+		yield return new PivotProperty("Href") { IsFilterVisible = false, IsMetaDataVisible = false, IsSearchVisible = false };
+		yield return new PivotProperty("Name") { IsFilterVisible = false };
+		yield return new PivotProperty("Description") { IsFilterVisible = false };
 	}
 
-	private static void ParseItems(XElement collection, Dictionary<string, PivotDataProperty> properties, IList<PivotDataItem> destination, bool isSupplement)
+	private static void ParseItems(XElement collection, Dictionary<string, PivotProperty> properties, IList<PivotDataItem> destination, bool isSupplement)
 	{
 		if (collection is null)
 			throw new ArgumentNullException(nameof(collection));
@@ -170,7 +169,7 @@ public static class CxmlPivotDataSource
 		}
 	}
 
-	private static void ParseFacetProperty(XElement facet, PivotDataProperty property, PivotDataItemPropertyCollection collection)
+	private static void ParseFacetProperty(XElement facet, PivotProperty property, PivotDataItemPropertyCollection collection)
 	{
 		foreach (var element in facet.Elements())
 		{
@@ -188,7 +187,7 @@ public static class CxmlPivotDataSource
 		}
 	}
 
-	private static void ParseAttributeProperty(XElement item, string name, Dictionary<string, PivotDataProperty> propertiesByName, PivotDataItemPropertyCollection collection)
+	private static void ParseAttributeProperty(XElement item, string name, Dictionary<string, PivotProperty> propertiesByName, PivotDataItemPropertyCollection collection)
 	{
 		var attr = item.Attribute(name)?.Value;
 		if (attr is null)
@@ -198,7 +197,7 @@ public static class CxmlPivotDataSource
 		AddProperty(property, collection, attr);
 	}
 
-	private static void ParseElementProperty(XElement item, XName name, Dictionary<string, PivotDataProperty> propertiesByName, PivotDataItemPropertyCollection collection)
+	private static void ParseElementProperty(XElement item, XName name, Dictionary<string, PivotProperty> propertiesByName, PivotDataItemPropertyCollection collection)
 	{
 		var value = item.Element(name)?.Value;
 		if (value is null)
@@ -208,12 +207,12 @@ public static class CxmlPivotDataSource
 		AddProperty(property, collection, value);
 	}
 
-	private static void AddProperty(PivotDataProperty property, PivotDataItemPropertyCollection collection, IComparable value)
+	private static void AddProperty(PivotProperty property, PivotDataItemPropertyCollection collection, IComparable value)
 	{
 		if (collection.TryGetValue(property, out var propertyValue))
 			propertyValue.Add(value);
 		else
-			collection[property] = new PivotDataPropertyValue(value);
+			collection[property] = new PivotPropertyValueCollection(value);
 	}
 }
 

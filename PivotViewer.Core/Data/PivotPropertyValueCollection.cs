@@ -4,18 +4,23 @@ using System.Diagnostics;
 namespace PivotViewer.Core.Data;
 
 [DebuggerDisplay("{DebuggerValue}")]
-public class PivotDataPropertyValue : IEnumerable<IComparable>
+public class PivotPropertyValueCollection : IReadOnlyList<IComparable>
 {
 	private readonly IList<IComparable> values;
 
-	public PivotDataPropertyValue(IList<IComparable> values)
-	{
-		this.values = values ?? throw new ArgumentNullException(nameof(values));
-	}
-
-	public PivotDataPropertyValue(IComparable value)
+	public PivotPropertyValueCollection(IComparable value)
 	{
 		values = new List<IComparable>() { value };
+	}
+
+	public PivotPropertyValueCollection(params IComparable[] values)
+	{
+		this.values = new List<IComparable>(values);
+	}
+
+	public PivotPropertyValueCollection(IEnumerable<IComparable> values)
+	{
+		this.values = new List<IComparable>(values);
 	}
 
 	public IComparable this[int index] => values[index];
@@ -29,7 +34,7 @@ public class PivotDataPropertyValue : IEnumerable<IComparable>
 		Count switch
 		{
 			0 => null,
-			1 => values[0]?.ToString(),
+			1 => $"{values[0]}",
 			_ => $"{values[0]}, ..."
 		};
 
