@@ -7,9 +7,11 @@ public class FilterManager
 
 	public FilterManager()
 	{
+		appliedFilters.FilterChanged += OnAppliedFilterChanged;
 	}
 
 	public FilterManager(PivotDataSource dataSource)
+		: this()
 	{
 		DataSource = dataSource;
 	}
@@ -17,7 +19,7 @@ public class FilterManager
 	public PivotDataSource? DataSource { get; set; }
 
 	public FilterPropertyCollection AvailableFilters => availableFilters;
-	
+
 	public AppliedFilterPropertyCollection AppliedFilters => appliedFilters;
 
 	public event EventHandler? FilterUpdated;
@@ -134,5 +136,10 @@ public class FilterManager
 		}
 
 		return true;
+	}
+
+	private void OnAppliedFilterChanged(object? sender, EventArgs e)
+	{
+		FilterUpdated?.Invoke(this, EventArgs.Empty);
 	}
 }

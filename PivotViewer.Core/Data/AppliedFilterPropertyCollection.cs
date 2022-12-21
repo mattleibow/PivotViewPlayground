@@ -1,7 +1,15 @@
-﻿namespace PivotViewer.Core.Data;
+﻿using System.Diagnostics;
 
+namespace PivotViewer.Core.Data;
+
+[DebuggerDisplay("{DebuggerValue}")]
 public class AppliedFilterPropertyCollection : FilterPropertyCollection
 {
+	internal string DebuggerValue =>
+		string.Join(";", this.Select(p => $"{p.Name}={string.Join(",", p.Values.DebuggerValue)}"));
+
+	public event EventHandler? FilterChanged;
+
 	public void ApplyValue(FilterValue filterValue) =>
 		ApplyOrIncrementValue(filterValue, 1);
 
@@ -23,5 +31,7 @@ public class AppliedFilterPropertyCollection : FilterPropertyCollection
 			applied.IncrementValue(value, change);
 			Add(applied);
 		}
+
+		FilterChanged?.Invoke(this, EventArgs.Empty);
 	}
 }

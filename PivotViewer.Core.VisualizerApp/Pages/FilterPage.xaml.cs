@@ -1,9 +1,10 @@
-﻿namespace PivotViewer.Core.VisualizerApp;
+﻿using System.Text;
+
+namespace PivotViewer.Core.VisualizerApp;
 
 public partial class FilterPage : ContentPage
 {
 	private readonly PivotDataSource datasource;
-	private readonly PivotDataSourceFilter filter;
 
 	public FilterPage()
 	{
@@ -11,17 +12,30 @@ public partial class FilterPage : ContentPage
 
 		datasource = CxmlPivotDataSource.FromFile("C:\\Projects\\PivotViewPlayground\\PivotViewer.Core.Tests\\TestData\\conceptcars.cxml");
 
-		filter = new PivotDataSourceFilter(datasource);
+		Filter = new PivotDataSourceFilter(datasource);
 
-		BindingContext = filter;
+		Filter.FilterUpdated += (sender, e) =>
+		{
+			// TODO: update FilteredItems
+		};
+
+		BindingContext = this;
 	}
+
+	public PivotDataSourceFilter Filter { get; }
+
+	public ObservableCollection<PivotDataItem> FilteredItems { get; } = new();
 }
 
 public class PivotDataSourceFilter : BindableObject
 {
 	// TODO: make readonly
-	public static readonly BindableProperty CategoriesProperty = BindableProperty.Create(
+	public static readonly BindableProperty PropertiesProperty = BindableProperty.Create(
 		nameof(Properties), typeof(ObservableCollection<PivotFilterProperty>), typeof(PivotDataSourceFilter), null);
+
+	// TODO: make readonly
+	public static readonly BindableProperty FilterProperty = BindableProperty.Create(
+		nameof(Filter), typeof(ObservableCollection<PivotFilterProperty>), typeof(PivotDataSourceFilter), new ObservableCollection<PivotFilterProperty>());
 
 	// TODO: make readonly
 	public static readonly BindableProperty FilterStringProperty = BindableProperty.Create(
@@ -38,6 +52,8 @@ public class PivotDataSourceFilter : BindableObject
 		filter.RebuildIndexes();
 
 		Properties = new(filter.AvailableFilters.Select(CreateProperty));
+
+		filter.FilterUpdated += OnFilterUpdated;
 	}
 
 	public string FilterString
@@ -48,12 +64,73 @@ public class PivotDataSourceFilter : BindableObject
 
 	public ObservableCollection<PivotFilterProperty> Properties
 	{
-		get => (ObservableCollection<PivotFilterProperty>)GetValue(CategoriesProperty);
-		private set => SetValue(CategoriesProperty, value);
+		get => (ObservableCollection<PivotFilterProperty>)GetValue(PropertiesProperty);
+		private set => SetValue(PropertiesProperty, value);
 	}
+
+	public ObservableCollection<PivotFilterProperty> Filter
+	{
+		get => (ObservableCollection<PivotFilterProperty>)GetValue(FilterProperty);
+		private set => SetValue(FilterProperty, value);
+	}
+
+	public event EventHandler? FilterUpdated;
 
 	private PivotFilterProperty CreateProperty(FilterProperty property) =>
 		new(filter, property);
+
+	private void OnFilterUpdated(object? sender, EventArgs e)
+	{
+		FilterString = GetFilterString(filter.AppliedFilters);
+
+		SyncFilterCollections(filter.AppliedFilters, Filter);
+
+		FilterUpdated?.Invoke(this, EventArgs.Empty);
+	}
+
+	private static string GetFilterString(AppliedFilterPropertyCollection appliedFilters)
+	{
+		var sb = new StringBuilder();
+
+		foreach (var filter in appliedFilters)
+		{
+			if (sb.Length > 0)
+				sb.Append(';');
+			sb.Append(filter.Name);
+			sb.Append('=');
+			var first = true;
+			foreach (var value in filter.Values)
+			{
+				if (!first)
+					sb.Append(',');
+				sb.Append(value.Value);
+				first = false;
+			}
+		}
+
+		return sb.ToString();
+	}
+
+	private void SyncFilterCollections(FilterPropertyCollection source, ObservableCollection<PivotFilterProperty> destination)
+	{
+		foreach (var src in source)
+		{
+			var dest = destination.FirstOrDefault(d => src.Name == d.Name);
+
+			if (dest is null)
+				destination.Add(CreateProperty(src));
+			else
+				dest.SyncFilterCollections(src.Values, dest.Values);
+		}
+
+		for (var i = destination.Count - 1; i >= 0; i--)
+		{
+			if (source.All(s => s.Name != destination[i].Name))
+			{
+				destination.RemoveAt(i);
+			}
+		}
+	}
 }
 
 public class PivotFilterProperty : BindableObject
@@ -85,6 +162,23 @@ public class PivotFilterProperty : BindableObject
 
 	private PivotFilterValue CreateValue(FilterValue value) =>
 		new(filter, property, value);
+
+	internal void SyncFilterCollections(FilterValueCollection source, ObservableCollection<PivotFilterValue> destination)
+	{
+		foreach (var src in source)
+		{
+			if (destination.All(d => src.Value.CompareTo(d.Value) != 0))
+				destination.Add(CreateValue(src));
+		}
+
+		for (var i = destination.Count - 1; i >= 0; i--)
+		{
+			if (source.All(s => s.Value.CompareTo(destination[i].Value) != 0))
+			{
+				destination.RemoveAt(i);
+			}
+		}
+	}
 }
 
 public class PivotFilterValue : BindableObject
