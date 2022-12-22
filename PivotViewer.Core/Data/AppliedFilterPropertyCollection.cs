@@ -24,6 +24,8 @@ public class AppliedFilterPropertyCollection : FilterPropertyCollection
 		if (TryGet(property.Name, out var applied))
 		{
 			applied.IncrementValue(value, change);
+			if (applied.Count == 0)
+				Remove(applied);
 		}
 		else
 		{

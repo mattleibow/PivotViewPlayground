@@ -4,22 +4,31 @@ public class PivotFilterProperty : BindableObject
 {
 	// TODO: make readonly
 	public static readonly BindableProperty ValuesProperty = BindableProperty.Create(
-		nameof(Values), typeof(ObservableCollection<PivotFilterValue>), typeof(PivotFilterProperty), null);
+		nameof(Values), typeof(ObservableCollection<PivotFilterValue>), typeof(PivotFilterProperty),
+		defaultValueCreator: (b) => new ObservableCollection<PivotFilterValue>());
+
+	// TODO: make readonly
+	public static readonly BindableProperty NameProperty = BindableProperty.Create(
+		nameof(Name), typeof(string), typeof(PivotFilterProperty), null);
 
 	private readonly FilterManager filter;
 	private readonly FilterProperty property;
 
-	public PivotFilterProperty(FilterManager filter, FilterProperty property)
+	internal PivotFilterProperty(FilterManager filter, FilterProperty property)
 	{
 		this.filter = filter;
 		this.property = property;
 
-		Values = new(property.Values.Select(CreateValue));
+		Name = property.Name;
+
+		SyncFilterCollections(property.Values, Values);
 	}
 
-	public string Name => property.Name;
-
-	public int Count => property.Count;
+	public string Name
+	{
+		get => (string)GetValue(NameProperty);
+		private set => SetValue(NameProperty, value);
+	}
 
 	public ObservableCollection<PivotFilterValue> Values
 	{
@@ -27,23 +36,10 @@ public class PivotFilterProperty : BindableObject
 		private set => SetValue(ValuesProperty, value);
 	}
 
-	private PivotFilterValue CreateValue(FilterValue value) =>
-		new(filter, property, value);
-
-	internal void SyncFilterCollections(FilterValueCollection source, ObservableCollection<PivotFilterValue> destination)
-	{
-		foreach (var src in source)
-		{
-			if (destination.All(d => src.Value.CompareTo(d.Value) != 0))
-				destination.Add(CreateValue(src));
-		}
-
-		for (var i = destination.Count - 1; i >= 0; i--)
-		{
-			if (source.All(s => s.Value.CompareTo(destination[i].Value) != 0))
-			{
-				destination.RemoveAt(i);
-			}
-		}
-	}
+	internal void SyncFilterCollections(FilterValueCollection source, ObservableCollection<PivotFilterValue> destination) =>
+		CollectionHelpers.Sync(
+			source,
+			destination,
+			(s, d) => s.Value.CompareTo(d.Value) == 0,
+			(s) => new(filter, property, s));
 }

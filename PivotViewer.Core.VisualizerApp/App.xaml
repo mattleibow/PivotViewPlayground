@@ -12,6 +12,8 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <app:PivotDataItemConverter x:Key="PivotDataItemConverter" />
+
             <app:DynamicTemplateSelector x:Key="VisualizerPropertyTemplates" ItemKeyBinding="{Binding Attribute.Key}">
                 <app:DynamicTemplateSelector.Templates>
                     <app:DynamicDataTemplate>

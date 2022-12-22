@@ -16,8 +16,10 @@ public partial class FilterPage : ContentPage
 
 		Filter.FilterUpdated += (sender, e) =>
 		{
-			// TODO: update FilteredItems
+			CollectionHelpers.Sync(Filter.GetFilteredItems(), FilteredItems);
 		};
+
+		CollectionHelpers.Sync(datasource.Items, FilteredItems);
 
 		BindingContext = this;
 	}

@@ -10,7 +10,7 @@ public class PivotFilterValue : BindableObject
 	private readonly FilterProperty filterProperty;
 	private readonly FilterValue filterValue;
 
-	public PivotFilterValue(FilterManager filter, FilterProperty property, FilterValue value)
+	internal PivotFilterValue(FilterManager filter, FilterProperty property, FilterValue value)
 	{
 		this.filter = filter;
 		filterProperty = property;
@@ -19,7 +19,7 @@ public class PivotFilterValue : BindableObject
 
 	public object Value => filterValue.Value;
 
-	public int Count => filterProperty.Count;
+	public int Count => filterValue.Count;
 
 	public bool IsApplied
 	{

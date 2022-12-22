@@ -10,7 +10,8 @@ public class PivotDataSourceFilter : BindableObject
 
 	// TODO: make readonly
 	public static readonly BindableProperty FilterProperty = BindableProperty.Create(
-		nameof(Filter), typeof(ObservableCollection<PivotFilterProperty>), typeof(PivotDataSourceFilter), new ObservableCollection<PivotFilterProperty>());
+		nameof(Filter), typeof(ObservableCollection<PivotFilterProperty>), typeof(PivotDataSourceFilter),
+		defaultValueCreator: (b) => new ObservableCollection<PivotFilterProperty>());
 
 	// TODO: make readonly
 	public static readonly BindableProperty FilterStringProperty = BindableProperty.Create(
@@ -51,6 +52,9 @@ public class PivotDataSourceFilter : BindableObject
 
 	public event EventHandler? FilterUpdated;
 
+	public IEnumerable<PivotDataItem> GetFilteredItems() =>
+		filter.GetFilteredItems();
+
 	private PivotFilterProperty CreateProperty(FilterProperty property) =>
 		new(filter, property);
 
@@ -86,24 +90,11 @@ public class PivotDataSourceFilter : BindableObject
 		return sb.ToString();
 	}
 
-	private void SyncFilterCollections(FilterPropertyCollection source, ObservableCollection<PivotFilterProperty> destination)
-	{
-		foreach (var src in source)
-		{
-			var dest = destination.FirstOrDefault(d => src.Name == d.Name);
-
-			if (dest is null)
-				destination.Add(CreateProperty(src));
-			else
-				dest.SyncFilterCollections(src.Values, dest.Values);
-		}
-
-		for (var i = destination.Count - 1; i >= 0; i--)
-		{
-			if (source.All(s => s.Name != destination[i].Name))
-			{
-				destination.RemoveAt(i);
-			}
-		}
-	}
+	private void SyncFilterCollections(FilterPropertyCollection source, ObservableCollection<PivotFilterProperty> destination) =>
+		CollectionHelpers.Sync(
+			source,
+			destination,
+			(s, d) => s.Name == d.Name,
+			CreateProperty,
+			(s, d) => d.SyncFilterCollections(s.Values, d.Values));
 }
