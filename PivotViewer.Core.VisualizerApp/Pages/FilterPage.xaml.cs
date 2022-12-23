@@ -16,7 +16,7 @@ public partial class FilterPage : ContentPage
 
 		Filter.FilterUpdated += (sender, e) =>
 		{
-			CollectionHelpers.Sync(Filter.GetFilteredItems(), FilteredItems);
+			CollectionHelpers.Sync(Filter.FilteredItems, FilteredItems);
 		};
 
 		CollectionHelpers.Sync(datasource.Items, FilteredItems);

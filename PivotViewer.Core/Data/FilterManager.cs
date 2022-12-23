@@ -2,8 +2,11 @@
 
 public class FilterManager
 {
-	private readonly FilterPropertyCollection availableFilters = new();
+	private readonly FilterPropertyCollection allFilters = new();
 	private readonly AppliedFilterPropertyCollection appliedFilters = new();
+	private readonly AppliedFilterPropertyCollection remainingFilters = new();
+	private readonly List<PivotDataItem> filteredItems = new();
+	private readonly List<PivotDataItem> removedItems = new();
 
 	public FilterManager()
 	{
@@ -18,37 +21,45 @@ public class FilterManager
 
 	public PivotDataSource? DataSource { get; set; }
 
-	public FilterPropertyCollection AvailableFilters => availableFilters;
+	public FilterPropertyCollection AllFilters => allFilters;
 
 	public AppliedFilterPropertyCollection AppliedFilters => appliedFilters;
+
+	public AppliedFilterPropertyCollection RemainingFilters => remainingFilters;
+
+	public IReadOnlyList<PivotDataItem> FilteredItems => filteredItems;
+
+	public IReadOnlyList<PivotDataItem> RemovedItems => removedItems;
 
 	public event EventHandler? FilterUpdated;
 
 	public void RebuildIndexes()
 	{
-		availableFilters.Clear();
+		allFilters.Clear();
+		appliedFilters.Clear();
+		remainingFilters.Clear();
+		filteredItems.Clear();
+		removedItems.Clear();
 
 		if (DataSource is null)
 			return;
 
-		var filterByPivotProperties = new Dictionary<PivotProperty, FilterProperty>();
-
+		// add the properties
 		foreach (var property in DataSource.Properties)
 		{
 			if (!property.IsFilterVisible)
 				continue;
 
 			var filterProp = new FilterProperty(property);
-			availableFilters.Add(filterProp);
-
-			filterByPivotProperties[property] = filterProp;
+			allFilters.Add(filterProp);
 		}
 
+		// calculate all the available values
 		foreach (var item in DataSource.Items)
 		{
 			foreach (var prop in item.Properties)
 			{
-				if (!filterByPivotProperties.TryGetValue(prop.Key, out var filterProp))
+				if (!allFilters.TryGet(prop.Key.Name, out var filterProp))
 					continue;
 
 				foreach (var val in prop.Value)
@@ -57,6 +68,23 @@ public class FilterManager
 				}
 			}
 		}
+
+		// copy all the values to remaining values
+		foreach (var available in allFilters)
+		{
+			var remaining = new FilterProperty(available.PivotProperty);
+			remainingFilters.Add(remaining);
+
+			foreach (var val in available.Values)
+			{
+				remaining.IncrementValue(val.Value, val.Count);
+			}
+		}
+
+		removedItems.EnsureCapacity(DataSource.Items.Count);
+
+		filteredItems.EnsureCapacity(DataSource.Items.Count);
+		filteredItems.AddRange(DataSource.Items);
 	}
 
 	//public ICollection<IComparable> GetAllValues(PivotProperty property, IEnumerable<PivotDataItem> items, bool includeDuplicates = true)
@@ -108,38 +136,142 @@ public class FilterManager
 		// loop through each filter as AND
 		foreach (var filter in appliedFilters)
 		{
-			// the item MUST have the filtered property
-			if (!item.Properties.TryGetValue(filter.PivotProperty, out var propValues))
-				return false;
-
 			// loop through each value as OR
-			var isMatch = false;
-			var filterValues = filter.Values;
-			foreach (var fv in filterValues)
-			{
-				foreach (var pv in propValues)
-				{
-					if (fv.Value.CompareTo(pv) == 0)
-					{
-						isMatch = true;
-						break;
-					}
-				}
-
-				if (isMatch)
-					break;
-			}
-
-			// none of the values intersected
-			if (!isMatch)
+			if (!IsAvailable(item, filter))
 				return false;
 		}
 
 		return true;
 	}
 
-	private void OnAppliedFilterChanged(object? sender, EventArgs e)
+	private bool IsAvailable(PivotDataItem item, FilterProperty filter)
 	{
-		FilterUpdated?.Invoke(this, EventArgs.Empty);
+		// the item MUST have the filtered property
+		if (!item.Properties.TryGetValue(filter.PivotProperty, out var propertyValues))
+			return false;
+
+		// loop through each value as OR
+		return IsIntersection(propertyValues, filter.Values);
+	}
+
+	private bool IsAvailable(PivotDataItem item, string propertyName, IComparable value)
+	{
+		// the item MUST have the filtered property
+		if (!item.Properties.TryGetValue(propertyName, out var propertyValues))
+			return false;
+
+		// loop through each value as OR
+		return IsMatch(propertyValues, value);
+	}
+
+	private static bool IsIntersection(IEnumerable<IComparable> itemPropertyValues, IEnumerable<FilterValue> filterValues)
+	{
+		foreach (var filterValue in filterValues)
+		{
+			if (IsMatch(itemPropertyValues, filterValue.Value))
+				return true;
+		}
+
+		return false;
+	}
+
+	private static bool IsMatch(IEnumerable<IComparable> itemPropertyValues, IComparable value)
+	{
+		foreach (var propertyValue in itemPropertyValues)
+		{
+			if (value.CompareTo(propertyValue) == 0)
+				return true;
+		}
+
+		return false;
+	}
+
+	private void OnAppliedFilterChanged(object? sender, FilterChangedEventArgs e)
+	{
+		if (e.Action == FilterChangedAction.AddProperty)
+		{
+			// this is adding the first value of a NEW property and
+			// thus means the filter is getting MORE restrictive
+
+			for (var i = filteredItems.Count - 1; i >= 0; i--)
+			{
+				var item = filteredItems[i];
+
+				if (!IsAvailable(item, e.PropertyName, e.Value))
+				{
+					removedItems.Add(item);
+					filteredItems.RemoveAt(i);
+				}
+			}
+		}
+		else if (e.Action == FilterChangedAction.RemoveProperty)
+		{
+			// this is removing the LAST value of an old property and
+			// thus means the filter is getting LESS restrictive
+
+			for (var i = removedItems.Count - 1; i >= 0; i--)
+			{
+				var item = removedItems[i];
+
+				if (!IsAvailable(item))
+				{
+					filteredItems.Add(item);
+					removedItems.RemoveAt(i);
+				}
+			}
+		}
+		else if (e.Action == FilterChangedAction.AddValue)
+		{
+			// this is adding ANOTHER value of an old property and
+			// thus means the filter is getting LESS restrictive
+
+			for (var i = removedItems.Count - 1; i >= 0; i--)
+			{
+				var item = removedItems[i];
+
+				if (IsAvailable(item))
+				{
+					filteredItems.Add(item);
+					removedItems.RemoveAt(i);
+				}
+			}
+		}
+		else if (e.Action == FilterChangedAction.RemoveValue)
+		{
+			// this is removing ANOTHER value of an old property and
+			// thus means the filter is getting MORE restrictive
+
+			for (var i = filteredItems.Count - 1; i >= 0; i--)
+			{
+				var item = filteredItems[i];
+
+				if (!IsAvailable(item, e.Property))
+				{
+					removedItems.Add(item);
+					filteredItems.RemoveAt(i);
+				}
+			}
+		}
+
+		// TODO: update filter lists
+
+		FilterUpdated?.Invoke(this, e);
+	}
+
+	private void SyncFilters(IEnumerable<PivotDataItem> items, AppliedFilterPropertyCollection filter)
+	{
+		foreach (var item in items)
+		{
+			foreach (var prop in item.Properties)
+			{
+				if (!allFilters.TryGet(prop.Key.Name, out var filterProp))
+					continue;
+
+				foreach (var val in prop.Value)
+				{
+					filter.ApplyValue(filterProp, val);
+				}
+			}
+		}
 	}
 }

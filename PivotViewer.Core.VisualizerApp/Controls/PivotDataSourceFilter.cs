@@ -6,7 +6,8 @@ public class PivotDataSourceFilter : BindableObject
 {
 	// TODO: make readonly
 	public static readonly BindableProperty PropertiesProperty = BindableProperty.Create(
-		nameof(Properties), typeof(ObservableCollection<PivotFilterProperty>), typeof(PivotDataSourceFilter), null);
+		nameof(Properties), typeof(ObservableCollection<PivotFilterProperty>), typeof(PivotDataSourceFilter),
+		defaultValueCreator: (b) => new ObservableCollection<PivotFilterProperty>());
 
 	// TODO: make readonly
 	public static readonly BindableProperty FilterProperty = BindableProperty.Create(
@@ -16,6 +17,11 @@ public class PivotDataSourceFilter : BindableObject
 	// TODO: make readonly
 	public static readonly BindableProperty FilterStringProperty = BindableProperty.Create(
 		nameof(FilterString), typeof(string), typeof(PivotDataSourceFilter), null);
+
+	// TODO: make readonly
+	public static readonly BindableProperty FilteredItemsProperty = BindableProperty.Create(
+		nameof(FilteredItems), typeof(ObservableCollection<PivotDataItem>), typeof(PivotDataSourceFilter),
+		defaultValueCreator: (b) => new ObservableCollection<PivotDataItem>());
 
 	private PivotDataSource datasource;
 	private FilterManager filter;
@@ -27,7 +33,7 @@ public class PivotDataSourceFilter : BindableObject
 		filter = new FilterManager(datasource);
 		filter.RebuildIndexes();
 
-		Properties = new(filter.AvailableFilters.Select(CreateProperty));
+		OnFilterUpdated(filter, EventArgs.Empty);
 
 		filter.FilterUpdated += OnFilterUpdated;
 	}
@@ -50,10 +56,13 @@ public class PivotDataSourceFilter : BindableObject
 		private set => SetValue(FilterProperty, value);
 	}
 
-	public event EventHandler? FilterUpdated;
+	public ObservableCollection<PivotDataItem> FilteredItems
+	{
+		get => (ObservableCollection<PivotDataItem>)GetValue(FilteredItemsProperty);
+		private set => SetValue(FilteredItemsProperty, value);
+	}
 
-	public IEnumerable<PivotDataItem> GetFilteredItems() =>
-		filter.GetFilteredItems();
+	public event EventHandler? FilterUpdated;
 
 	private PivotFilterProperty CreateProperty(FilterProperty property) =>
 		new(filter, property);
@@ -62,7 +71,10 @@ public class PivotDataSourceFilter : BindableObject
 	{
 		FilterString = GetFilterString(filter.AppliedFilters);
 
+		SyncFilterCollections(filter.RemainingFilters, Properties);
 		SyncFilterCollections(filter.AppliedFilters, Filter);
+
+		SyncFilterCollections(filter.FilteredItems, FilteredItems);
 
 		FilterUpdated?.Invoke(this, EventArgs.Empty);
 	}
@@ -97,4 +109,9 @@ public class PivotDataSourceFilter : BindableObject
 			(s, d) => s.Name == d.Name,
 			CreateProperty,
 			(s, d) => d.SyncFilterCollections(s.Values, d.Values));
+
+	private void SyncFilterCollections(IEnumerable<PivotDataItem> source, ObservableCollection<PivotDataItem> destination) =>
+		CollectionHelpers.Sync(
+			source,
+			destination);
 }
