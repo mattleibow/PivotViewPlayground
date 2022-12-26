@@ -14,17 +14,8 @@ public partial class FilterPage : ContentPage
 
 		Filter = new PivotDataSourceFilter(datasource);
 
-		Filter.FilterUpdated += (sender, e) =>
-		{
-			CollectionHelpers.Sync(Filter.FilteredItems, FilteredItems);
-		};
-
-		CollectionHelpers.Sync(datasource.Items, FilteredItems);
-
 		BindingContext = this;
 	}
 
 	public PivotDataSourceFilter Filter { get; }
-
-	public ObservableCollection<PivotDataItem> FilteredItems { get; } = new();
 }

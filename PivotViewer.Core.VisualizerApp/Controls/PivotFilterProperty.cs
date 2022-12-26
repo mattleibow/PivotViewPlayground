@@ -21,7 +21,7 @@ public class PivotFilterProperty : BindableObject
 
 		Name = property.Name;
 
-		SyncFilterCollections(property.Values, Values);
+		Sync(property.Values, Values);
 	}
 
 	public string Name
@@ -36,10 +36,11 @@ public class PivotFilterProperty : BindableObject
 		private set => SetValue(ValuesProperty, value);
 	}
 
-	internal void SyncFilterCollections(FilterValueCollection source, ObservableCollection<PivotFilterValue> destination) =>
+	internal void Sync(FilterValueCollection source, ObservableCollection<PivotFilterValue> destination) =>
 		CollectionHelpers.Sync(
 			source,
 			destination,
 			(s, d) => s.Value.CompareTo(d.Value) == 0,
-			(s) => new(filter, property, s));
+			(s) => new(filter, property, s),
+			(s, d) => d.Sync(s, d));
 }

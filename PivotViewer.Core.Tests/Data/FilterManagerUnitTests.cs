@@ -125,7 +125,7 @@ public class FilterManagerUnitTests
 	[InlineData("PThree=VThree", new[] { "2" })]
 	[InlineData("POne=VOne;PTwo=VTwo", new[] { "1" })]
 	[InlineData("POne=VOne;PThree=VThree", new string[0])]
-	[InlineData("POne=VOne;PThree=VThree;POne=VA", new[] { "1", "2" })]
+	[InlineData("POne=VOne;PThree=VThree;POne=VA", new[] { "2" })]
 	[InlineData("POne=VInvalid", new string[0])]
 	//[InlineData("PInvalid=VInvalid", new string[0])]
 	public void ApplyFilterMovesFromFilteredToRemoved(string filter, string[] available)
@@ -235,7 +235,7 @@ public class FilterManagerUnitTests
 
 		Assert.Empty(filterManager.AppliedFilters);
 		AssertFilter(filterManager.AllFilters, expected);
-		AssertFilter(filterManager.RemainingFilters, expected);
+		AssertFilter(filterManager.AvailableFilters, expected);
 	}
 
 	[Fact]
@@ -250,22 +250,26 @@ public class FilterManagerUnitTests
 
 		Assert.Empty(filterManager.AppliedFilters);
 		AssertFilter(filterManager.AllFilters, expected);
-		AssertFilter(filterManager.RemainingFilters, expected);
+		AssertFilter(filterManager.AvailableFilters, expected);
 	}
 
-	[Fact]
-	public void CorrectFiltersAfterSingleItem()
+	[Theory]
+	[InlineData("", "", "POne=VOne|1,VA|2,Va|1,VFirst|1,V@|1;PTwo=VTwo|1,V2|1;PThree=VThree|1,V3|1")]
+	[InlineData("POne=VOne", "POne=VOne|1", "POne=VOne|1,VA|2,Va|1,VFirst|1,V@|1;PTwo=VTwo|1,V2|1")]
+	[InlineData("PTwo=V2", "PTwo=V2|1", "POne=VOne|1,VA|1,Va|1;PTwo=VTwo|1,V2|1")]
+	[InlineData("PThree=VThree", "PThree=VThree|1", "POne=VA|1,VFirst|1,V@|1;PThree=VThree|1,V3|1")]
+	public void AppliedFiltersAreCorrect(string filter, string applied, string remaining)
 	{
 		var datasource = BuildTestDataSource();
 
 		var filterManager = new FilterManager(datasource);
 		filterManager.RebuildIndexes();
 
-		ApplyFilter(filterManager, "POne=VOne");
+		ApplyFilter(filterManager, filter);
 
-		AssertFilter(filterManager.AppliedFilters, "POne=VOne|1");
+		AssertFilter(filterManager.AppliedFilters, applied);
 
-		AssertFilter(filterManager.RemainingFilters, "POne=VA|1,VFirst|1,V@|1;PThree=VThree|1,V3|1");
+		AssertFilter(filterManager.AvailableFilters, remaining);
 	}
 
 	[Fact]
@@ -291,12 +295,12 @@ public class FilterManagerUnitTests
 		filterManager.RebuildIndexes();
 
 		AssertFilter(filterManager.AppliedFilters, "");
-		AssertFilter(filterManager.RemainingFilters, "POne=VOne|1");
+		AssertFilter(filterManager.AvailableFilters, "POne=VOne|1");
 
 		ApplyFilter(filterManager, "POne=VOne");
 
 		AssertFilter(filterManager.AppliedFilters, "POne=VOne|1");
-		AssertFilter(filterManager.RemainingFilters, "");
+		AssertFilter(filterManager.AvailableFilters, "POne=VOne|1");
 	}
 
 	[Theory]

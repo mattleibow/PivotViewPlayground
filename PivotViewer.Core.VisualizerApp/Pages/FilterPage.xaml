@@ -68,7 +68,7 @@
         </ScrollView>
 
         <!-- items -->
-        <CollectionView Grid.Column="2" ItemsSource="{Binding FilteredItems}">
+        <CollectionView Grid.Column="2" ItemsSource="{Binding Filter.FilteredItems}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="data:PivotDataItem">
                     <Label Text="{Binding ., Converter={StaticResource PivotDataItemConverter}, ConverterParameter='Name'}" />

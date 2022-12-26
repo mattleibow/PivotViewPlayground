@@ -23,7 +23,9 @@ internal static class CollectionHelpers
 
 		for (var i = destination.Count - 1; i >= 0; i--)
 		{
-			if (sourceList.All(s => !comparer(s, destination[i])))
+			var dest = destination[i];
+
+			if (sourceList.All(s => !comparer(s, dest)))
 			{
 				destination.RemoveAt(i);
 			}
@@ -49,7 +51,9 @@ internal static class CollectionHelpers
 
 		for (var i = destination.Count - 1; i >= 0; i--)
 		{
-			if (sourceList.All(s => !s.Equals(destination[i])))
+			var dest = destination[i];
+
+			if (sourceList.All(s => !s.Equals(dest)))
 			{
 				destination.RemoveAt(i);
 			}

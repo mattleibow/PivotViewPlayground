@@ -19,6 +19,9 @@ public class AppliedFilterPropertyCollection : FilterPropertyCollection
 	public void ApplyValue(PivotProperty property, IComparable value) =>
 		UpdateValue(property, value, 1);
 
+	public void UnapplyValue(PivotProperty property, IComparable value) =>
+		UnapplyValue(property.Name, value);
+
 	public void UnapplyValue(FilterValue filterValue) =>
 		UnapplyValue(filterValue.Property.Name, filterValue.Value);
 

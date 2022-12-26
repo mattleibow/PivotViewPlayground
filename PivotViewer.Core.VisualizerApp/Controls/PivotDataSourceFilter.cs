@@ -71,10 +71,10 @@ public class PivotDataSourceFilter : BindableObject
 	{
 		FilterString = GetFilterString(filter.AppliedFilters);
 
-		SyncFilterCollections(filter.RemainingFilters, Properties);
-		SyncFilterCollections(filter.AppliedFilters, Filter);
+		Sync(filter.AvailableFilters, Properties);
+		Sync(filter.AppliedFilters, Filter);
 
-		SyncFilterCollections(filter.FilteredItems, FilteredItems);
+		Sync(filter.FilteredItems, FilteredItems);
 
 		FilterUpdated?.Invoke(this, EventArgs.Empty);
 	}
@@ -102,15 +102,15 @@ public class PivotDataSourceFilter : BindableObject
 		return sb.ToString();
 	}
 
-	private void SyncFilterCollections(FilterPropertyCollection source, ObservableCollection<PivotFilterProperty> destination) =>
+	private void Sync(FilterPropertyCollection source, ObservableCollection<PivotFilterProperty> destination) =>
 		CollectionHelpers.Sync(
 			source,
 			destination,
 			(s, d) => s.Name == d.Name,
 			CreateProperty,
-			(s, d) => d.SyncFilterCollections(s.Values, d.Values));
+			(s, d) => d.Sync(s.Values, d.Values));
 
-	private void SyncFilterCollections(IEnumerable<PivotDataItem> source, ObservableCollection<PivotDataItem> destination) =>
+	private void Sync(IEnumerable<PivotDataItem> source, ObservableCollection<PivotDataItem> destination) =>
 		CollectionHelpers.Sync(
 			source,
 			destination);

@@ -4,7 +4,7 @@ public class FilterManager
 {
 	private readonly FilterPropertyCollection allFilters = new();
 	private readonly AppliedFilterPropertyCollection appliedFilters = new();
-	private readonly AppliedFilterPropertyCollection remainingFilters = new();
+	private readonly AppliedFilterPropertyCollection availableFilters = new();
 	private readonly List<PivotDataItem> filteredItems = new();
 	private readonly List<PivotDataItem> removedItems = new();
 
@@ -25,7 +25,7 @@ public class FilterManager
 
 	public AppliedFilterPropertyCollection AppliedFilters => appliedFilters;
 
-	public AppliedFilterPropertyCollection RemainingFilters => remainingFilters;
+	public AppliedFilterPropertyCollection AvailableFilters => availableFilters;
 
 	public IReadOnlyList<PivotDataItem> FilteredItems => filteredItems;
 
@@ -37,7 +37,7 @@ public class FilterManager
 	{
 		allFilters.Clear();
 		appliedFilters.Clear();
-		remainingFilters.Clear();
+		availableFilters.Clear();
 		filteredItems.Clear();
 		removedItems.Clear();
 
@@ -57,12 +57,15 @@ public class FilterManager
 		// calculate all the available values
 		foreach (var item in DataSource.Items)
 		{
-			foreach (var prop in item.Properties)
+			foreach (var propPair in item.Properties)
 			{
-				if (!allFilters.TryGet(prop.Key.Name, out var filterProp))
+				if (!propPair.Key.IsFilterVisible)
 					continue;
 
-				foreach (var val in prop.Value)
+				if (!allFilters.TryGet(propPair.Key.Name, out var filterProp))
+					continue;
+
+				foreach (var val in propPair.Value)
 				{
 					filterProp.IncrementValue(val, 1);
 				}
@@ -73,7 +76,7 @@ public class FilterManager
 		foreach (var available in allFilters)
 		{
 			var remaining = new FilterProperty(available.PivotProperty);
-			remainingFilters.Add(remaining);
+			availableFilters.Add(remaining);
 
 			foreach (var val in available.Values)
 			{
@@ -86,38 +89,6 @@ public class FilterManager
 		filteredItems.EnsureCapacity(DataSource.Items.Count);
 		filteredItems.AddRange(DataSource.Items);
 	}
-
-	//public ICollection<IComparable> GetAllValues(PivotProperty property, IEnumerable<PivotDataItem> items, bool includeDuplicates = true)
-	//{
-	//	ICollection<IComparable> collection = includeDuplicates
-	//		? new Collection<IComparable>()
-	//		: new HashSet<IComparable>();
-
-	//	foreach (var item in items)
-	//	{
-	//		if (item.Properties.TryGetValue(property, out var values))
-	//		{
-	//			foreach (IComparable value in values)
-	//			{
-	//				collection.Add(value);
-	//			}
-	//		}
-	//	}
-
-	//	return collection;
-	//}
-
-	//public void SetFilterValue(FilterValue filterValue)
-	//{
-	//	var property = filterValue.Category.Property;
-
-	//	if (appliedFilters.TryGetValue(property, out var applied))
-	//		applied.ResetValues();
-	//	else
-	//		appliedFilters[property] = applied = new FilterProperty(property);
-
-	//	applied.SetValue(filterValue.Value, 1);
-	//}
 
 	public IEnumerable<PivotDataItem> GetFilteredItems()
 	{
@@ -213,7 +184,7 @@ public class FilterManager
 			{
 				var item = removedItems[i];
 
-				if (!IsAvailable(item))
+				if (IsAvailable(item))
 				{
 					filteredItems.Add(item);
 					removedItems.RemoveAt(i);
@@ -253,25 +224,38 @@ public class FilterManager
 			}
 		}
 
-		// TODO: update filter lists
+		// TODO: improve filter performance
 
-		FilterUpdated?.Invoke(this, e);
-	}
+		availableFilters.Clear();
 
-	private void SyncFilters(IEnumerable<PivotDataItem> items, AppliedFilterPropertyCollection filter)
-	{
-		foreach (var item in items)
+		foreach (var item in DataSource.Items)
 		{
-			foreach (var prop in item.Properties)
+			foreach (var property in item.Properties)
 			{
-				if (!allFilters.TryGet(prop.Key.Name, out var filterProp))
+				if (!property.Key.IsFilterVisible)
 					continue;
 
-				foreach (var val in prop.Value)
+				var available = true;
+
+				foreach (var filter in appliedFilters)
 				{
-					filter.ApplyValue(filterProp, val);
+					if (property.Key != filter.PivotProperty && !IsAvailable(item, filter))
+					{
+						available = false;
+						break;
+					}
+				}
+
+				if (available)
+				{
+					foreach (var v in property.Value)
+					{
+						availableFilters.ApplyValue(property.Key, v);
+					}
 				}
 			}
 		}
+
+		FilterUpdated?.Invoke(this, e);
 	}
 }
