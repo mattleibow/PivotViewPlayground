@@ -15,22 +15,17 @@ public class PivotFilterValue : BindableObject
 	private readonly FilterManager filter;
 	private readonly FilterProperty filterProperty;
 	private readonly FilterValue filterValue;
-	private readonly bool inConstructor;
+
+	private bool inSync;
 
 	internal PivotFilterValue(FilterManager filter, FilterProperty property, FilterValue value)
 	{
-		inConstructor = true;
-
 		this.filter = filter;
 		filterProperty = property;
 		filterValue = value;
 
-		Count = value.Count;
 		Value = value.Value;
-
-		IsApplied = filter.AppliedFilters.TryGet(property.Name, out var prop) && prop.HasValue(value.Value);
-
-		inConstructor = false;
+		Sync(value);
 	}
 
 	public object Value
@@ -51,15 +46,25 @@ public class PivotFilterValue : BindableObject
 		set => SetValue(IsAppliedProperty, value);
 	}
 
-	internal void Sync(FilterValue source, PivotFilterValue destination) =>
-		destination.Count = source.Count;
+	internal void Sync(FilterValue source)
+	{
+		inSync = true;
+
+		IsApplied = GetIsApplied(source);
+		Count = source.Count;
+
+		inSync = false;
+	}
+
+	private bool GetIsApplied(FilterValue value) =>
+		filter.AppliedFilters.TryGet(value.Property.Name, out var prop) && prop.HasValue(value.Value);
 
 	private static void OnIsAppliedChanged(BindableObject bindable, object oldValue, object newValue)
 	{
 		if (bindable is not PivotFilterValue pfv || newValue is not bool applied)
 			return;
 
-		if (pfv.inConstructor)
+		if (pfv.inSync)
 			return;
 
 		if (applied)

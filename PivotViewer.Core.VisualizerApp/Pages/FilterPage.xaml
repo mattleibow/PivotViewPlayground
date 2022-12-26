@@ -56,7 +56,10 @@
                             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Values}" Spacing="5" Padding="10,0,0,0">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate x:DataType="controls:PivotFilterValue">
-                                        <Label Text="{Binding Value}" VerticalOptions="Center" />
+                                        <HorizontalStackLayout Spacing="5" Padding="10,0,0,0">
+                                            <CheckBox IsChecked="{Binding IsApplied}" VerticalOptions="Center" />
+                                            <Label Text="{Binding Value}" VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </VerticalStackLayout>
@@ -75,9 +78,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <!-- filter string -->
-        <Label Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Filter.FilterString}" LineBreakMode="CharacterWrap" />
 
     </Grid>
 

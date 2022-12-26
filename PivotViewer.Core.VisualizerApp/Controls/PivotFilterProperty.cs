@@ -42,5 +42,5 @@ public class PivotFilterProperty : BindableObject
 			destination,
 			(s, d) => s.Value.CompareTo(d.Value) == 0,
 			(s) => new(filter, property, s),
-			(s, d) => d.Sync(s, d));
+			(s, d) => d.Sync(s));
 }
