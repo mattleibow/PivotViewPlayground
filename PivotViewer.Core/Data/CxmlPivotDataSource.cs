@@ -58,7 +58,6 @@ public static class CxmlPivotDataSource
 		var dzCollection = XDocument.Load(imgBase);
 		var xItems = dzCollection.Element(xmlnsDZ + "Collection").Element(xmlnsDZ + "Items");
 
-		Dictionary<string, (int Width, int Height)>? imageSizes;
 		foreach (var i in xItems.Elements(xmlnsDZ + "I"))
 		{
 			var id = i.Attribute("Id")?.Value;
