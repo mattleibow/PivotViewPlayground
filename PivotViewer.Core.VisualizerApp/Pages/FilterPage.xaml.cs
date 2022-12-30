@@ -4,18 +4,23 @@ namespace PivotViewer.Core.VisualizerApp;
 
 public partial class FilterPage : ContentPage
 {
-	private readonly PivotDataSource datasource;
-
 	public FilterPage()
 	{
 		InitializeComponent();
 
-		datasource = CxmlPivotDataSource.FromFile("C:\\Projects\\PivotViewPlayground\\PivotViewer.Core.Tests\\TestData\\conceptcars.cxml");
-
-		Filter = new PivotDataSourceFilter(datasource);
-
 		BindingContext = this;
+
+		LoadCollectionAsync();
 	}
 
-	public PivotDataSourceFilter Filter { get; }
+	public PivotDataSourceFilter? Filter { get; private set; }
+
+	private async void LoadCollectionAsync()
+	{
+		var datasource = new CxmlPivotDataSource("C:\\Projects\\PivotViewPlayground\\PivotViewer.Core.Tests\\TestData\\conceptcars.cxml");
+		await datasource.LoadAsync();
+
+		Filter = new PivotDataSourceFilter(datasource);
+		OnPropertyChanged(nameof(Filter));
+	}
 }

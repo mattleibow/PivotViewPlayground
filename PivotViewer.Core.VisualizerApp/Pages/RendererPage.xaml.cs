@@ -4,9 +4,9 @@ namespace PivotViewer.Core.VisualizerApp;
 
 public partial class RendererPage : ContentPage
 {
-	private readonly string[] newIds;
 	private readonly PivotRenderer renderer = new();
 
+	private string[] newIds;
 	private string? itemsText;
 	private string[]? visibleIds;
 
@@ -17,29 +17,11 @@ public partial class RendererPage : ContentPage
 	{
 		InitializeComponent();
 
-		try
-		{
-			var datasource = CxmlPivotDataSource.FromFile("C:\\Projects\\PivotViewPlayground\\PivotViewer.Core.Tests\\TestData\\conceptcars.cxml");
-
-			newIds = datasource.Items!.Select(i => i.Id!).ToArray();
-
-			renderer.DataSource = datasource;
-		}
-		catch
-		{
-			newIds = Enumerable.Range(1, 100).Select(i => i.ToString()).ToArray();
-
-			renderer.DataSource = new PivotDataSource
-			{
-				Items = newIds.Select(NewItem).ToArray(),
-			};
-		}
-
-		ItemsText = string.Join(Environment.NewLine, newIds);
-
 		Visualizer = new RendererVisualizer("Default", renderer);
 
 		BindingContext = this;
+
+		LoadCollectionAsync();
 	}
 
 	public RendererVisualizer Visualizer { get; }
@@ -53,6 +35,8 @@ public partial class RendererPage : ContentPage
 			visibleIds = itemsText.Split(new[] { '\r', '\n' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
 			renderer.Filter = (id) => visibleIds.Contains(id);
+
+			OnPropertyChanged();
 		}
 	}
 
@@ -81,6 +65,31 @@ public partial class RendererPage : ContentPage
 		isVisible = false;
 
 		base.OnDisappearing();
+	}
+
+	private async void LoadCollectionAsync()
+	{
+		try
+		{
+			var datasource = new CxmlPivotDataSource("C:\\Projects\\PivotViewPlayground\\PivotViewer.Core.Tests\\TestData\\conceptcars.cxml");
+			await datasource.LoadAsync();
+
+			newIds = datasource.Items.Select(i => i.Id!).ToArray();
+
+			renderer.DataSource = datasource;
+		}
+		catch
+		{
+			newIds = Enumerable.Range(1, 100).Select(i => i.ToString()).ToArray();
+
+			var datasource = new PivotDataSource();
+			foreach (var id in newIds)
+				datasource.Items.Add(NewItem(id));
+
+			renderer.DataSource = datasource;
+		}
+
+		ItemsText = string.Join(Environment.NewLine, newIds);
 	}
 
 	private static PivotDataItem NewItem(string id) =>
