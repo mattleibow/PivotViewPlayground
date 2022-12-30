@@ -275,8 +275,6 @@ public class FilterManagerUnitTests
 	[Fact]
 	public void SimpleDataFiltersCorrectAfterSingleItem()
 	{
-		var datasource = new PivotDataSource();
-
 		var property1 = new PivotProperty("POne");
 
 		var item1 = new PivotDataItem
@@ -288,8 +286,11 @@ public class FilterManagerUnitTests
 			}
 		};
 
-		datasource.Items = new List<PivotDataItem> { item1 };
-		datasource.Properties = new List<PivotProperty> { property1 };
+		var datasource = new PivotDataSource
+		{
+			Items = { item1 },
+			Properties = { property1 },
+		};
 
 		var filterManager = new FilterManager(datasource);
 		filterManager.RebuildIndexes();
@@ -310,9 +311,9 @@ public class FilterManagerUnitTests
 	[InlineData("Fuel=Vegetable oil", 2)]
 	[InlineData("Fuel=Plutonium,Vegetable oil", 3)]
 	[InlineData("Fuel=Vegetable oil;Manufacturer=EcoJet", 1)]
-	public void ConceptCarsIsAvailableIsCorrect(string filter, int expectedCount)
+	public async Task ConceptCarsIsAvailableIsCorrect(string filter, int expectedCount)
 	{
-		var datasource = LoadConceptCarsDataSource();
+		var datasource = await LoadConceptCarsDataSourceAsync();
 
 		var filterManager = new FilterManager(datasource);
 		filterManager.RebuildIndexes();
@@ -326,8 +327,6 @@ public class FilterManagerUnitTests
 
 	private static PivotDataSource BuildTestDataSource()
 	{
-		var datasource = new PivotDataSource();
-
 		var property1 = new PivotProperty("POne");
 		var property2 = new PivotProperty("PTwo");
 		var property3 = new PivotProperty("PThree");
@@ -352,18 +351,23 @@ public class FilterManagerUnitTests
 			}
 		};
 
-		datasource.Items = new List<PivotDataItem> { item1, item2 };
-		datasource.Properties = new List<PivotProperty> { property1, property2, property3 };
+		var datasource = new PivotDataSource
+		{
+			Items = { item1, item2 },
+			Properties = { property1, property2, property3 }
+		};
 
 		return datasource;
 	}
 
-	private static PivotDataSource LoadConceptCarsDataSource() =>
-		LoadDataSource("TestData/conceptcars.cxml");
+	private static Task<PivotDataSource> LoadConceptCarsDataSourceAsync() =>
+		LoadDataSourceAsync("TestData/conceptcars.cxml");
 
-	private static PivotDataSource LoadDataSource(string filename)
+	private static async Task<PivotDataSource> LoadDataSourceAsync(string filename)
 	{
-		var datasource = CxmlPivotDataSource.FromFile(filename);
+		var datasource = new CxmlPivotDataSource(filename);
+
+		await datasource.LoadAsync();
 
 		return datasource;
 	}

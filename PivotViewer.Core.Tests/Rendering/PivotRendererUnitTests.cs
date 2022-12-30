@@ -1,4 +1,4 @@
-namespace PivotViewer.Core.Tests;
+﻿namespace PivotViewer.Core.Tests;
 
 public partial class PivotRendererUnitTests
 {
@@ -18,9 +18,13 @@ public partial class PivotRendererUnitTests
 		Assert.Equal("D", items[3].Id);
 	}
 
-	private static PivotDataSource CreateDataSource(params string[] items) =>
-		new()
-		{
-			Items = items.Select(i => new PivotDataItem { Id = i }).ToArray()
-		};
+	private static PivotDataSource CreateDataSource(params string[] items)
+	{
+		var datasource = new PivotDataSource();
+
+		foreach (var item in items)
+			datasource.Items.Add(new PivotDataItem { Id = item });
+
+		return datasource;
+	}
 }
