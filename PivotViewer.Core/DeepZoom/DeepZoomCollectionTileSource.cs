@@ -13,7 +13,7 @@ public class DeepZoomCollectionTileSource : IDeepZoomTileSource
 
 		TileCoordinates = DeepZoomExtensions.GetMortonPoint(ItemN);
 
-		TileSize = tileSize;
+		TileSize = new Size(tileSize, tileSize);
 		TileBaseUri = tileBaseUri;
 		TileFileFormat = tileFileFormat;
 	}
@@ -24,7 +24,7 @@ public class DeepZoomCollectionTileSource : IDeepZoomTileSource
 
 	public Size ItemSize { get; }
 
-	public int TileSize { get; }
+	public Size TileSize { get; }
 
 	public int MaxLevel { get; }
 
@@ -56,6 +56,17 @@ public class DeepZoomCollectionTileSource : IDeepZoomTileSource
 		return 1.0 / scale;
 	}
 
+	public Size GetScaledItemSize(int level)
+	{
+		var scale = GetScale(level);
+
+		var scaled = new Size(
+			(int)Math.Ceiling(ItemSize.Width * scale),
+			(int)Math.Ceiling(ItemSize.Height * scale));
+
+		return scaled;
+	}
+
 	public Size GetTileCount(int level) => new(1, 1);
 
 	public Size GetItemCount(int level)
@@ -64,7 +75,7 @@ public class DeepZoomCollectionTileSource : IDeepZoomTileSource
 
 		var itemSize = TileSize / (1 << level);
 
-		return new(itemSize, itemSize);
+		return itemSize;
 	}
 
 	public RectangleF GetTileBounds(int level, int x, int y) => new(x, y, 1, 1);
@@ -79,8 +90,8 @@ public class DeepZoomCollectionTileSource : IDeepZoomTileSource
 		var itemCol = TileCoordinates.X;
 		var itemRow = TileCoordinates.Y;
 
-		var tileCol = (int)Math.Floor((double)itemCol / numItems);
-		var tileRow = (int)Math.Floor((double)itemRow / numItems);
+		var tileCol = (int)Math.Floor((double)itemCol / numItems.Width);
+		var tileRow = (int)Math.Floor((double)itemRow / numItems.Height);
 
 		var uri = $"{TileBaseUri}/{level}/{tileCol}_{tileRow}.{TileFileFormat}";
 
@@ -88,11 +99,13 @@ public class DeepZoomCollectionTileSource : IDeepZoomTileSource
 
 		// DZC thumbnails are always >= 1px
 		var cropRect = new Rectangle(
-			(int)((itemCol % numItems) * itemSize),
-			(int)((itemRow % numItems) * itemSize),
+			(int)((itemCol % numItems.Width) * itemSize),
+			(int)((itemRow % numItems.Height) * itemSize),
 			Math.Max(1, (int)Math.Ceiling(ItemSize.Width * scale)),
 			Math.Max(1, (int)Math.Ceiling(ItemSize.Height * scale)));
 
 		return new[] { new DeepZoomImageTile(uri, cropRect, default) };
 	}
+
+	public Rectangle GetTiles(int level, RectangleF frame) => new(0, 0, 1, 1);
 }

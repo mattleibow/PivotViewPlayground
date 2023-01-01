@@ -78,6 +78,60 @@ public class DeepZoomCollectionTileSourceUnitTests
 	}
 
 	[Theory]
+	// "ideal" - perfect fit
+	[InlineData(0, 128, 128, 256, 7, 0, 1, 1)]
+	[InlineData(0, 128, 128, 256, 7, 1, 2, 2)]
+	[InlineData(0, 128, 128, 256, 7, 2, 4, 4)]
+	[InlineData(0, 128, 128, 256, 7, 3, 8, 8)]
+	[InlineData(0, 128, 128, 256, 7, 4, 16, 16)]
+	[InlineData(0, 128, 128, 256, 7, 5, 32, 32)]
+	[InlineData(0, 128, 128, 256, 7, 6, 64, 64)]
+	[InlineData(0, 128, 128, 256, 7, 7, 128, 128)]
+	// "ideal" - large image needs an extra scale down
+	[InlineData(0, 256, 256, 256, 7, 0, 1, 1)]
+	[InlineData(0, 256, 256, 256, 7, 1, 2, 2)]
+	[InlineData(0, 256, 256, 256, 7, 2, 4, 4)]
+	[InlineData(0, 256, 256, 256, 7, 3, 8, 8)]
+	[InlineData(0, 256, 256, 256, 7, 4, 16, 16)]
+	[InlineData(0, 256, 256, 256, 7, 5, 32, 32)]
+	[InlineData(0, 256, 256, 256, 7, 6, 64, 64)]
+	[InlineData(0, 256, 256, 256, 7, 7, 128, 128)]
+	// "ideal" - more levels means an extra scale up
+	[InlineData(0, 128, 128, 256, 10, 0, 1, 1)]
+	[InlineData(0, 128, 128, 256, 10, 1, 2, 2)]
+	[InlineData(0, 128, 128, 256, 10, 2, 4, 4)]
+	[InlineData(0, 128, 128, 256, 10, 3, 8, 8)]
+	[InlineData(0, 128, 128, 256, 10, 4, 16, 16)]
+	[InlineData(0, 128, 128, 256, 10, 5, 32, 32)]
+	[InlineData(0, 128, 128, 256, 10, 6, 64, 64)]
+	[InlineData(0, 128, 128, 256, 10, 7, 128, 128)]
+	// "0"
+	[InlineData(0, 640, 426, 256, 7, 0, 1, 1)]
+	[InlineData(0, 640, 426, 256, 7, 1, 2, 1)]
+	[InlineData(0, 640, 426, 256, 7, 2, 3, 2)]
+	[InlineData(0, 640, 426, 256, 7, 3, 5, 4)]
+	[InlineData(0, 640, 426, 256, 7, 4, 10, 7)]
+	[InlineData(0, 640, 426, 256, 7, 5, 20, 14)]
+	[InlineData(0, 640, 426, 256, 7, 6, 40, 27)]
+	[InlineData(0, 640, 426, 256, 7, 7, 80, 54)]
+	// "7"
+	[InlineData(7, 454, 480, 256, 7, 0, 1, 1)]
+	[InlineData(7, 454, 480, 256, 7, 1, 2, 2)]
+	[InlineData(7, 454, 480, 256, 7, 2, 4, 4)]
+	[InlineData(7, 454, 480, 256, 7, 3, 8, 8)]
+	[InlineData(7, 454, 480, 256, 7, 4, 15, 15)]
+	[InlineData(7, 454, 480, 256, 7, 5, 29, 30)]
+	[InlineData(7, 454, 480, 256, 7, 6, 57, 60)]
+	[InlineData(7, 454, 480, 256, 7, 7, 114, 120)]
+
+	public void GetScaledItemSizeIsCorrect(int itemN, int width, int height, int tileSize, int maxLevel, int level, int scaledW, int scaledH)
+	{
+		var tileSource = new DeepZoomCollectionTileSource("<anything>", itemN, width, height, maxLevel, tileSize, "<fake>", "jpg");
+
+		Assert.Equal(new Size(scaledW, scaledH), tileSource.GetScaledItemSize(level));
+	}
+
+	[Theory]
 	// "0"
 	[InlineData(0, 640, 426, 256)]
 	[InlineData(1, 640, 426, 256)]

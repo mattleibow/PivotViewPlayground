@@ -12,7 +12,7 @@ public class TileManager
 		tileLoader.TileLoaded += OnTileLoaded;
 	}
 
-	public DeepZoomCollectionTileSource? TileSource { get; set; }
+	public IDeepZoomTileSource? TileSource { get; set; }
 
 	public int LevelOverride { get; set; } = -1;
 
@@ -36,7 +36,7 @@ public class TileManager
 			data = new LevelData
 			{
 				Level = level,
-				ItemTileSize = TileSource.GetItemTileSize(level),
+				TileCount = TileSource.GetTileCount(level),
 			};
 			foreach (var tile in TileSource.GetImageTiles(level))
 			{
@@ -56,15 +56,29 @@ public class TileManager
 
 		// TODO: determine the tiles that fit in the frame
 
-		var itemTileSize = data.ItemTileSize; // 64, 64
-		var tileSize = TileSource.TileSize; // 256
+		//var itemTileSize = data.ItemTileSize; // 64, 64
+		//var tileSize = TileSource.TileSize; // 256
 
-		var normalizedFrame = new RectangleF(0, 0, frame.Width, frame.Height); // 0, 0, 1000, 1000
-		var imageFrame = AspectFillImageIntoFrame(normalizedFrame, TileSource.ItemSize); // x, y, 640, 480
+		//var normalizedFrame = new RectangleF(0, 0, frame.Width, frame.Height); // 0, 0, 1000, 1000
+		//var imageFrame = AspectFillImageIntoFrame(normalizedFrame, TileSource.ItemSize); // x, y, 640, 480
 
-		var tilesX = (int)Math.Ceiling((double)TileSource.ItemSize.Width / TileSource.TileSize);
-		var tilesY = (int)Math.Ceiling((double)TileSource.ItemSize.Height / TileSource.TileSize);
+		//var tilesX = (int)Math.Ceiling((double)TileSource.ItemSize.Width / TileSource.TileSize);
+		//var tilesY = (int)Math.Ceiling((double)TileSource.ItemSize.Height / TileSource.TileSize);
 
+
+		var normalizedFrame = new RectangleF(0, 0, 1, 1);
+
+		//TileSource.GetTileBounds
+
+
+
+		for (int y = 0; y < data.TileCount.Height; y++)
+		{
+			for (int x = 0; x < data.TileCount.Width; x++)
+			{
+
+			}
+		}
 
 
 		//
@@ -141,7 +155,7 @@ public class TileManager
 		public int Level { get; set; }
 
 		public Dictionary<Point, Tile> Tiles { get; set; } = new();
-		
-		public Size ItemTileSize { get; set; }
+
+		public Size TileCount { get; set; }
 	}
 }

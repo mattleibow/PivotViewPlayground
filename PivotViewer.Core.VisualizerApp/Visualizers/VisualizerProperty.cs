@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace PivotViewer.Core.VisualizerApp.Visualizers;
 
@@ -35,14 +36,20 @@ public class VisualizerProperty : BindableObject
 		}
 	}
 
-	public object? Value
+	public string? Value
 	{
-		get => Property.GetValue(Target);
+		get
+		{
+			var val = Property.GetValue(Target);
+			var newVal = ConvertToString(val);
+			return newVal;
+		}
 		set
 		{
 			try
 			{
-				var newVal = Convert.ChangeType(value, Property.PropertyType);
+				var newVal = ConvertFromString(value);
+
 				if (Value != newVal)
 				{
 					Property.SetValue(Target, newVal);
@@ -58,5 +65,23 @@ public class VisualizerProperty : BindableObject
 		}
 	}
 
-	public object? DefaultValue { get; }
+	public string? DefaultValue { get; }
+
+	private object? ConvertFromString(string? value)
+	{
+		if (Attribute.Converter is null)
+			return Convert.ChangeType(value, Property.PropertyType);
+
+		var converter = (TypeConverter)Activator.CreateInstance(Attribute.Converter)!;
+		return converter.ConvertFrom(value);
+	}
+
+	private string? ConvertToString(object? value)
+	{
+		if (Attribute.Converter is null)
+			return value?.ToString();
+
+		var converter = (TypeConverter)Activator.CreateInstance(Attribute.Converter)!;
+		return converter.ConvertTo(value, typeof(string))?.ToString();
+	}
 }

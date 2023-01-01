@@ -21,6 +21,8 @@ public class VisualizerPropertyAttribute : Attribute
 			return name;
 		}
 	}
+
+	public Type? Converter { get; set; }
 }
 
 public class SliderAttribute : VisualizerPropertyAttribute
@@ -40,6 +42,14 @@ public class SliderAttribute : VisualizerPropertyAttribute
 public class SwitchAttribute : VisualizerPropertyAttribute
 {
 	public SwitchAttribute(string label)
+		: base(label)
+	{
+	}
+}
+
+public class EntryAttribute : VisualizerPropertyAttribute
+{
+	public EntryAttribute(string label)
 		: base(label)
 	{
 	}

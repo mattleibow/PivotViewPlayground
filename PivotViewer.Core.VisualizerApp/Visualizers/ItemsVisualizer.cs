@@ -10,43 +10,21 @@ public class ItemsVisualizer : Visualizer
 
 	public IReadOnlyList<PivotRendererItem> Items { get; }
 
-	[Switch("Show screen boundary lines")]
-	public bool IsScreenLinesVisible { get; set; } = true;
-
 	[Switch("Show items")]
 	public bool IsItemsVisible { get; set; } = true;
 
 	[Switch("Show desired locations")]
 	public bool IsDesiredLocations { get; set; } = true;
 
-	[Slider("Screen scale", 0.1, 1)]
-	public double ScreenScale { get; set; } = 0.5;
-
-	public override void Draw(ICanvas canvas, RectF bounds)
+	protected override void DrawScreen(ICanvas canvas, RectF bounds)
 	{
-		base.Draw(canvas, bounds);
-
-		var scaledW = bounds.Width * ScreenScale;
-		var scaledH = bounds.Height * ScreenScale;
-		var screenRect = new RectF(
-			(float)(bounds.X + (bounds.Width - scaledW) / 2),
-			(float)(bounds.Y + (bounds.Height - scaledH) / 2),
-			(float)scaledW,
-			(float)scaledH);
+		base.DrawScreen(canvas, bounds);
 
 		// draw items
 		if (IsItemsVisible)
 		{
-			PrepareItems(screenRect);
-			DrawItems(canvas, screenRect);
-		}
-
-		// draw "screen bounds"
-		if (IsScreenLinesVisible)
-		{
-			canvas.StrokeColor = Colors.Gray;
-			canvas.StrokeSize = 1;
-			canvas.DrawRectangle(screenRect);
+			PrepareItems(bounds);
+			DrawItems(canvas, bounds);
 		}
 	}
 

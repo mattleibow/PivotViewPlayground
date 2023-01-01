@@ -6,6 +6,11 @@
     xmlns:local="clr-namespace:PivotViewer.Core.VisualizerApp">
 
     <ShellContent
+        Title="DeepZoom"
+        ContentTemplate="{DataTemplate local:DeepZoomPage}"
+        Route="DeepZoom" />
+
+    <ShellContent
         Title="Filter"
         ContentTemplate="{DataTemplate local:FilterPage}"
         Route="Filter" />

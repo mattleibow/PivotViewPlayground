@@ -9,4 +9,7 @@ internal static class Utils
 
 	public static Rect ToRect(this RectangleF rect) =>
 		new(rect.X, rect.Y, rect.Width, rect.Height);
+
+	public static RectF ToRectF(this RectangleF rect) =>
+		new(rect.X, rect.Y, rect.Width, rect.Height);
 }
