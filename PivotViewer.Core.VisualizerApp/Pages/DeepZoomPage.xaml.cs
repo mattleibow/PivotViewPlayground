@@ -1,11 +1,12 @@
 ﻿using PivotViewer.Core.DeepZoom;
+using PivotViewer.Core.VisualizerApp.Visualizers;
 using PivotViewer.Core.VisualizerApp.Visualizers.DeepZoom;
 
 namespace PivotViewer.Core.VisualizerApp;
 
 public partial class DeepZoomPage : ContentPage
 {
-	private DeepZoomImageVisualizer? current;
+	private Visualizer? current;
 
 	public DeepZoomPage()
 	{
@@ -20,6 +21,10 @@ public partial class DeepZoomPage : ContentPage
 				new DeepZoomImageVisualizer("Image (7)", new DeepZoomImageTileSource("7", 454, 480, 9, 254, 1, $"{uri}\\7_files", "jpg")),
 				new DeepZoomImageVisualizer("Collection (0)", new DeepZoomCollectionTileSource("0", 0, 640, 426, 7, 256, $"{uri}\\collection-dz_files", "jpg")),
 				new DeepZoomImageVisualizer("Collection (7)", new DeepZoomCollectionTileSource("7", 7, 454, 480, 7, 256, $"{uri}\\collection-dz_files", "jpg")),
+				new DeepZoomTileManagerVisualizer("Image (0)", new DeepZoomImageTileSource("0", 640, 426, 10, 254, 1, $"{uri}\\0_files", "jpg")),
+				new DeepZoomTileManagerVisualizer("Image (7)", new DeepZoomImageTileSource("7", 454, 480, 9, 254, 1, $"{uri}\\7_files", "jpg")),
+				new DeepZoomTileManagerVisualizer("Collection (0)",new DeepZoomCollectionTileSource("0", 0, 640, 426, 7, 256, $"{uri}\\collection-dz_files", "jpg")),
+				new DeepZoomTileManagerVisualizer("Collection (7)",new DeepZoomCollectionTileSource("7", 7, 454, 480, 7, 256, $"{uri}\\collection-dz_files", "jpg")),
 			};
 
 		Current = Visualizers.FirstOrDefault();
@@ -27,9 +32,9 @@ public partial class DeepZoomPage : ContentPage
 		BindingContext = this;
 	}
 
-	public ObservableCollection<DeepZoomImageVisualizer> Visualizers { get; }
+	public ObservableCollection<Visualizer> Visualizers { get; }
 
-	public DeepZoomImageVisualizer? Current
+	public Visualizer? Current
 	{
 		get => current;
 		set

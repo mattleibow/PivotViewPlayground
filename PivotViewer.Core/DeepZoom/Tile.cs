@@ -11,4 +11,6 @@ public class Tile
 	public string Uri { get; set; }
 
 	public Rectangle CropRect { get; set; }
+	
+	public RectangleF Bounds { get; set; }
 }

@@ -2,34 +2,6 @@
 
 public class TileManagerUnitTests
 {
-	//private readonly IFileLoader fileLoader;
-	//private readonly TileCache tileCache;
-
-	//public TileManagerUnitTests()
-	//{
-	//	fileLoader = new TestFileLoader();
-	//	tileCache = new TileCache();
-	//}
-
-	[Fact]
-	public void Test()
-	{
-		var tileSource = new DeepZoomCollectionTileSource("0", 0, 64, 64, 5, 32, "TestData\\collection-dz_deepzoom\\collection-dz_files", "jpg");
-
-		var cache = new TileCache<ITileLoadingInfo>(10);
-		var imageLoader = new TestImageLoader();
-		var tileLoader = new TileLoader(imageLoader, cache, 1);
-		var manager = new TileManager(tileLoader)
-		{
-			TileSource = tileSource,
-			LevelOverride = 0,
-		};
-
-		var canvas = new TestDeepZoomCanvas();
-
-		manager.Update(new RectangleF(0, 0, 100, 100), new RectangleF(0, 0, 100, 100), canvas);
-	}
-
 	[Theory]
 	[InlineData(0, 0, 100, 100, 100, 100, 0, 0, 100, 100)]
 	[InlineData(25, 75, 100, 100, 100, 100, 25, 75, 100, 100)]
@@ -72,13 +44,102 @@ public class TileManagerUnitTests
 	//	Assert.Equal(new Rectangle(x, y, width, height), img.CropRect);
 	//}
 
+	[Theory]
+	// 
+	[InlineData(64, 64, 32, 6, 0, -1, 4)]
+	[InlineData(64, 64, 32, 6, 0, 0, 1)]
+	[InlineData(64, 64, 32, 6, 0, 1, 1)]
+	[InlineData(64, 64, 32, 6, 0, 2, 1)]
+	[InlineData(64, 64, 32, 6, 0, 3, 1)]
+	[InlineData(64, 64, 32, 6, 0, 4, 1)]
+	[InlineData(64, 64, 32, 6, 0, 5, 1)]
+	[InlineData(64, 64, 32, 6, 0, 6, 4)]
+	[InlineData(64, 64, 32, 6, 0, 7, 4)]
+	[InlineData(64, 64, 32, 6, 0, 8, 4)]
+	// "0"
+	[InlineData(640, 426, 254, 10, 1, -1, 6)]
+	[InlineData(640, 426, 254, 10, 1, 0, 1)]
+	[InlineData(640, 426, 254, 10, 1, 1, 1)]
+	[InlineData(640, 426, 254, 10, 1, 2, 1)]
+	[InlineData(640, 426, 254, 10, 1, 3, 1)]
+	[InlineData(640, 426, 254, 10, 1, 4, 1)]
+	[InlineData(640, 426, 254, 10, 1, 5, 1)]
+	[InlineData(640, 426, 254, 10, 1, 6, 1)]
+	[InlineData(640, 426, 254, 10, 1, 7, 1)]
+	[InlineData(640, 426, 254, 10, 1, 8, 1)]
+	[InlineData(640, 426, 254, 10, 1, 9, 2)]
+	[InlineData(640, 426, 254, 10, 1, 10, 6)]
+	// "7"
+	[InlineData(454, 480, 254, 9, 1, -1, 4)]
+	[InlineData(454, 480, 254, 9, 1, 0, 1)]
+	[InlineData(454, 480, 254, 9, 1, 1, 1)]
+	[InlineData(454, 480, 254, 9, 1, 2, 1)]
+	[InlineData(454, 480, 254, 9, 1, 3, 1)]
+	[InlineData(454, 480, 254, 9, 1, 4, 1)]
+	[InlineData(454, 480, 254, 9, 1, 5, 1)]
+	[InlineData(454, 480, 254, 9, 1, 6, 1)]
+	[InlineData(454, 480, 254, 9, 1, 7, 1)]
+	[InlineData(454, 480, 254, 9, 1, 8, 1)]
+	[InlineData(454, 480, 254, 9, 1, 9, 4)]
+	public async Task ImageTileSourceUpdateLoadsCorrectNumberOfTiles(int iW, int iH, int tileSize, int maxLevel, int overlap, int level, int expectedTiles)
+	{
+		// the tile source
+		var tileSource = new DeepZoomImageTileSource("<anything>", iW, iH, maxLevel, tileSize, overlap, "Test_files", "jpg");
+
+		// the UI info
+		var frame = new RectangleF(0, 0, iW, iH);
+		var clip = new RectangleF(0, 0, iW, iH);
+		var canvas = new TestDeepZoomCanvas();
+
+		// the tile manager
+		var imageLoader = new TestImageLoader();
+		var tileCache = new TileCache<ITileLoadingInfo>(expectedTiles + 1);
+		var tileLoader = new TileLoader(imageLoader, tileCache, 1);
+		var tileManager = new TileManager(tileLoader)
+		{
+			TileSource = tileSource,
+			LevelOverride = level,
+		};
+
+		// fake "render loop"
+		await RenderAllTiles(tileManager, expectedTiles, () => tileManager.Update(frame, clip, canvas));
+
+		// make sure all 4 tiles were loaded at full res
+		Assert.Equal(expectedTiles, imageLoader.LoadedUris.Count);
+		Assert.Equal(expectedTiles, tileCache.Count);
+		Assert.Equal(expectedTiles, canvas.DrawnTiles.Count);
+	}
+
+	private static Task RenderAllTiles(TileManager tileManager, int expectedTiles, Action update)
+	{
+		// fake "render loop"
+		var tcs = new TaskCompletionSource();
+		var tilesLoaded = 0;
+		tileManager.TileLoaded += (s, e) =>
+		{
+			tilesLoaded++;
+			if (tilesLoaded == expectedTiles)
+			{
+				// trigger a "refresh" when all tiles are loaded
+				update();
+
+				tcs.SetResult();
+			}
+		};
+
+		// request the initial "frame"
+		update();
+
+		return tcs.Task;
+	}
+
 	class TestImageLoader : IImageLoader
 	{
-		public int LoadCount { get; set; }
+		public List<string> LoadedUris { get; } = new();
 
 		public Task<object?> LoadAsync(string uri, CancellationToken cancellationToken = default)
 		{
-			LoadCount++;
+			LoadedUris.Add(uri);
 
 			return Task.FromResult<object?>(uri);
 		}
@@ -86,8 +147,11 @@ public class TileManagerUnitTests
 
 	class TestDeepZoomCanvas : IDeepZoomCanvas
 	{
-		public void DrawTile(Tile tile)
+		public List<(string Image, RectangleF Source, RectangleF Destination)> DrawnTiles { get; } = new();
+
+		public void DrawTile(object image, RectangleF source, RectangleF destination)
 		{
+			DrawnTiles.Add((image.ToString()!, source, destination));
 		}
 	}
 }

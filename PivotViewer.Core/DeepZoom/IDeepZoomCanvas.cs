@@ -2,5 +2,5 @@
 
 public interface IDeepZoomCanvas
 {
-	void DrawTile(Tile tile);
+	void DrawTile(object image, RectangleF source, RectangleF destination);
 }
