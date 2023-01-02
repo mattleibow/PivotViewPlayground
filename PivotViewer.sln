@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33028.149
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotViewer.Core.Tests", "PivotViewer.Core.Tests\PivotViewer.Core.Tests.csproj", "{EF2C8727-CC59-4C23-ADE3-F631999399CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pivot.Core.Tests", "Pivot.Core.Tests\Pivot.Core.Tests.csproj", "{EF2C8727-CC59-4C23-ADE3-F631999399CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotViewer.Core", "PivotViewer.Core\PivotViewer.Core.csproj", "{27C567D2-B277-491E-A2D3-BA1D0D5494A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pivot.Core", "Pivot.Core\Pivot.Core.csproj", "{27C567D2-B277-491E-A2D3-BA1D0D5494A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotViewer.Core.VisualizerApp", "PivotViewer.Core.VisualizerApp\PivotViewer.Core.VisualizerApp.csproj", "{11FEF861-59D3-4C44-A63F-52E478CB1DDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PivotVisualizerApp", "PivotVisualizerApp\PivotVisualizerApp.csproj", "{11FEF861-59D3-4C44-A63F-52E478CB1DDB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{62ADF24C-7BBC-4403-8CE0-C23E6C54D8DB}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{62ADF24C-7
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeepZoom.Core", "DeepZoom.Core\DeepZoom.Core.csproj", "{8C32679F-3060-4A85-B26E-B676FD3CED24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeepZoom.Core.Tests", "DeepZoom.Core.Tests\DeepZoom.Core.Tests.csproj", "{0D18A3D8-01EB-4F8A-B782-86ABD80C0287}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Core", "Utils.Core\Utils.Core.csproj", "{6CD1BCAC-5892-4425-9F61-CC13C3380F45}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Core.Tests", "Utils.Core.Tests\Utils.Core.Tests.csproj", "{0849A0D5-62A0-4DE3-9E4B-1BA0D3CA1A1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0E456503-37DA-4959-B29E-747DE9826A68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{39D7DF6C-66B8-46A7-B585-9EC1E009E759}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6DE013D8-35DB-4719-8654-275149437F45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +52,34 @@ Global
 		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11FEF861-59D3-4C44-A63F-52E478CB1DDB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8C32679F-3060-4A85-B26E-B676FD3CED24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C32679F-3060-4A85-B26E-B676FD3CED24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C32679F-3060-4A85-B26E-B676FD3CED24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C32679F-3060-4A85-B26E-B676FD3CED24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D18A3D8-01EB-4F8A-B782-86ABD80C0287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D18A3D8-01EB-4F8A-B782-86ABD80C0287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D18A3D8-01EB-4F8A-B782-86ABD80C0287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D18A3D8-01EB-4F8A-B782-86ABD80C0287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD1BCAC-5892-4425-9F61-CC13C3380F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD1BCAC-5892-4425-9F61-CC13C3380F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD1BCAC-5892-4425-9F61-CC13C3380F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD1BCAC-5892-4425-9F61-CC13C3380F45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0849A0D5-62A0-4DE3-9E4B-1BA0D3CA1A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0849A0D5-62A0-4DE3-9E4B-1BA0D3CA1A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0849A0D5-62A0-4DE3-9E4B-1BA0D3CA1A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0849A0D5-62A0-4DE3-9E4B-1BA0D3CA1A1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF2C8727-CC59-4C23-ADE3-F631999399CA} = {39D7DF6C-66B8-46A7-B585-9EC1E009E759}
+		{27C567D2-B277-491E-A2D3-BA1D0D5494A1} = {0E456503-37DA-4959-B29E-747DE9826A68}
+		{11FEF861-59D3-4C44-A63F-52E478CB1DDB} = {6DE013D8-35DB-4719-8654-275149437F45}
+		{8C32679F-3060-4A85-B26E-B676FD3CED24} = {0E456503-37DA-4959-B29E-747DE9826A68}
+		{0D18A3D8-01EB-4F8A-B782-86ABD80C0287} = {39D7DF6C-66B8-46A7-B585-9EC1E009E759}
+		{6CD1BCAC-5892-4425-9F61-CC13C3380F45} = {0E456503-37DA-4959-B29E-747DE9826A68}
+		{0849A0D5-62A0-4DE3-9E4B-1BA0D3CA1A1C} = {39D7DF6C-66B8-46A7-B585-9EC1E009E759}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CAE09155-848B-4137-9DB4-E7F10066AAC8}

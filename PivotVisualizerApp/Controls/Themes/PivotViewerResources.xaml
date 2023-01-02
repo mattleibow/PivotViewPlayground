@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:PivotVisualizerApp"
+    xmlns:controls="clr-namespace:PivotVisualizerApp.Controls"
+    xmlns:themes="clr-namespace:PivotVisualizerApp.Controls.Themes"
+    x:Class="PivotVisualizerApp.Controls.Themes.PivotViewerResources">
+
+    <!-- the control template for PivotViewer -->
+    <ControlTemplate x:Key="PivotViewerControlTemplate">
+        <Grid
+            x:Name="PART_Container"
+            RowDefinitions="Auto,*"
+            ColumnDefinitions="Auto,*,Auto">
+
+            <!-- the bar at the top with the name, sorting, views and zoom -->
+            <Grid
+                x:Name="PART_ControlBarContainer"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Padding="5">
+                
+                <Grid
+                    Background="LightGray"
+                    HorizontalOptions="Fill"
+                    HeightRequest="22" 
+                    Opacity="0.2" />
+                
+            </Grid>
+
+            <!-- an empty grid to make measuring the size of the viewport easier -->
+            <Grid
+                x:Name="PART_ViewerEmptySpace"
+                Grid.Row="1"
+                Grid.Column="1">
+                
+            </Grid>
+            
+            <!-- the actual items viewer -->
+            <Grid
+                x:Name="PART_ViewerContainer"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3">
+                
+                <!-- TODO: the actual items viewer canvas -->
+                <app:GraphicsViewEx
+                    x:Name="PART_Viewer"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    Drawable="{Binding Visualizer}" />
+                
+            </Grid>
+
+            <!-- the pane used for filtering -->
+            <Grid
+                x:Name="PART_FilterPaneContainer"
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalOptions="Start"
+                Padding="5,0,0,5">
+                
+                <controls:PivotViewerFilterPane
+                    x:Name="PART_FilterPane"
+                    WidthRequest="185" />
+                
+            </Grid>
+
+            <!-- the pane use to display currently selected item details -->
+            <Grid
+                x:Name="PART_DetailsPaneContainer"
+                Grid.Row="1"
+                Grid.Column="2"
+                HorizontalOptions="End"
+                Padding="0,0,5,5">
+
+                <Grid
+                    WidthRequest="190"
+                    VerticalOptions="Fill"
+                    Background="LightGray"
+                    Opacity="0.2" />
+                
+            </Grid>
+            
+        </Grid>
+    </ControlTemplate>
+
+    <!-- the explicit style that allows for extension -->
+    <Style x:Key="PivotViewerStyle" TargetType="controls:PivotViewer">
+        <Setter Property="ControlTemplate"
+                Value="{StaticResource PivotViewerControlTemplate}" />
+    </Style>
+
+    <!-- the implicit style that applies to all controls -->
+    <Style TargetType="controls:PivotViewer"
+           BasedOn="{StaticResource PivotViewerStyle}" />
+
+</ResourceDictionary>

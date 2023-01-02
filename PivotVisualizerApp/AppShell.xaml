@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PivotVisualizerApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PivotVisualizerApp">
+
+    <ShellContent
+        Title="PivotViewer"
+        ContentTemplate="{DataTemplate local:PivotViewerPage}"
+        Route="PivotViewer" />
+
+    <ShellContent
+        Title="DeepZoom"
+        ContentTemplate="{DataTemplate local:DeepZoomPage}"
+        Route="DeepZoom" />
+
+    <ShellContent
+        Title="Filter"
+        ContentTemplate="{DataTemplate local:FilterPage}"
+        Route="Filter" />
+
+    <ShellContent
+        Title="Renderer"
+        ContentTemplate="{DataTemplate local:RendererPage}"
+        Route="Renderer" />
+
+    <ShellContent
+        Title="Animation"
+        ContentTemplate="{DataTemplate local:AnimationPage}"
+        Route="Animation" />
+
+    <ShellContent
+        Title="Layout"
+        ContentTemplate="{DataTemplate local:LayoutPage}"
+        Route="Layout" />
+
+</Shell>

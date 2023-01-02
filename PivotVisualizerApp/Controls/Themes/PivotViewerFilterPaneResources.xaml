@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:PivotVisualizerApp"
+    xmlns:controls="clr-namespace:PivotVisualizerApp.Controls"
+    xmlns:themes="clr-namespace:PivotVisualizerApp.Controls.Themes"
+    x:Class="PivotVisualizerApp.Controls.Themes.PivotViewerFilterPaneResources">
+
+    <!-- the control template for PivotViewerFilterPane -->
+    <ControlTemplate x:Key="PivotViewerFilterPaneControlTemplate">
+        <Grid x:Name="PART_Container">
+
+            <ScrollView Background="LightGray">
+                <VerticalStackLayout
+                    Spacing="10"
+                    BindableLayout.ItemsSource="{Binding Filter.Properties}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="controls:PivotFilterProperty">
+                            <VerticalStackLayout>
+
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Values.Count, StringFormat='({0})'}" FontAttributes="Italic" />
+                                </HorizontalStackLayout>
+
+                                <CollectionView ItemsSource="{Binding Values}" MaximumHeightRequest="100">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="controls:PivotFilterValue">
+                                            <HorizontalStackLayout Spacing="5" Padding="10,0,0,0">
+                                                <CheckBox IsChecked="{Binding IsApplied}" VerticalOptions="Center" />
+                                                <Label Text="{Binding Value}" VerticalOptions="Center" />
+                                                <Label Text="{Binding Count, StringFormat='({0})'}" FontAttributes="Italic" VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </ControlTemplate>
+
+    <!-- the explicit style that allows for extension -->
+    <Style x:Key="PivotViewerFilterPaneStyle" TargetType="controls:PivotViewerFilterPane">
+        <Setter Property="ControlTemplate"
+                Value="{StaticResource PivotViewerFilterPaneControlTemplate}" />
+    </Style>
+
+    <!-- the implicit style that applies to all controls -->
+    <Style TargetType="controls:PivotViewerFilterPane"
+           BasedOn="{StaticResource PivotViewerFilterPaneStyle}" />
+
+</ResourceDictionary>
