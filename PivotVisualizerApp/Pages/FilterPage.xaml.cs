@@ -1,4 +1,4 @@
-﻿using PivotVisualizerApp.Controls;
+﻿using PivotVisualizerApp.Controls.ViewModels;
 
 namespace PivotVisualizerApp;
 
@@ -13,14 +13,14 @@ public partial class FilterPage : ContentPage
 		LoadCollectionAsync();
 	}
 
-	public PivotDataSourceFilter? Filter { get; private set; }
+	public FilterViewModel? Filter { get; private set; }
 
 	private async void LoadCollectionAsync()
 	{
 		var datasource = new CxmlPivotDataSource($"{MauiProgram.TestDataPath}conceptcars.cxml");
 		await datasource.LoadAsync();
 
-		Filter = new PivotDataSourceFilter(datasource);
+		Filter = new FilterViewModel(datasource);
 		OnPropertyChanged(nameof(Filter));
 	}
 }

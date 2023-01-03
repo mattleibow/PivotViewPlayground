@@ -10,6 +10,16 @@ public class AppliedFilterPropertyCollection : FilterPropertyCollection
 
 	public event EventHandler<FilterChangedEventArgs>? FilterChanged;
 
+	public override void Clear()
+	{
+		// TODO: this is really slow
+
+		for (var i = Count - 1; i >= 0; i--)
+		{
+			UnapplyProperty(this[i].Name);
+		}
+	}
+
 	public void ApplyValue(FilterValue filterValue) =>
 		UpdateValue(filterValue.Property.PivotProperty, filterValue.Value, 1);
 
@@ -42,6 +52,21 @@ public class AppliedFilterPropertyCollection : FilterPropertyCollection
 		{
 			FilterChanged?.Invoke(this, new(FilterChangedAction.RemoveValue, applied, value));
 		}
+	}
+
+	public void UnapplyProperty(PivotProperty property) =>
+		UnapplyProperty(property.Name);
+
+	public void UnapplyProperty(string propertyName)
+	{
+		if (!TryGet(propertyName, out var applied))
+			return;
+
+		var args = new FilterChangedEventArgs(FilterChangedAction.RemoveProperty, applied, applied.Values.Values);
+
+		Remove(applied);
+
+		FilterChanged?.Invoke(this, args);
 	}
 
 	private void UpdateValue(PivotProperty property, IComparable value, int change = 1)
@@ -90,7 +115,14 @@ public class FilterChangedEventArgs : EventArgs
 	{
 		Action = action;
 		Property = property;
-		Value = value;
+		Values = new[] { value };
+	}
+
+	public FilterChangedEventArgs(FilterChangedAction action, FilterProperty property, IEnumerable<IComparable> values)
+	{
+		Action = action;
+		Property = property;
+		Values = values.ToArray();
 	}
 
 	public FilterChangedAction Action { get; }
@@ -99,7 +131,7 @@ public class FilterChangedEventArgs : EventArgs
 
 	public string PropertyName => Property.Name;
 
-	public IComparable Value { get; }
+	public IList<IComparable> Values { get; }
 }
 
 public enum FilterChangedAction

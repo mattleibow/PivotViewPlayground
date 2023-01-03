@@ -14,19 +14,19 @@ public class FilterPropertyCollection : IReadOnlyList<FilterProperty>
 
 	public int Count => properties.Count;
 
-	public void Add(FilterProperty item)
+	public virtual void Add(FilterProperty item)
 	{
 		properties.Add(item);
 		propertiesByName.Add(item.Name, item);
 	}
 
-	public void Remove(FilterProperty item)
+	public virtual void Remove(FilterProperty item)
 	{
 		properties.Remove(item);
 		propertiesByName.Remove(item.Name);
 	}
 
-	public void Clear()
+	public virtual void Clear()
 	{
 		properties.Clear();
 		propertiesByName.Clear();

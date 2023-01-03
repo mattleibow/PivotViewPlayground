@@ -1,4 +1,4 @@
-﻿namespace PivotVisualizerApp.Controls;
+﻿namespace PivotVisualizerApp.Controls.ViewModels;
 
 internal static class CollectionHelpers
 {

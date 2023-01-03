@@ -5,40 +5,111 @@
     xmlns:app="clr-namespace:PivotVisualizerApp"
     xmlns:controls="clr-namespace:PivotVisualizerApp.Controls"
     xmlns:themes="clr-namespace:PivotVisualizerApp.Controls.Themes"
+    xmlns:vm="clr-namespace:PivotVisualizerApp.Controls.ViewModels"
     x:Class="PivotVisualizerApp.Controls.Themes.PivotViewerFilterPaneResources">
+
+    <SolidColorBrush x:Key="PaneBackgroundBrush">#FFF2F2F2</SolidColorBrush>
+    <SolidColorBrush x:Key="PaneHeadingBrush">#DDDDDD</SolidColorBrush>
+    <SolidColorBrush x:Key="PropertyHeadingBrush">#DDDDDD</SolidColorBrush>
 
     <!-- the control template for PivotViewerFilterPane -->
     <ControlTemplate x:Key="PivotViewerFilterPaneControlTemplate">
-        <Grid x:Name="PART_Container">
+        <Grid x:Name="PART_Container"
+              x:DataType="vm:FilterViewModel"
+              RowDefinitions="Auto,*"
+              Background="{StaticResource PaneBackgroundBrush}">
 
-            <ScrollView Background="LightGray">
-                <VerticalStackLayout
-                    Spacing="10"
-                    BindableLayout.ItemsSource="{Binding Filter.Properties}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="controls:PivotFilterProperty">
-                            <VerticalStackLayout>
+            <!-- title and clear -->
+            <Grid
+                Grid.Row="0"
+                Padding="5,5,5,5"
+                HeightRequest="30"
+                ColumnDefinitions="*,Auto"
+                Background="{StaticResource PaneHeadingBrush}">
+                <Label
+                    Text="Filter"
+                    FontSize="14" FontAttributes="Bold" />
+                <Button
+                    Grid.Column="1"
+                    Text="Clear All"
+                    MinimumHeightRequest="0" MinimumWidthRequest="0" 
+                    Padding="5,2" Margin="0"
+                    CornerRadius="2"
+                    BorderWidth="0"
+                    FontSize="12"
+                    IsVisible="{Binding IsFilterApplied}"
+                    Command="{Binding ClearAllCommand} "/>
+            </Grid>
 
-                                <HorizontalStackLayout Spacing="5">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Values.Count, StringFormat='({0})'}" FontAttributes="Italic" />
-                                </HorizontalStackLayout>
+            <ScrollView
+                Grid.Row="1">
+                <VerticalStackLayout>
 
-                                <CollectionView ItemsSource="{Binding Values}" MaximumHeightRequest="100">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="controls:PivotFilterValue">
-                                            <HorizontalStackLayout Spacing="5" Padding="10,0,0,0">
-                                                <CheckBox IsChecked="{Binding IsApplied}" VerticalOptions="Center" />
-                                                <Label Text="{Binding Value}" VerticalOptions="Center" />
-                                                <Label Text="{Binding Count, StringFormat='({0})'}" FontAttributes="Italic" VerticalOptions="Center" />
-                                            </HorizontalStackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
+                    <!-- search box -->
+                    <Grid Padding="5,5,5,5">
+                        <SearchBar 
+                            Placeholder="Search..."
+                            Background="White"
+                            MinimumHeightRequest="0" MinimumWidthRequest="0" />
+                    </Grid>
+                    
+                    <!-- filters accordion -->
+                    <VerticalStackLayout
+                        Spacing="10"
+                        BindableLayout.ItemsSource="{Binding Properties}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:FilterPropertyViewModel">
+                                <VerticalStackLayout>
 
-                            </VerticalStackLayout>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
+                                    <Grid 
+                                        ColumnDefinitions="*,Auto"
+                                        Padding="5,5,5,5"
+                                        HeightRequest="30"
+                                        Background="{StaticResource PropertyHeadingBrush}">
+                                        <Label
+                                            Text="{Binding Name}"
+                                            FontSize="14" FontAttributes="Bold" />
+                                        <Button
+                                            Grid.Column="1"
+                                            Text="Clear"
+                                            MinimumHeightRequest="0" MinimumWidthRequest="0" 
+                                            Padding="5,2" Margin="0"
+                                            CornerRadius="2"
+                                            BorderWidth="0"
+                                            FontSize="12"
+                                            IsVisible="{Binding IsApplied}"
+                                            Command="{Binding ClearCommand} "/>
+                                    </Grid>
+
+                                    <CollectionView ItemsSource="{Binding Values}" MaximumHeightRequest="100">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:FilterValueViewModel">
+                                                <Grid
+                                                    Padding="5,0,5,0"
+                                                    ColumnDefinitions="Auto,*,Auto">
+                                                    <CheckBox 
+                                                        Grid.Column="0" VerticalOptions="Center"
+                                                        IsChecked="{Binding IsApplied}" 
+                                                        MinimumWidthRequest="35" MinimumHeightRequest="35" />
+                                                    <Label 
+                                                        Grid.Column="1" VerticalOptions="Center"
+                                                        Text="{Binding Value}" 
+                                                        FontSize="12" />
+                                                    <Label 
+                                                        Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End"
+                                                        Margin="0,0,5,0"
+                                                        Text="{Binding Count, StringFormat='({0})'}" 
+                                                        FontSize="12" FontAttributes="Italic" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                    
                 </VerticalStackLayout>
             </ScrollView>
 

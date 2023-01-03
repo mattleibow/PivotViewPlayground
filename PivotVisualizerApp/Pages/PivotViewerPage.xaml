@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:app="clr-namespace:PivotVisualizerApp"
              xmlns:controls="clr-namespace:PivotVisualizerApp.Controls"
              x:Class="PivotVisualizerApp.PivotViewerPage"
              Title="PivotViewerPage">
 
-    <controls:PivotViewer />
+    <controls:PivotViewer ItemsSource="{Binding Items}">
+        <controls:PivotViewer.PivotProperties>
+            <controls:PivotViewerProperty Name="Full Name" Binding="{Binding FullName}" />
+            <controls:PivotViewerProperty Name="Words of Wisdom" Binding="{Binding Statement}" />
+            <controls:PivotViewerProperty Name="Tags" Binding="{Binding Tags}" />
+            <controls:PivotViewerProperty Name="Other" Binding="{Binding Other}" />
+        </controls:PivotViewer.PivotProperties>
+    </controls:PivotViewer>
 
 </ContentPage>

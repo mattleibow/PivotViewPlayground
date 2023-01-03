@@ -4,6 +4,7 @@
              xmlns:app="clr-namespace:PivotVisualizerApp"
              xmlns:vis="clr-namespace:PivotVisualizerApp.Visualizers"
              xmlns:controls="clr-namespace:PivotVisualizerApp.Controls"
+             xmlns:vm="clr-namespace:PivotVisualizerApp.Controls.ViewModels"
              xmlns:data="clr-namespace:Pivot.Core.Data;assembly=Pivot.Core"
              x:Class="PivotVisualizerApp.FilterPage"
              x:DataType="app:FilterPage">
@@ -16,7 +17,7 @@
                 Spacing="10"
                 BindableLayout.ItemsSource="{Binding Filter.Properties}">
                 <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="controls:PivotFilterProperty">
+                    <DataTemplate x:DataType="vm:FilterPropertyViewModel">
                         <VerticalStackLayout>
 
                             <HorizontalStackLayout Spacing="5">
@@ -26,7 +27,7 @@
 
                             <CollectionView ItemsSource="{Binding Values}" MaximumHeightRequest="100">
                                 <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="controls:PivotFilterValue">
+                                    <DataTemplate x:DataType="vm:FilterValueViewModel">
                                         <HorizontalStackLayout Spacing="5" Padding="10,0,0,0">
                                             <CheckBox IsChecked="{Binding IsApplied}" VerticalOptions="Center" />
                                             <Label Text="{Binding Value}" VerticalOptions="Center" />
@@ -48,14 +49,14 @@
                 Spacing="10"
                 BindableLayout.ItemsSource="{Binding Filter.Filter}">
                 <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="controls:PivotFilterProperty">
+                    <DataTemplate x:DataType="vm:FilterPropertyViewModel">
                         <VerticalStackLayout Spacing="5">
 
                             <Label Text="{Binding Name}" FontAttributes="Bold" />
 
                             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Values}" Spacing="5" Padding="10,0,0,0">
                                 <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="controls:PivotFilterValue">
+                                    <DataTemplate x:DataType="vm:FilterValueViewModel">
                                         <HorizontalStackLayout Spacing="5" Padding="10,0,0,0">
                                             <CheckBox IsChecked="{Binding IsApplied}" VerticalOptions="Center" />
                                             <Label Text="{Binding Value}" VerticalOptions="Center" />

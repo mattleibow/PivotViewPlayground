@@ -35,12 +35,24 @@ public class FilterManager
 
 	public void RebuildIndexes()
 	{
+		ClearIndexes();
+
+		BuildIndexes();
+
+		FilterUpdated?.Invoke(this, EventArgs.Empty);
+	}
+
+	private void ClearIndexes()
+	{
 		allFilters.Clear();
 		appliedFilters.Clear();
 		availableFilters.Clear();
 		filteredItems.Clear();
 		removedItems.Clear();
+	}
 
+	private void BuildIndexes()
+	{
 		if (DataSource is null)
 			return;
 
@@ -115,7 +127,7 @@ public class FilterManager
 		return true;
 	}
 
-	private bool IsAvailable(PivotDataItem item, FilterProperty filter)
+	private static bool IsAvailable(PivotDataItem item, FilterProperty filter)
 	{
 		// the item MUST have the filtered property
 		if (!item.Properties.TryGetValue(filter.PivotProperty, out var propertyValues))
@@ -125,7 +137,7 @@ public class FilterManager
 		return IsIntersection(propertyValues, filter.Values);
 	}
 
-	private bool IsAvailable(PivotDataItem item, string propertyName, IComparable value)
+	private static bool IsAvailable(PivotDataItem item, string propertyName, IComparable value)
 	{
 		// the item MUST have the filtered property
 		if (!item.Properties.TryGetValue(propertyName, out var propertyValues))
@@ -135,11 +147,32 @@ public class FilterManager
 		return IsMatch(propertyValues, value);
 	}
 
+	private static bool IsAvailable(PivotDataItem item, string propertyName, IEnumerable<IComparable> values)
+	{
+		// the item MUST have the filtered property
+		if (!item.Properties.TryGetValue(propertyName, out var propertyValues))
+			return false;
+
+		// loop through each value as OR
+		return IsIntersection(propertyValues, values);
+	}
+
 	private static bool IsIntersection(IEnumerable<IComparable> itemPropertyValues, IEnumerable<FilterValue> filterValues)
 	{
 		foreach (var filterValue in filterValues)
 		{
 			if (IsMatch(itemPropertyValues, filterValue.Value))
+				return true;
+		}
+
+		return false;
+	}
+
+	private static bool IsIntersection(IEnumerable<IComparable> itemPropertyValues, IEnumerable<IComparable> values)
+	{
+		foreach (var value in values)
+		{
+			if (IsMatch(itemPropertyValues, value))
 				return true;
 		}
 
@@ -168,7 +201,7 @@ public class FilterManager
 			{
 				var item = filteredItems[i];
 
-				if (!IsAvailable(item, e.PropertyName, e.Value))
+				if (!IsAvailable(item, e.PropertyName, e.Values))
 				{
 					removedItems.Add(item);
 					filteredItems.RemoveAt(i);

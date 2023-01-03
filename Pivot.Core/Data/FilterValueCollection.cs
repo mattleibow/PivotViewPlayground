@@ -14,6 +14,8 @@ public class FilterValueCollection : IReadOnlyList<FilterValue>
 
 	public int Count => values.Count;
 
+	public ICollection<IComparable> Values => valuesByValue.Keys;
+
 	internal string? DebuggerValue =>
 		Count switch
 		{
