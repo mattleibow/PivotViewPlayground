@@ -4,7 +4,7 @@ namespace PivotVisualizerApp;
 
 public static class MauiProgram
 {
-	public const string TestDataPath = "C:\\Projects\\PivotViewPlayground\\resources\\testdata\\";
+	public const string TestDataPath = "D:\\GitHub\\PivotViewPlayground\\resources\\testdata\\";
 
 	public static MauiApp CreateMauiApp()
 	{

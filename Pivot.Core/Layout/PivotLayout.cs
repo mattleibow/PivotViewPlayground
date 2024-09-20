@@ -1,6 +1,9 @@
 ﻿namespace Pivot.Core.Layout;
 
-abstract public class PivotLayout
+/// <summary>
+/// This class is responsible for laying out a collection of items in a specific way.
+/// </summary>
+public abstract class PivotLayout
 {
 	private RectangleF measureLastSize;
 	private bool measureDirty;
@@ -11,6 +14,16 @@ abstract public class PivotLayout
 	private float itemAspectRatioOverride;
 	private float itemMargin;
 
+	/// <summary>
+	/// Gets or sets the number of items to use instead of the real number of items.
+	/// </summary>
+	/// <remarks>
+	/// This can be used to have a series of layouts of the same size, but differing number of items. 
+	/// However, since item size is based on the number of items that can fit into an area, this property
+	/// can be used to make sure all the items are the same size - even if this particular layout
+	/// has more space available. One use case would be a histogram layout where there are multiple grid
+	/// layouts lext to each other.
+	/// </remarks>
 	public virtual int ItemCountOverride
 	{
 		get => itemCountOverride;
@@ -21,6 +34,12 @@ abstract public class PivotLayout
 		}
 	}
 
+	/// <summary>
+	/// Gets or sets the item aspect ratio to use instead of the real aspect ratio.
+	/// </summary>
+	/// <remarks>
+	/// See <see cref="ItemCountOverride"/> for more information.
+	/// </remarks>
 	public virtual float ItemAspectRatioOverride
 	{
 		get => itemAspectRatioOverride;
@@ -42,7 +61,7 @@ abstract public class PivotLayout
 	}
 
 	/// <summary>
-	/// Width/Height
+	/// Gets the aspect ratio to use for for all items (calculated as width/height).
 	/// </summary>
 	public float ItemAspectRatio { get; protected set; } = 1.0f;
 
