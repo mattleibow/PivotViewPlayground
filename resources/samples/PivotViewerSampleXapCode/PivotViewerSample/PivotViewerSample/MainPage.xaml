@@ -1,0 +1,128 @@
+﻿<UserControl
+    x:Class="PivotViewerSample.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PivotViewerSample"
+    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation" 
+    xmlns:uriMapper="clr-namespace:System.Windows.Navigation;assembly=System.Windows.Controls.Navigation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480">
+
+    <Grid x:Name="LayoutRoot"
+          Style="{StaticResource LayoutRootGridStyle}">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border x:Name="ContentBorder"
+                Grid.Row="1"
+                Style="{StaticResource ContentBorderStyle}">
+
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- The PivotViewer control -->
+                <local:CustomPivotViewer x:Name="PivotViewer"
+                                         Grid.Row="0"
+                                         Grid.Column="0"
+                                         LinkClicked="PivotViewer_LinkClicked"
+                                         ItemDoubleClicked="PivotViewer_ItemDoubleClicked"/>
+                
+                <!-- A sidebar for displaying the contents of the cart -->
+                <Grid x:Name="CartContentsGrid"
+                      Grid.Row="0"
+                      Grid.Column="1"
+                      Width="175"
+                      Margin="5,0,0,0"
+                      Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Shopping Cart Contents"
+                               Style="{StaticResource ContentTextStyle}"
+                               HorizontalAlignment="Center"/>
+                    <ListBox x:Name="CartContents"
+                             Grid.Row="1"/>
+                </Grid>
+                
+                <!-- A status bar at the bottom for displaying the current ViewerState -->
+                <Grid Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="Current ViewerState"
+                               Style="{StaticResource ContentTextStyle}"/>
+                    <TextBox Grid.Column="2"
+                             Text="{Binding ElementName=PivotViewer, Path=ViewerState}"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid x:Name="NavigationGrid"
+                Grid.Row="0"
+                Style="{StaticResource NavigationGridStyle}">
+
+            <!-- Sample Application Logo -->
+            <Border x:Name="BrandingBorder"
+                    Style="{StaticResource BrandingBorderStyle}">
+                <StackPanel x:Name="BrandingStackPanel"
+                            Style="{StaticResource BrandingStackPanelStyle}">
+                    <ContentControl Style="{StaticResource LogoIcon}"/>
+                    <TextBlock x:Name="ApplicationNameTextBlock"
+                                Style="{StaticResource ApplicationNameStyle}" 
+                                Text="PivotViewer Demo"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Pre-defined filter buttons -->
+            <Border x:Name="LinksBorder"
+                    Style="{StaticResource LinksBorderStyle}">
+                <StackPanel x:Name="LinksStackPanel"
+                            Style="{StaticResource LinksStackPanelStyle}">
+
+                    <HyperlinkButton Style="{StaticResource LinkStyle}" 
+                                     Content="Cars Collection"
+                                     Click="OnCarsCollectionClicked"/>
+                    <Rectangle x:Name="Divider1"
+                               Style="{StaticResource DividerStyle}"/>
+                    <HyperlinkButton Style="{StaticResource LinkStyle}" 
+                                     Content="Hybrid SUVs"
+                                     Click="OnHybridSUVsClicked"/>
+                    <Rectangle x:Name="Divider2"
+                               Style="{StaticResource DividerStyle}"/>
+                    <HyperlinkButton Style="{StaticResource LinkStyle}" 
+                                     Content="American Cars"
+                                     Click="OnAmericanCarsClicked"/>
+                    <Rectangle x:Name="Divider3"
+                               Style="{StaticResource DividerStyle}"/>
+                    <HyperlinkButton x:Name="Link2"
+                                        Style="{StaticResource LinkStyle}" 
+                                        Content="AMG Movies"
+                                        Click="OnAMGTopMoviesClicked"/>
+
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+    
+</UserControl>
