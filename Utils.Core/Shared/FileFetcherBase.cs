@@ -1,7 +1,7 @@
 ﻿#if DEEPZOOM_CORE
 namespace DeepZoom.Core;
 #elif PIVOT_CORE
-namespace Pivot.Core;
+namespace Pivot;
 #else
 namespace Utils.Core;
 #endif

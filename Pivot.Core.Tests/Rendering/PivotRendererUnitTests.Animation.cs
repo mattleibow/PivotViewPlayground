@@ -1,4 +1,8 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Animation.Steps;
+using Pivot.Layout;
+using Pivot.Layout.Transitions;
+
+namespace Pivot.Tests;
 
 public partial class PivotRendererUnitTests
 {

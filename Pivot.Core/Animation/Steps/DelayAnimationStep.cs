@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Pivot.Core.Animation;
+namespace Pivot.Animation.Steps;
 
 [DebuggerDisplay("Delay: Name = {Name}, IsComplete = {IsComplete}")]
 public class DelayAnimationStep : AnimationStep

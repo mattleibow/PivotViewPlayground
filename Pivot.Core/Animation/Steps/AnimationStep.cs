@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Pivot.Core.Animation;
+namespace Pivot.Animation.Steps;
 
 [DebuggerDisplay("Step: Name = {Name}, IsComplete = {IsComplete}")]
 public abstract class AnimationStep : IAnimationStep

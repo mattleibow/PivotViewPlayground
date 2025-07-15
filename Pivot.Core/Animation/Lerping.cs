@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Animation;
+﻿namespace Pivot.Animation;
 
 public delegate object LerpingDelegate(object? start, object? end, double progress);
 

@@ -1,7 +1,7 @@
 ﻿global using System.Drawing;
 global using DeepZoom.Core;
-global using Pivot.Core.Animation;
-global using Pivot.Core.Data;
-global using Pivot.Core.Layout;
-global using Pivot.Core.Rendering;
+global using Pivot.Animation;
+global using Pivot;
+global using Pivot;
+global using Pivot.Rendering;
 global using Xunit;

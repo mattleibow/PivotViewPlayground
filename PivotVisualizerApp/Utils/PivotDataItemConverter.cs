@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Pivot.Data.Model;
 
 namespace PivotVisualizerApp;
 

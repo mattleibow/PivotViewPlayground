@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Layout;
+﻿namespace Pivot.Layout;
 
 /// <summary>
 /// This class is responsible for laying out a collection of items in a specific way.

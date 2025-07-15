@@ -1,4 +1,6 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Data.Sources;
+
+namespace Pivot.Tests;
 
 public partial class PivotRendererUnitTests
 {

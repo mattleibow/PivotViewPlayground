@@ -1,6 +1,8 @@
 ﻿global using System.Collections.ObjectModel;
 global using DeepZoom.Core;
-global using Pivot.Core.Animation;
-global using Pivot.Core.Data;
-global using Pivot.Core.Layout;
-global using Pivot.Core.Rendering;
+global using Pivot.Animation;
+global using Pivot;
+global using Pivot.Data;
+global using Pivot.Data.Model;
+global using Pivot.Data.Sources;
+global using Pivot.Rendering;

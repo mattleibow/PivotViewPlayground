@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Pivot.Core.Layout;
+namespace Pivot.Layout;
 
 public class GridLayout : PivotLayout
 {

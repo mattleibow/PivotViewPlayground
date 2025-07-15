@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Animation;
+﻿namespace Pivot.Animation;
 
 public class AnimatableProperty<T>
 {

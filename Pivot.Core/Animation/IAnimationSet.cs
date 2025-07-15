@@ -1,4 +1,6 @@
-﻿namespace Pivot.Core.Animation;
+﻿using Pivot.Animation.Steps;
+
+namespace Pivot.Animation;
 
 public interface IAnimationSet
 {

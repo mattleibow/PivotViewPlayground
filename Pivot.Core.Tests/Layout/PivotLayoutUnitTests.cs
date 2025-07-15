@@ -1,4 +1,7 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Data.Model;
+using Pivot.Layout;
+
+namespace Pivot.Tests;
 
 public partial class PivotLayoutUnitTests
 {

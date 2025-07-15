@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Layout;
+﻿namespace Pivot.Layout;
 
 public class VerticalStackLayout : PivotLayout
 {
@@ -28,7 +28,7 @@ public class VerticalStackLayout : PivotLayout
 
 			var newFrame = new RectangleF(
 				frame.X + ItemMargin,
-				frame.Y + ItemMargin + (ItemHeight * i),
+				frame.Y + ItemMargin + ItemHeight * i,
 				Math.Max(0, ItemWidth - ItemMargin - ItemMargin),
 				Math.Max(0, ItemHeight - ItemMargin - ItemMargin));
 

@@ -1,4 +1,6 @@
-﻿namespace PivotVisualizerApp.Visualizers.Layout;
+﻿using Pivot.Layout;
+
+namespace PivotVisualizerApp.Visualizers.Layout;
 
 public class LayoutVisualizer : ItemsVisualizer
 {

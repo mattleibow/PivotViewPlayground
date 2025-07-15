@@ -1,5 +1,5 @@
 ﻿using PivotVisualizerApp.Visualizers.Animation;
-using Easing = Pivot.Core.Animation.Easing;
+using Easing = Pivot.Animation.Easing;
 
 namespace PivotVisualizerApp;
 

@@ -1,6 +1,7 @@
-﻿using Xunit.Abstractions;
+﻿using Pivot.Layout;
+using Xunit.Abstractions;
 
-namespace Pivot.Core.Tests;
+namespace Pivot.Tests;
 
 public partial class PivotLayoutUnitTests
 {

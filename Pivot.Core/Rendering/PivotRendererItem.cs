@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using Pivot.Data.Model;
 
-namespace Pivot.Core.Rendering;
+namespace Pivot.Rendering;
 
 [DebuggerDisplay("{Id}")]
 public class PivotRendererItem

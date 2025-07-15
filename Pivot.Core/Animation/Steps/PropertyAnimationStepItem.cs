@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Animation;
+﻿namespace Pivot.Animation.Steps;
 
 public abstract record PropertyAnimationStepItem(TimeSpan Duration, TimeSpan Delay)
 {

@@ -1,4 +1,6 @@
-﻿using PivotVisualizerApp.Visualizers.Rendering;
+﻿using Pivot.Data.Model;
+using Pivot.Data.Sources.Cxml;
+using PivotVisualizerApp.Visualizers.Rendering;
 
 namespace PivotVisualizerApp;
 

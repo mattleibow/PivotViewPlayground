@@ -1,4 +1,9 @@
-﻿namespace Pivot.Core.Rendering;
+﻿using Pivot.Animation.Steps;
+using Pivot.Data.Sources;
+using Pivot.Layout;
+using Pivot.Layout.Transitions;
+
+namespace Pivot.Rendering;
 
 public class PivotRenderer
 {

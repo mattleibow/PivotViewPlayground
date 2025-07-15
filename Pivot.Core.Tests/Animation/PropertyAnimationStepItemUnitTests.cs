@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Tests;
+﻿namespace Pivot.Tests;
 
 public class PropertyAnimationStepItemUnitTests
 {
