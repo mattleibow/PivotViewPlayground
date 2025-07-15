@@ -8,38 +8,47 @@ namespace Pivot.Data.Model;
 /// </summary>
 public class PivotDataItemCollection : IReadOnlyList<PivotDataItem>
 {
-	private readonly List<PivotDataItem> items = new();
-	private readonly Dictionary<string, PivotDataItem> itemsById = new();
+	private readonly List<PivotDataItem> dataItems = new();
+	private readonly Dictionary<string, PivotDataItem> dataItemsById = new();
 
-	public PivotDataItem this[int index] => items[index];
+	public PivotDataItem this[int index] => dataItems[index];
 
-	public PivotDataItem this[string id] => itemsById[id];
+	public PivotDataItem this[string id] => dataItemsById[id];
 
-	public int Count => items.Count;
+	public int Count => dataItems.Count;
 
 	public void Add(PivotDataItem item)
 	{
-		items.Add(item);
-		itemsById.Add(item.Id, item);
+		dataItems.Add(item);
+		dataItemsById.Add(item.Id, item);
+	}
+
+	public void AddRange(IEnumerable<PivotDataItem> items)
+	{
+		dataItems.AddRange(items);
+		foreach (var item in items)
+		{
+			dataItemsById.Add(item.Id, item);
+		}
 	}
 
 	public void Remove(PivotDataItem item)
 	{
-		items.Remove(item);
-		itemsById.Remove(item.Id);
+		dataItems.Remove(item);
+		dataItemsById.Remove(item.Id);
 	}
 
 	public void Clear()
 	{
-		items.Clear();
-		itemsById.Clear();
+		dataItems.Clear();
+		dataItemsById.Clear();
 	}
 
 	public bool TryGet(string id, [MaybeNullWhen(false)] out PivotDataItem item) =>
-		itemsById.TryGetValue(id, out item);
+		dataItemsById.TryGetValue(id, out item);
 
 	public IEnumerator<PivotDataItem> GetEnumerator() =>
-		items.GetEnumerator();
+		dataItems.GetEnumerator();
 
 	IEnumerator IEnumerable.GetEnumerator() =>
 		GetEnumerator();

@@ -482,7 +482,7 @@ public partial class PivotRendererUnitTests
 			// step 3 is missing
 		}
 
-		private static PivotRenderer CreateTestRenderer(params string[] items) =>
+		private static PivotVisualizationController CreateTestRenderer(params string[] items) =>
 			new()
 			{
 				DataSource = CreateDataSource(items),

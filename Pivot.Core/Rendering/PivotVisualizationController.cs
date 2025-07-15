@@ -1,47 +1,57 @@
 ﻿using Pivot.Animation.Steps;
+using Pivot.Data.Model;
 using Pivot.Data.Sources;
 using Pivot.Layout;
 using Pivot.Layout.Transitions;
 
 namespace Pivot.Rendering;
 
-public class PivotRenderer
+/// <summary>
+/// This class is responsible for updating all the positions of the items
+/// in the data source based on the current layout and filters.
+/// </summary>
+public class PivotVisualizationController : IPivotVisualizationSource
 {
 	private readonly BufferedDelegate bufferedUpdate = new();
 
-	private readonly List<PivotRendererItem> allItems = new();
-	private readonly List<PivotRendererItem> currentItems = new();
-	private readonly List<PivotRendererItem> visibleItems = new();
+	private readonly List<PivotVisualizationItem> allItems = new();
+	private readonly Dictionary<PivotDataItem, PivotVisualizationItem> dataItemToRendererItem = new();
+	private readonly List<PivotVisualizationItem> currentItems = new();
+	private readonly List<PivotVisualizationItem> visibleItems = new();
 
-	private Func<string, bool>? filter;
+	private IReadOnlyCollection<PivotDataItem>? filter;
+
 	private PivotDataSource? dataSource;
 	private PivotLayout? layout = new GridLayout();
 	private RectangleF frame;
 	private AnimationSet? animation;
 
-	public PivotRenderer()
+	public PivotVisualizationController()
 	{
 	}
 
-	// TODO: Filter
+	IReadOnlyList<PivotVisualizationItem> IPivotVisualizationSource.Items => VisibleItems;
+
+	RectangleF IPivotVisualizationSource.RenderFrame
+	{
+		get => Frame;
+		set => Frame = value;
+	}
+
 	// TODO: SortOrder
 
 	public IAnimationSet? Animation => animation;
 
-	public Func<string, bool>? Filter
+	public IReadOnlyCollection<PivotDataItem>? Filter
 	{
 		get => filter;
 		set
 		{
-			//if (filter == value)
-			//    return;
-
 			filter = value;
 
-			currentItems.Clear();
-			currentItems.AddRange(GetFilteredItems());
+			ResetCurrentItemsList();
 
-			UpdateVisibleItems();
+			InvalidateVisibleItems();
 
 			ItemsChanged?.Invoke(this, EventArgs.Empty);
 		}
@@ -63,19 +73,17 @@ public class PivotRenderer
 
 			if (dataSource?.Items is not null)
 			{
-				// update all items
-				foreach (var item in dataSource.Items)
-				{
-					allItems.Add(new PivotRendererItem(item));
-				}
+				allItems.EnsureCapacity(dataSource.Items.Count);
+				currentItems.EnsureCapacity(dataSource.Items.Count);
+				visibleItems.EnsureCapacity(dataSource.Items.Count);
+
+				ResetAllItemsList();
+				ResetCurrentItemsList();
 
 				// TODO: sorting of all items
-
-				var filteredItems = GetFilteredItems();
-				currentItems.AddRange(filteredItems);
 			}
 
-			UpdateVisibleItems();
+			InvalidateVisibleItems();
 
 			ItemsChanged?.Invoke(this, EventArgs.Empty);
 		}
@@ -91,7 +99,7 @@ public class PivotRenderer
 
 			layout = value;
 
-			UpdateVisibleItems();
+			InvalidateVisibleItems();
 		}
 	}
 
@@ -107,7 +115,7 @@ public class PivotRenderer
 
 			frame = value;
 
-			UpdateVisibleItems();
+			InvalidateVisibleItems();
 		}
 	}
 
@@ -129,11 +137,11 @@ public class PivotRenderer
 
 	public EasingDelegate RemoveItemsAnimationEasing { get; set; } = Easing.CubicInOut;
 
-	public IReadOnlyList<PivotRendererItem> Items => allItems;
+	public IReadOnlyList<PivotVisualizationItem> Items => allItems;
 
-	public IReadOnlyList<PivotRendererItem> CurrentItems => currentItems;
+	public IReadOnlyList<PivotVisualizationItem> CurrentItems => currentItems;
 
-	public IReadOnlyList<PivotRendererItem> VisibleItems => visibleItems;
+	public IReadOnlyList<PivotVisualizationItem> VisibleItems => visibleItems;
 
 	public event EventHandler? ItemsChanged;
 
@@ -144,31 +152,68 @@ public class PivotRenderer
 		animation = null;
 
 		// update current items
-		var filteredItems = GetFilteredItems();
-		currentItems.Clear();
-		currentItems.AddRange(filteredItems);
 		visibleItems.Clear();
-		visibleItems.AddRange(filteredItems);
+		visibleItems.AddRange(currentItems);
 
 		// layout items
-		Layout?.LayoutItems(filteredItems, Frame);
+		Layout?.LayoutItems(currentItems, Frame);
 
 		// immediately apply layout
-		foreach (var item in filteredItems)
+		foreach (var item in currentItems)
 			item.Frame.Current = item.Frame.Desired;
 	}
 
-	private PivotRendererItem[] GetFilteredItems() =>
-		Filter is null
-		   ? allItems.ToArray()
-		   : allItems.Where(i => Filter(i.Id)).ToArray();
-
-	private void UpdateVisibleItems()
+	private void ResetAllItemsList()
 	{
-		bufferedUpdate.Post(LayoutAnimationDelay, UpdateVisibleItemsImmediate);
+		allItems.Clear();
+
+		// bail out if there are not items at all
+		if (dataSource?.Items is not { } items)
+			return;
+
+		// create renderer items for all data items
+		foreach (var item in items)
+		{
+			var rendererItem = new PivotVisualizationItem(item);
+			allItems.Add(rendererItem);
+			dataItemToRendererItem[item] = rendererItem;
+		}
 	}
 
-	private void UpdateVisibleItemsImmediate()
+	private void ResetCurrentItemsList()
+	{
+		currentItems.Clear();
+
+		// bail out if there are not items at all
+		if (allItems.Count <= 0)
+			return;
+
+		// if the filter is null or empty, then show all items
+		if (filter is null || filter.Count == 0)
+		{
+			currentItems.AddRange(allItems);
+			return;
+		}
+
+		// otherwise, show only the items that match the filter
+		currentItems.AddRange(GetFilteredItems());
+
+		IEnumerable<PivotVisualizationItem> GetFilteredItems()
+		{
+			foreach (var item in filter)
+			{
+				if (dataItemToRendererItem.TryGetValue(item, out var rendererItem))
+					yield return rendererItem;
+			}
+		}
+	}
+
+	private void InvalidateVisibleItems()
+	{
+		bufferedUpdate.Post(LayoutAnimationDelay, InvalidateVisibleItemsImmediate);
+	}
+
+	private void InvalidateVisibleItemsImmediate()
 	{
 		animation = null;
 
@@ -202,7 +247,7 @@ public class PivotRenderer
 			animation.Add(step);
 	}
 
-	private IEnumerable<IAnimationStep> GetAnimationSteps(PivotRendererItem[] removed, PivotRendererItem[] remaining, PivotRendererItem[] added)
+	private IEnumerable<IAnimationStep> GetAnimationSteps(PivotVisualizationItem[] removed, PivotVisualizationItem[] remaining, PivotVisualizationItem[] added)
 	{
 		// add step 1 - remove old items
 		if (removed.Length > 0)

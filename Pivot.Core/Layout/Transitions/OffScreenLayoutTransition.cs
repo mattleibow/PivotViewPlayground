@@ -2,7 +2,7 @@
 
 public abstract class OffScreenLayoutTransition : PivotLayoutTransition
 {
-	public override void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame, PivotLayoutTransitionType transitionType)
+	public override void ArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame, PivotLayoutTransitionType transitionType)
 	{
 		foreach (var item in items)
 		{

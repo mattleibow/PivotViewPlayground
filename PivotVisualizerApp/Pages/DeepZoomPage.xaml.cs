@@ -5,7 +5,7 @@ namespace PivotVisualizerApp;
 
 public partial class DeepZoomPage : ContentPage
 {
-	private Visualizer? current;
+	private SimpleVisualizer? current;
 
 	public DeepZoomPage()
 	{
@@ -31,9 +31,9 @@ public partial class DeepZoomPage : ContentPage
 		BindingContext = this;
 	}
 
-	public ObservableCollection<Visualizer> Visualizers { get; }
+	public ObservableCollection<SimpleVisualizer> Visualizers { get; }
 
-	public Visualizer? Current
+	public SimpleVisualizer? Current
 	{
 		get => current;
 		set

@@ -73,13 +73,13 @@ public abstract class PivotLayout
 
 	public float LayoutHeight { get; protected set; }
 
-	public void LayoutItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	public void LayoutItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		MeasureItems(items, frame);
 		ArrangeItems(items, frame);
 	}
 
-	public void MeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	public void MeasureItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		if (measureLastSize == frame && !measureDirty)
 			return;
@@ -90,7 +90,7 @@ public abstract class PivotLayout
 		OnMeasureItems(items, frame);
 	}
 
-	public void ArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	public void ArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		if (arrangeLastSize == frame && !arrangeDirty)
 			return;
@@ -107,11 +107,11 @@ public abstract class PivotLayout
 		measureDirty = true;
 	}
 
-	protected abstract void OnMeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+	protected abstract void OnMeasureItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame);
 
-	protected abstract void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame);
+	protected abstract void OnArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame);
 
-	protected float GetItemAspectRatio(IReadOnlyList<PivotRendererItem> items)
+	protected float GetItemAspectRatio(IReadOnlyList<PivotVisualizationItem> items)
 	{
 		if (ItemAspectRatioOverride != 0.0f)
 			return ItemAspectRatioOverride;

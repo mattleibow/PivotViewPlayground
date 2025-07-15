@@ -1,4 +1,5 @@
-﻿using Pivot.Data.Sources;
+﻿using Pivot.Data.Model;
+using Pivot.Data.Sources;
 
 namespace Pivot.Tests;
 

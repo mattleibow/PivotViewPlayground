@@ -10,8 +10,8 @@ public class PivotDataItem
 {
 	public PivotDataItem()
 	{
-
 	}
+
 	public string? Id { get; set; }
 
 	public float ImageWidth { get; set; } = 0;

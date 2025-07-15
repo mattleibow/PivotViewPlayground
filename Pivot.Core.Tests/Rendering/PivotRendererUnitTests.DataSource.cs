@@ -7,7 +7,7 @@ public partial class PivotRendererUnitTests
 		[Fact]
 		public void CurrentItemsIsCorrect()
 		{
-			var renderer = new PivotRenderer
+			var renderer = new PivotVisualItemController
 			{
 				DataSource = CreateDataSource(new[] { "A", "B", "C", "D" })
 			};
@@ -25,7 +25,7 @@ public partial class PivotRendererUnitTests
 		[Fact]
 		public void AllItemsIsCorrect()
 		{
-			var renderer = new PivotRenderer
+			var renderer = new PivotVisualItemController
 			{
 				DataSource = CreateDataSource(new[] { "A", "B", "C", "D" })
 			};

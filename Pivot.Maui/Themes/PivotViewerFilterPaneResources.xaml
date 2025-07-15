@@ -2,7 +2,6 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:app="clr-namespace:PivotVisualizerApp"
     xmlns:controls="clr-namespace:Pivot.Controls"
     xmlns:themes="clr-namespace:Pivot.Controls.Themes"
     xmlns:vm="clr-namespace:Pivot.Controls.ViewModels"

@@ -4,9 +4,9 @@ using Pivot.Data.Model;
 namespace Pivot.Rendering;
 
 [DebuggerDisplay("{Id}")]
-public class PivotRendererItem
+public class PivotVisualizationItem
 {
-	public PivotRendererItem(PivotDataItem dataItem)
+	public PivotVisualizationItem(PivotDataItem dataItem)
 	{
 		DataItem = dataItem;
 	}

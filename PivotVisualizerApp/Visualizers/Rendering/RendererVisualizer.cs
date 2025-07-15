@@ -1,41 +1,71 @@
-﻿using System.Drawing;
+﻿using Pivot.Controls;
 
 namespace PivotVisualizerApp.Visualizers.Rendering;
 
-public class RendererVisualizer : ItemsVisualizer
+public class RendererVisualizer : Visualizer
 {
-	public RendererVisualizer(string name, PivotRenderer renderer)
-		: base(name + " Renderer", renderer.VisibleItems)
+	private MauiGraphicsPivotVisualizationCanvas mauiCanvas = new();
+
+	public RendererVisualizer(string name, PivotVisualizationController controller)
+		: base(name + " Renderer")
 	{
-		IsDesiredLocations = false;
-		ScreenScale = 1;
+		Controller = controller;
+		Renderer = new MauiGraphicsPivotVisualizationRenderer(controller);
 
-		Renderer = renderer;
-
-		renderer.ItemsChanged += OnRendererItemsChanged;
+		controller.ItemsChanged += OnRendererItemsChanged;
 	}
 
-	public PivotRenderer Renderer { get; }
+	public PivotVisualizationController Controller { get; }
+
+	public MauiGraphicsPivotVisualizationRenderer Renderer { get; }
+
+	[Slider("Render scale", 0.1, 1)]
+	public double RenderScale
+	{
+		get => mauiCanvas.DebugOptions.RenderScale;
+		set => mauiCanvas.DebugOptions.RenderScale = (float)value;
+	}
+
+	[Switch("Show screen boundary lines")]
+	public bool DrawScreenBounds
+	{
+		get => mauiCanvas.DebugOptions.DrawRenderFrameBoundary;
+		set => mauiCanvas.DebugOptions.DrawRenderFrameBoundary = value;
+	}
+
+	[Switch("Show items")]
+	public bool DrawItems
+	{
+		get => mauiCanvas.DebugOptions.DrawItems;
+		set => mauiCanvas.DebugOptions.DrawItems = value;
+	}
+
+	[Switch("Show debug items")]
+	public bool DrawDebugItems
+	{
+		get => mauiCanvas.DebugOptions.DrawDebugItems;
+		set => mauiCanvas.DebugOptions.DrawDebugItems = value;
+	}
 
 	[Slider("Minimum animation delay (ms)", 0, 1000)]
 	public double MinimumAnimationDelay
 	{
-		get => Renderer.MinimumAnimationDelay.TotalMilliseconds;
-		set => Renderer.MinimumAnimationDelay = TimeSpan.FromMilliseconds(value);
+		get => Controller.MinimumAnimationDelay.TotalMilliseconds;
+		set => Controller.MinimumAnimationDelay = TimeSpan.FromMilliseconds(value);
 	}
 
 	[Slider("Maximum animation delay (ms)", 0, 1000)]
 	public double MaximumAnimationDelay
 	{
-		get => Renderer.MaximumAnimationDelay.TotalMilliseconds;
-		set => Renderer.MaximumAnimationDelay = TimeSpan.FromMilliseconds(value);
+		get => Controller.MaximumAnimationDelay.TotalMilliseconds;
+		set => Controller.MaximumAnimationDelay = TimeSpan.FromMilliseconds(value);
 	}
 
-	protected override void PrepareItems(RectF bounds)
+	public override void Draw(ICanvas canvas, RectF bounds)
 	{
-		base.PrepareItems(bounds);
+		mauiCanvas.Canvas = canvas;
 
-		Renderer.Frame = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+		Renderer.Draw(mauiCanvas, bounds.ToSystemRectangleF());
 	}
 
 	private void OnRendererItemsChanged(object? sender, EventArgs e)

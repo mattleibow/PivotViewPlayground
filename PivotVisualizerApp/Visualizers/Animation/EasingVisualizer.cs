@@ -5,7 +5,7 @@ namespace PivotVisualizerApp.Visualizers.Animation;
 public class EasingVisualizer : AnimationVisualizer
 {
 	public EasingVisualizer(string name, EasingDelegate func)
-		: base($"{name} Easing", new List<PivotRendererItem>(new[] { CreateAnimationItem() }))
+		: base($"{name} Easing", new List<PivotVisualizationItem>(new[] { CreateAnimationItem() }))
 	{
 		EasingFunction = func;
 	}
@@ -29,7 +29,7 @@ public class EasingVisualizer : AnimationVisualizer
 		Items[0].Frame.Desired = rect;
 	}
 
-	private static PivotRendererItem CreateAnimationItem()
+	private static PivotVisualizationItem CreateAnimationItem()
 	{
 		var dataItem = new PivotDataItem
 		{
@@ -37,7 +37,7 @@ public class EasingVisualizer : AnimationVisualizer
 			ImageHeight = 10
 		};
 
-		var renderItem = new PivotRendererItem(dataItem);
+		var renderItem = new PivotVisualizationItem(dataItem);
 
 		var rect = new RectangleF(0, 0, 10, 10);
 

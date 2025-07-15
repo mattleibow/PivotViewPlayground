@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Pivot.Controls"
+    xmlns:themes="clr-namespace:Pivot.Controls.Themes"
+    xmlns:vm="clr-namespace:Pivot.Controls.ViewModels"
+    x:Class="Pivot.Controls.Themes.PivotViewerVisualizationPaneResources">
+
+    <!-- the control template for PivotViewerVisualizationPane -->
+    <ControlTemplate x:Key="PivotViewerVisualizationPaneControlTemplate">
+        <Grid x:Name="PART_Container">
+
+            <Label Text="VIS" TextColor="Red" />
+
+        </Grid>
+    </ControlTemplate>
+
+    <!-- the explicit style that allows for extension -->
+    <Style x:Key="PivotViewerVisualizationPaneStyle" TargetType="controls:PivotViewerVisualizationPane">
+        <Setter Property="ControlTemplate"
+                Value="{StaticResource PivotViewerVisualizationPaneControlTemplate}" />
+    </Style>
+
+    <!-- the implicit style that applies to all controls -->
+    <Style TargetType="controls:PivotViewerVisualizationPane"
+           BasedOn="{StaticResource PivotViewerVisualizationPaneStyle}" />
+
+</ResourceDictionary>

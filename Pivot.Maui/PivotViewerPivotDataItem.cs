@@ -2,6 +2,10 @@
 
 namespace Pivot.Controls;
 
+/// <summary>
+/// This type wraps arbitrary data items from a <see cref="PivotViewer"/> into
+/// a <see cref="PivotDataItem"/> for use in filtering and rendering.
+/// </summary>
 internal class PivotViewerPivotDataItem : PivotDataItem
 {
 	private readonly PivotViewerPivotDataItemBindingProxy bindableItem = new();

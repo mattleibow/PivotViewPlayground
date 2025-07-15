@@ -31,7 +31,7 @@
 
             <!-- an empty grid to make measuring the size of the viewport easier -->
             <Grid
-                x:Name="PART_ViewerEmptySpace"
+                x:Name="PART_VisualizationEmptySpace"
                 Grid.Row="1"
                 Grid.Column="1">
                 
@@ -39,17 +39,15 @@
             
             <!-- the actual items viewer -->
             <Grid
-                x:Name="PART_ViewerContainer"
+                x:Name="PART_VisualizationContainer"
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="3">
                 
-                <!-- TODO: the actual items viewer canvas -->
-                <controls:GraphicsViewEx
-                    x:Name="PART_Viewer"
+                <controls:PivotViewerVisualizationPane
+                    x:Name="PART_VisualizationPane"
                     HorizontalOptions="Fill"
-                    VerticalOptions="Fill"
-                    Drawable="{Binding Visualizer}" />
+                    VerticalOptions="Fill" />
                 
             </Grid>
 

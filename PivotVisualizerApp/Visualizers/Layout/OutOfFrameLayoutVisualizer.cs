@@ -6,7 +6,7 @@ namespace PivotVisualizerApp.Visualizers.Layout;
 
 public class OutOfFrameLayoutVisualizer : LayoutVisualizer<OutOfFrameLayoutVisualizer.Wrapper>
 {
-	public OutOfFrameLayoutVisualizer(bool isAdding, ObservableCollection<PivotRendererItem> items)
+	public OutOfFrameLayoutVisualizer(bool isAdding, ObservableCollection<PivotVisualizationItem> items)
 		: base($"Out Of Frame ({(isAdding ? "Adding" : "Removing")})", new Wrapper(isAdding), items)
 	{
 	}
@@ -21,7 +21,7 @@ public class OutOfFrameLayoutVisualizer : LayoutVisualizer<OutOfFrameLayoutVisua
 			this.isAdding = isAdding;
 		}
 
-		protected override void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+		protected override void OnArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 		{
 			var offscreenItems = items.Where((item, idx) => idx % 2 != 0).ToArray();
 

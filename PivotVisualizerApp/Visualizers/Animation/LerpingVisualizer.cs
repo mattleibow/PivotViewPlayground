@@ -5,7 +5,7 @@ namespace PivotVisualizerApp.Visualizers.Animation;
 public class LerpingVisualizer : AnimationVisualizer
 {
 	public LerpingVisualizer()
-		: base($"RectangleF Lerping", new List<PivotRendererItem>(new[] { CreateAnimationItem() }))
+		: base($"RectangleF Lerping", new List<PivotVisualizationItem>(new[] { CreateAnimationItem() }))
 	{
 		LerpingFunction = Lerping.Lerps[typeof(RectangleF)];
 	}
@@ -25,7 +25,7 @@ public class LerpingVisualizer : AnimationVisualizer
 		Items[0].Frame.Desired = rect;
 	}
 
-	private static PivotRendererItem CreateAnimationItem()
+	private static PivotVisualizationItem CreateAnimationItem()
 	{
 		var dataItem = new PivotDataItem
 		{
@@ -33,7 +33,7 @@ public class LerpingVisualizer : AnimationVisualizer
 			ImageHeight = 10
 		};
 
-		var renderItem = new PivotRendererItem(dataItem);
+		var renderItem = new PivotVisualizationItem(dataItem);
 
 		var rect = new RectangleF(0, 0, 10, 10);
 

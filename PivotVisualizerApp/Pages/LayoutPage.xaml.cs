@@ -25,7 +25,7 @@ public partial class LayoutPage : ContentPage
 		BindingContext = this;
 	}
 
-	public ObservableCollection<PivotRendererItem> Items { get; } =
+	public ObservableCollection<PivotVisualizationItem> Items { get; } =
 		new()
 		{
 			NewItem("Item 1"),
@@ -78,6 +78,6 @@ public partial class LayoutPage : ContentPage
 		}
 	}
 
-	private static PivotRendererItem NewItem(string name) =>
+	private static PivotVisualizationItem NewItem(string name) =>
 		new(new() { Id = name });
 }
