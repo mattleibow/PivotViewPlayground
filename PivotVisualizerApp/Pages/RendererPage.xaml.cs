@@ -1,14 +1,16 @@
-﻿using PivotVisualizerApp.Visualizers.Rendering;
+﻿using Pivot.Data.Model;
+using Pivot.Data.Sources.Cxml;
+using PivotVisualizerApp.Visualizers.Rendering;
 
 namespace PivotVisualizerApp;
 
 public partial class RendererPage : ContentPage
 {
-	private readonly PivotRenderer renderer = new();
+	private readonly PivotVisualizationController renderer = new();
 
-	private string[] newIds;
+	private readonly List<PivotDataItem> allItems = new();
+
 	private string? itemsText;
-	private string[]? visibleIds;
 
 	private bool isVisible;
 	private long lastUpdated;
@@ -21,7 +23,7 @@ public partial class RendererPage : ContentPage
 
 		BindingContext = this;
 
-		LoadCollectionAsync();
+		_ = LoadCollectionAsync();
 	}
 
 	public RendererVisualizer Visualizer { get; }
@@ -32,9 +34,9 @@ public partial class RendererPage : ContentPage
 		set
 		{
 			itemsText = value ?? string.Empty;
-			visibleIds = itemsText.Split(new[] { '\r', '\n' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
-			renderer.Filter = (id) => visibleIds.Contains(id);
+			var filter = itemsText.Split(new[] { '\r', '\n' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+			renderer.Filter = allItems.Where(i => filter.Contains(i.Id)).ToList();
 
 			OnPropertyChanged();
 		}
@@ -67,29 +69,32 @@ public partial class RendererPage : ContentPage
 		base.OnDisappearing();
 	}
 
-	private async void LoadCollectionAsync()
+	private async Task LoadCollectionAsync()
 	{
-		try
-		{
-			var datasource = new CxmlPivotDataSource($"{MauiProgram.TestDataPath}conceptcars.cxml");
-			await datasource.LoadAsync();
+		//try
+		//{
+		//	var datasource = new CxmlPivotDataSource($"{MauiProgram.TestDataPath}conceptcars.cxml");
+		//	await datasource.LoadAsync();
 
-			newIds = datasource.Items.Select(i => i.Id!).ToArray();
+		//	newIds = datasource.Items.Select(i => i.Id!).ToArray();
 
-			renderer.DataSource = datasource;
-		}
-		catch
-		{
-			newIds = Enumerable.Range(1, 100).Select(i => i.ToString()).ToArray();
+		//	renderer.DataSource = datasource;
+		//}
+		//catch
+		//{
 
-			var datasource = new PivotDataSource();
-			foreach (var id in newIds)
-				datasource.Items.Add(NewItem(id));
+		var newIds = Enumerable.Range(1, 100).Select(i => i.ToString());
 
-			renderer.DataSource = datasource;
-		}
+		allItems.Clear();
+		allItems.AddRange(newIds.Select(NewItem));
 
-		ItemsText = string.Join(Environment.NewLine, newIds);
+		var datasource = new PivotDataSource();
+		datasource.Items.AddRange(allItems);
+		renderer.DataSource = datasource;
+
+		//}
+
+		ItemsText = string.Join(Environment.NewLine, allItems.Select(i => i.Id));
 	}
 
 	private static PivotDataItem NewItem(string id) =>

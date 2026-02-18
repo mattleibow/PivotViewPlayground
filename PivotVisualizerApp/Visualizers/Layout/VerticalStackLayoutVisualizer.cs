@@ -1,9 +1,9 @@
 ﻿namespace PivotVisualizerApp.Visualizers.Layout;
 
-public class VerticalStackLayoutVisualizer : LayoutVisualizer<Pivot.Core.Layout.VerticalStackLayout>
+public class VerticalStackLayoutVisualizer : LayoutVisualizer<Pivot.Layout.VerticalStackLayout>
 {
-	public VerticalStackLayoutVisualizer(ObservableCollection<PivotRendererItem> items)
-		: base("Vertical Stack", new Pivot.Core.Layout.VerticalStackLayout(), items)
+	public VerticalStackLayoutVisualizer(ObservableCollection<PivotVisualizationItem> items)
+		: base("Vertical Stack", new Pivot.Layout.VerticalStackLayout(), items)
 	{
 	}
 }

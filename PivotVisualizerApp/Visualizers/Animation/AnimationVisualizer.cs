@@ -4,7 +4,7 @@ public class AnimationVisualizer : ItemsVisualizer
 {
 	long lastTime;
 
-	public AnimationVisualizer(string name, IReadOnlyList<PivotRendererItem> items)
+	public AnimationVisualizer(string name, IReadOnlyList<PivotVisualizationItem> items)
 		: base(name + " Animation", items)
 	{
 	}

@@ -1,4 +1,9 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Data.Filtering;
+using Pivot.Data.Model;
+using Pivot.Data.Sources;
+using Pivot.Data.Sources.Cxml;
+
+namespace Pivot.Tests;
 
 public class FilterManagerUnitTests
 {

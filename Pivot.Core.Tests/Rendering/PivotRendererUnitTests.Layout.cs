@@ -1,4 +1,7 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Layout;
+using Pivot.Layout.Transitions;
+
+namespace Pivot.Tests;
 
 public partial class PivotRendererUnitTests
 {
@@ -7,7 +10,7 @@ public partial class PivotRendererUnitTests
 		[Fact]
 		public void VerticalStackLayout()
 		{
-			var renderer = new PivotRenderer
+			var renderer = new PivotVisualizationController
 			{
 				DataSource = CreateDataSource(new[] { "A", "B", "C" }),
 				Layout = new VerticalStackLayout { ItemMargin = 15 },

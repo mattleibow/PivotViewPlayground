@@ -1,4 +1,6 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Animation.Steps;
+
+namespace Pivot.Tests;
 
 public class AnimationSetUnitTests
 {

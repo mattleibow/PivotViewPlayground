@@ -1,4 +1,5 @@
-﻿using PivotVisualizerApp.Controls.ViewModels;
+﻿using Pivot.Controls.ViewModels;
+using Pivot.Data.Sources.Cxml;
 
 namespace PivotVisualizerApp;
 

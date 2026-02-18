@@ -1,8 +1,8 @@
-﻿namespace Pivot.Core.Layout;
+﻿namespace Pivot.Layout;
 
 public class VerticalStackLayout : PivotLayout
 {
-	protected override void OnMeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	protected override void OnMeasureItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		// 1. Get the aspect ratio of the items
 		ItemAspectRatio = GetItemAspectRatio(items);
@@ -20,7 +20,7 @@ public class VerticalStackLayout : PivotLayout
 		LayoutHeight = ItemHeight * count;
 	}
 
-	protected override void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	protected override void OnArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		for (var i = 0; i < items.Count; i++)
 		{
@@ -28,7 +28,7 @@ public class VerticalStackLayout : PivotLayout
 
 			var newFrame = new RectangleF(
 				frame.X + ItemMargin,
-				frame.Y + ItemMargin + (ItemHeight * i),
+				frame.Y + ItemMargin + ItemHeight * i,
 				Math.Max(0, ItemWidth - ItemMargin - ItemMargin),
 				Math.Max(0, ItemHeight - ItemMargin - ItemMargin));
 

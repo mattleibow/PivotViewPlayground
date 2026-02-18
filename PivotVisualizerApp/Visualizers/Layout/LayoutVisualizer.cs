@@ -1,10 +1,12 @@
-﻿namespace PivotVisualizerApp.Visualizers.Layout;
+﻿using Pivot.Layout;
+
+namespace PivotVisualizerApp.Visualizers.Layout;
 
 public class LayoutVisualizer : ItemsVisualizer
 {
 	private RectF lastScreenRect;
 
-	public LayoutVisualizer(string name, PivotLayout layout, ObservableCollection<PivotRendererItem> items)
+	public LayoutVisualizer(string name, PivotLayout layout, ObservableCollection<PivotVisualizationItem> items)
 		: base(name + " Layout", items)
 	{
 		Layout = layout;
@@ -52,7 +54,7 @@ public class LayoutVisualizer : ItemsVisualizer
 public class LayoutVisualizer<T> : LayoutVisualizer
 	where T : PivotLayout
 {
-	public LayoutVisualizer(string name, T layout, ObservableCollection<PivotRendererItem> items)
+	public LayoutVisualizer(string name, T layout, ObservableCollection<PivotVisualizationItem> items)
 		: base(name, layout, items)
 	{
 	}

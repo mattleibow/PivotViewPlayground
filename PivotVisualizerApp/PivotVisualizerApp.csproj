@@ -58,6 +58,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DeepZoom.Core\DeepZoom.Core.csproj" />
     <ProjectReference Include="..\Pivot.Core\Pivot.Core.csproj" />
+    <ProjectReference Include="..\Pivot.Maui\Pivot.Maui.csproj" />
   </ItemGroup>
 
 </Project>

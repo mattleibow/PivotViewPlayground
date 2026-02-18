@@ -1,4 +1,6 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Data.Sources.Cxml;
+
+namespace Pivot.Tests;
 
 public class CxmlPivotDataSourceUnitTests
 {

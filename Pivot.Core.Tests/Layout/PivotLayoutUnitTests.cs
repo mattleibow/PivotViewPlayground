@@ -1,4 +1,7 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Data.Model;
+using Pivot.Layout;
+
+namespace Pivot.Tests;
 
 public partial class PivotLayoutUnitTests
 {
@@ -73,8 +76,8 @@ public partial class PivotLayoutUnitTests
 		Assert.Equal(2, layout.OnArrangeItemsCount);
 	}
 
-	private static List<PivotRendererItem> CreateItemList(params string[] items) =>
-		items.Select(i => new PivotRendererItem(CreateDataItem(i))).ToList();
+	private static List<PivotVisualizationItem> CreateItemList(params string[] items) =>
+		items.Select(i => new PivotVisualizationItem(CreateDataItem(i))).ToList();
 
 	private static PivotDataItem CreateDataItem(string name, float width = 100, float height = 100) =>
 		new()
@@ -90,10 +93,10 @@ public partial class PivotLayoutUnitTests
 
 		public int OnArrangeItemsCount { get; private set; }
 
-		protected override void OnMeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame) =>
+		protected override void OnMeasureItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame) =>
 			OnMeasureItemsCount++;
 
-		protected override void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame) =>
+		protected override void OnArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame) =>
 			OnArrangeItemsCount++;
 
 		public void ResetCounts() =>

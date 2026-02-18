@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics;
 
-namespace Pivot.Core.Animation;
+namespace Pivot.Animation.Steps;
 
 [DebuggerDisplay("Property: Name = {Name}, IsComplete = {IsComplete}")]
 public class PropertyAnimationStep : AnimationStep, IEnumerable<PropertyAnimationStepItem>

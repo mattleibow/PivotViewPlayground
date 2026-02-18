@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:app="clr-namespace:PivotVisualizerApp"
              xmlns:vis="clr-namespace:PivotVisualizerApp.Visualizers"
-             xmlns:controls="clr-namespace:PivotVisualizerApp.Controls"
-             xmlns:vm="clr-namespace:PivotVisualizerApp.Controls.ViewModels"
-             xmlns:data="clr-namespace:Pivot.Core.Data;assembly=Pivot.Core"
+             xmlns:controls="clr-namespace:Pivot.Controls;assembly=Pivot.Maui"
+             xmlns:vm="clr-namespace:Pivot.Controls.ViewModels;assembly=Pivot.Maui"
+             xmlns:data="clr-namespace:Pivot.Data.Model;assembly=Pivot.Core"
              x:Class="PivotVisualizerApp.FilterPage"
              x:DataType="app:FilterPage">
     

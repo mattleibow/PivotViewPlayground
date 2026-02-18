@@ -10,7 +10,7 @@ using Microsoft.Maui.Graphics.Platform;
 
 namespace PivotVisualizerApp.Visualizers.DeepZoom;
 
-public class DeepZoomImageVisualizer : Visualizer
+public class DeepZoomImageVisualizer : SimpleVisualizer
 {
 	private readonly Dictionary<string, Stream?> streams = new();
 	private readonly Dictionary<string, Microsoft.Maui.Graphics.IImage?> images = new();

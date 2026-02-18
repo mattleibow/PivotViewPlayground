@@ -1,5 +1,5 @@
 ﻿using PivotVisualizerApp.Visualizers.Animation;
-using Easing = Pivot.Core.Animation.Easing;
+using Easing = Pivot.Animation.Easing;
 
 namespace PivotVisualizerApp;
 
@@ -53,7 +53,7 @@ public partial class AnimationPage : ContentPage
 		isVisible = false;
 	}
 
-	public ObservableCollection<PivotRendererItem> Items { get; } =
+	public ObservableCollection<PivotVisualizationItem> Items { get; } =
 		new()
 		{
 			NewItem("Item 1"),
@@ -74,6 +74,6 @@ public partial class AnimationPage : ContentPage
 		}
 	}
 
-	private static PivotRendererItem NewItem(string name) =>
+	private static PivotVisualizationItem NewItem(string name) =>
 		new(new() { Id = name });
 }

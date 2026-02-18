@@ -1,0 +1,27 @@
+﻿using System.Diagnostics;
+using Pivot.Data.Model;
+
+namespace Pivot.Rendering;
+
+[DebuggerDisplay("{Id}")]
+public class PivotVisualizationItem
+{
+	public PivotVisualizationItem(PivotDataItem dataItem)
+	{
+		DataItem = dataItem;
+	}
+
+	public string? Id => DataItem.Id;
+
+	public PivotDataItem DataItem { get; }
+
+	/// <summary>
+	/// Width / Height
+	/// </summary>
+	public float AspectRatio =>
+		DataItem.ImageWidth == 0 || DataItem.ImageHeight == 0
+			? 1.0f
+			: (float)DataItem.ImageWidth / DataItem.ImageHeight;
+
+	public AnimatableProperty<RectangleF> Frame { get; } = new(default);
+}

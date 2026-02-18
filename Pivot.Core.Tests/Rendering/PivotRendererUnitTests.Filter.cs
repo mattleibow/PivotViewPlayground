@@ -1,4 +1,4 @@
-﻿namespace Pivot.Core.Tests;
+﻿namespace Pivot.Tests;
 
 public partial class PivotRendererUnitTests
 {
@@ -8,7 +8,7 @@ public partial class PivotRendererUnitTests
 		public void FilterRemovesItemsFromCurrentItems()
 		{
 			var filter = new[] { "A", "B", "C" };
-			var renderer = new PivotRenderer
+			var renderer = new PivotVisualItemController
 			{
 				Filter = (item) => filter.Contains(item),
 				DataSource = CreateDataSource(new[] { "A", "B", "C", "D" })
@@ -29,7 +29,7 @@ public partial class PivotRendererUnitTests
 			var filterInitial = new[] { "A", "B", "C" };
 			var filterUpdate = new[] { "B", "C", "D" };
 
-			var renderer = new PivotRenderer
+			var renderer = new PivotVisualItemController
 			{
 				Filter = (item) => filterInitial.Contains(item),
 				DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),
@@ -54,7 +54,7 @@ public partial class PivotRendererUnitTests
 			var filterInitial = new[] { "A", "B", "C" };
 			var filterUpdate = new[] { "B", "C", "D" };
 
-			var renderer = new PivotRenderer
+			var renderer = new PivotVisualItemController
 			{
 				Filter = (item) => filterInitial.Contains(item),
 				DataSource = CreateDataSource(new[] { "A", "B", "C", "D" }),

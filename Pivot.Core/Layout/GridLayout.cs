@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Pivot.Core.Layout;
+namespace Pivot.Layout;
 
 public class GridLayout : PivotLayout
 {
@@ -18,8 +18,8 @@ public class GridLayout : PivotLayout
 		Down
 	}
 
-	private readonly Dictionary<PivotRendererItem, (int Row, int Column)> itemToPosition = new();
-	private readonly Dictionary<(int Row, int Column), PivotRendererItem> positionToItem = new();
+	private readonly Dictionary<PivotVisualizationItem, (int Row, int Column)> itemToPosition = new();
+	private readonly Dictionary<(int Row, int Column), PivotVisualizationItem> positionToItem = new();
 
 	public LayoutOrigin Origin { get; set; }
 
@@ -27,18 +27,18 @@ public class GridLayout : PivotLayout
 
 	public int Rows { get; protected set; }
 
-	public bool TryGetItem(int row, int column, [MaybeNullWhen(false)] out PivotRendererItem item) =>
+	public bool TryGetItem(int row, int column, [MaybeNullWhen(false)] out PivotVisualizationItem item) =>
 		positionToItem.TryGetValue((row, column), out item);
 
-	public bool TryGetGridPosition(PivotRendererItem item, out (int Row, int Column) position) =>
+	public bool TryGetGridPosition(PivotVisualizationItem item, out (int Row, int Column) position) =>
 		itemToPosition.TryGetValue(item, out position);
 
-	public PivotRendererItem? GetNextItem(PivotRendererItem item, SearchDirection direction)
+	public PivotVisualizationItem? GetNextItem(PivotVisualizationItem item, SearchDirection direction)
 	{
 		if (!itemToPosition.TryGetValue(item, out var pos))
 			return null;
 
-		PivotRendererItem? next = null;
+		PivotVisualizationItem? next = null;
 		var nextRow = pos.Row;
 		var nextCol = pos.Column;
 
@@ -85,7 +85,7 @@ public class GridLayout : PivotLayout
 		return next;
 	}
 
-	protected override void OnMeasureItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	protected override void OnMeasureItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		// 1. Get the aspect ratio of the items
 		ItemAspectRatio = GetItemAspectRatio(items);
@@ -127,7 +127,7 @@ public class GridLayout : PivotLayout
 		LayoutHeight = ItemHeight * Rows;
 	}
 
-	protected override void OnArrangeItems(IReadOnlyList<PivotRendererItem> items, RectangleF frame)
+	protected override void OnArrangeItems(IReadOnlyList<PivotVisualizationItem> items, RectangleF frame)
 	{
 		// reset any local state
 		itemToPosition.Clear();

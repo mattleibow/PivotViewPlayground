@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using Pivot.Animation.Steps;
 
-namespace Pivot.Core.Animation;
+namespace Pivot.Animation;
 
 public class AnimationSet : IAnimationSet, IEnumerable<IAnimationStep>
 {

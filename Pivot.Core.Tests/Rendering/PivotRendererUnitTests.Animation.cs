@@ -1,4 +1,8 @@
-﻿namespace Pivot.Core.Tests;
+﻿using Pivot.Animation.Steps;
+using Pivot.Layout;
+using Pivot.Layout.Transitions;
+
+namespace Pivot.Tests;
 
 public partial class PivotRendererUnitTests
 {
@@ -478,7 +482,7 @@ public partial class PivotRendererUnitTests
 			// step 3 is missing
 		}
 
-		private static PivotRenderer CreateTestRenderer(params string[] items) =>
+		private static PivotVisualizationController CreateTestRenderer(params string[] items) =>
 			new()
 			{
 				DataSource = CreateDataSource(items),

@@ -11,7 +11,7 @@ using Microsoft.Maui.Graphics.Platform;
 
 namespace PivotVisualizerApp.Visualizers.DeepZoom;
 
-public class DeepZoomTileManagerVisualizer : Visualizer
+public class DeepZoomTileManagerVisualizer : SimpleVisualizer
 {
 	private readonly MauiGraphicsImageLoader imageLoader;
 	private readonly ITileCache<ITileLoadingInfo> tileCache;

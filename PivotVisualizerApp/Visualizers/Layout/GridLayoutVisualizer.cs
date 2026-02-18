@@ -1,8 +1,10 @@
-﻿namespace PivotVisualizerApp.Visualizers.Layout;
+﻿using Pivot.Layout;
+
+namespace PivotVisualizerApp.Visualizers.Layout;
 
 public class GridLayoutVisualizer : LayoutVisualizer<GridLayout>
 {
-	public GridLayoutVisualizer(ObservableCollection<PivotRendererItem> items)
+	public GridLayoutVisualizer(ObservableCollection<PivotVisualizationItem> items)
 		: base("Grid", new GridLayout(), items)
 	{
 	}
